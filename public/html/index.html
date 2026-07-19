@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Froggly | Home</title>
+        <link rel="stylesheet" href="../css/shared.css">
+        <link rel="stylesheet" href="../css/index.css">
+    </head>
+    <body>
+        <!-- split the navbar into three sections; left, center, and right -->
+        <!-- the css will spread them cleanly across the entire bar -->
+        <header class="navbar">
+            <!-- section 1: left -->
+            <div class="navbar-left">
+                <span class="logo">Froggly!</span>
+            </div>
+            <!-- section 2: center -->
+            <div class="navbar-center">
+                <!-- give the search bar an ID because it will be used to fetch with document.getElementbyId -->
+                <input type="text" id="searchInput" placeholder="Looking for something?">
+            </div>
+            <!-- section 3: right -->
+            <div class="navbar-right">
+                <!-- inbox modal -->
+                <div class="inbox-wrapper">
+                    <button id="inboxBtn">Inbox</button>
+                    <div id="inboxModal" class="inbox-modal hidden">
+                        <p class="inbox-title">Inbox</p>
+                        <ul id="inboxList"></ul>
+                    </div>            
+                </div>
+                <button id="addPostBtn">Add Post +</button>
+                <a class="button-link" href="../html/changelog.html">Changelog</a>
+
+                <!-- profile button -->
+                <a href="../html/profile.html" class="profile-link">
+                    <img src="../assets/defaultpfp.jpg" alt="Profile" class="navbar-avatar">
+                </a>
+            </div>
+        </header>
+
+        <!-- this section will be empty for the most part and filled with timeline.js -->
+        <main id="timeline" class="timeline-grid">
+            <!-- posts will be added here! -->
+        </main>
+
+        <!-- this is the post modal (initially hidden) -->
+        <div id="addPostModal" class="modal hidden">
+            <div class="modal-content">
+                <button id="closeModalBtn" class="close-btn">&times;</button>
+                <h2>New Post</h2>
+                <form id="addPostForm">
+                    <input type="text" id="imageUrlInput" placeholder="Image or GIF URL">
+                    <input type="text" id="tagInput" placeholder="Tags">
+                    <input type="text" id="captionInput" placeholder="Caption">
+                    <input type="text" id="mediaTypeInput" placeholder="Media Type">
+                    <input type="text" id="uploaderInput" placeholder="Your name">
+                    <button type="submit" class="submit">Post</button>
+                </form>
+            </div>
+        </div>
+
+        <script src="../js/data.js"></script>
+        <script src="../js/timeline.js"></script>
+        <script src="../js/search.js"></script>
+        <script src="../js/addPost.js"></script>
+        <script src="../js/inbox.js"></script>
+    </body>
+</html>

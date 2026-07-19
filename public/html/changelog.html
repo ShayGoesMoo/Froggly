@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Froggly | Changelog</title>
+        <link rel="stylesheet" href="../css/shared.css">
+        <link rel="stylesheet" href="../css/changelog.css">
+    </head>
+    <body>
+        <header class="navbar">
+            <div class="navbar-left">
+                <span class="logo">Froggly!</span>
+            </div>
+            <div class="navbar-right">
+                <a class="button-link" href="../html/index.html">Timeline</a>
+                <a class="button-link" href="../html/changelog.html">Changelog</a>
+
+                <a href="../html/profile.html" class="profile-link">
+                    <img src="../assets/defaultpfp.jpg" alt="Profile" class="navbar-avatar">
+                </a>
+            </div>
+        </header>
+
+        <main class="changelog-container">
+            <h1>Changelog</h1>
+            <p class="changelog-subtitle">A running log of everything built so far.</p>
+            <!-- entries go here -->
+            <div class="changelog-entry">
+                <div class="version-tag">v0.3.0</div>
+                <div class="entry-details">
+                    <span class="entry-date">July 18, 2026</span>
+                    <ul>
+                        <li>Profile pages are set. Each user has a banner, avatar, bio section and a grid showing that user's own posts. Editing isn't functional yet tho, it's just the layout.</li>
+                        <li>The navbar now includes a profile icon, timeline button and changelog button on every page that links directly to the new profile page.</li>
+                    </ul>
+                </div>
+            </div>
+              
+            <div class="changelog-entry">
+                <!-- entry details go here -->
+                <div class="version-tag">v0.2.0</div>
+                <div class="entry-details">
+                    <span class="entry-date">July 18, 2026</span>
+                    <ul>
+                        <li>An inbox dropdown/dropdown is in the navbar. Clicking the button shows a list of recent notifications, and clicking anywhere outside the dropdown closes it automatically.</li>
+                    </ul>
+                </div>
+            </div>
+              
+            <div class="changelog-entry">
+                <div class="version-tag">v0.1.0</div>
+                <div class="entry-details">
+                    <span class="entry-date">July 17, 2026</span>
+                    <ul>
+                        <li>Shay created Froggly! (˶˃⤙˂˶)</li>
+                        <li>The timeline lays posts out in a masonry-style grid, so images and gifs of different sizes stack together without leaving awkward gaps.</li>
+                        <li>A search bar filters the timeline live as you type, matching against both captions, tags, media type and uploader names.</li>
+                        <li>Posts support gifs in addition to static images (any direct image link works; animated or not.)</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

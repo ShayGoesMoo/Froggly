@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Froggly | Home</title>
+        <link rel="stylesheet" href="../css/shared.css">
+        <link rel="stylesheet" href="../css/profile.css">
+    </head>
+    <body>
+        <header class="navbar">
+            <div class="navbar-left">
+                <span class="logo">Froggly!</span>
+            </div>
+            <div class="navbar-right">
+                <a class="button-link" href="../html/index.html">Timeline</a>
+                <a class="button-link" href="../html/changelog.html">Changelog</a>
+
+                <a href="../html/profile.html" class="profile-link">
+                    <img src="../assets/defaultpfp.jpg" alt="Profile" class="navbar-avatar">
+                </a>
+            </div>
+        </header>
+
+        <main class="profile-container">
+            <section class="profile-banner">
+                <div class="profile-avatar-space">
+                    <img src="../assets/defaultpfp.jpg" alt="Profile" class="profile-avatar">
+                </div>
+            </section>
+
+            <section class="profile-info">
+                <h1 class="profile-username">@username</h1>
+                <p class="profile-bio">This is a placeholder. We can customize later!</p>
+                <button class="edit-profile-btn">Edit Profile</button>
+            </section>
+
+            <secton class="profile-posts">
+                <h2>Posts</h2>
+                <div class="profile-posts-grid" id="profileTimeline">
+                    <!-- user's posts will show up here -->
+                </div>
+            </secton>
+        </main>
+    </body>
+</html>
