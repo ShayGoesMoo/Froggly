@@ -145,3 +145,44 @@
     border-radius: 6px;
     background: #f7f7f7;
 }
+
+/* --------------------------------------------------- INDIVIDUAL POSTS */
+.post-view-content {
+    width: 420px;
+    max-width: 90vw;
+    padding: 0;
+    overflow: hidden;
+}
+
+.post-view-content img {
+    width: 100%;
+    display: block;
+}
+
+.post-view-info {
+    padding: 16px;
+}
+
+.post-view-info .post-meta {
+    margin-top: 6px;
+}
+
+.post-view-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.edit-post-btn, .delete-post-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.delete-post-btn {
+    color: #c0392b;
+    border-color: #e0b4ae;
+}

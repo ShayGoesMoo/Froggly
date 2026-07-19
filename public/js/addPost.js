@@ -30,9 +30,16 @@ function handleAddPost(event) {
     closeModal();
 }
 
+function closeModalOnOutsideClick(event) {
+    if (addPostModal.contains(event.target) && event.target !== closeModalBtn) {
+      addPostModal.classList.add("hidden");
+    }
+}
+
 addPostBtn.addEventListener("click", openModal);
 closeModalBtn.addEventListener("click", closeModal);
 addPostForm.addEventListener("submit", handleAddPost);
+document.addEventListener("click", closeModalOnOutsideClick);
 
 /* addPostModal, addPostBtn, closeModalBtn, addPostForm grab the modal elements once and store them, instead of querying the DOM every time they're needed */
 /* openModal removes the "hidden" class to show the modal, closeModal adds it back and resets the form so old input doesn't linger next time it opens */

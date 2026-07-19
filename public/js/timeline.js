@@ -16,6 +16,9 @@ function createPostCard(post) {
 
     card.appendChild(img);
     card.appendChild(info);
+
+    card.addEventListener("click", () => openViewPost(post));
+    
     return card;
 }
 

@@ -6,6 +6,10 @@
         <title>Froggly | Home</title>
         <link rel="stylesheet" href="../css/shared.css">
         <link rel="stylesheet" href="../css/index.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&amp;family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&amp;family=Mukta+Vaani:wght@200;300;400;500;600;700;800&amp;family=Noto+Serif+NP+Hmong:wght@400..700&amp;family=Noto+Serif+Oriya:wght@400..700&amp;family=Nunito:ital,wght@0,200..1000;1,200..1000&amp;display=swap" rel="stylesheet">    
     </head>
     <body>
         <!-- split the navbar into three sections; left, center, and right -->
@@ -18,7 +22,7 @@
             <!-- section 2: center -->
             <div class="navbar-center">
                 <!-- give the search bar an ID because it will be used to fetch with document.getElementbyId -->
-                <input type="text" id="searchInput" placeholder="Looking for something?">
+                <input type="text" id="searchInput" placeholder="Looking for something? (¬_ ´¬ )">
             </div>
             <!-- section 3: right -->
             <div class="navbar-right">
@@ -31,6 +35,7 @@
                     </div>            
                 </div>
                 <button id="addPostBtn">Add Post +</button>
+                <a class="button-link" href="../html/index.html">Timeline</a>
                 <a class="button-link" href="../html/changelog.html">Changelog</a>
 
                 <!-- profile button -->
@@ -61,8 +66,25 @@
             </div>
         </div>
 
+        <!-- this is the individual post modal (initially hidden) -->
+        <div id="viewPostModal" class="modal hidden">
+            <div class="modal-content post-view-content">
+                <button id="closeViewPostBtn" class="close-btn">&times;</button>
+                <img id="viewPostImage" src="" alt="">
+                <div class="post-view-info">
+                    <p id="viewPostCaption"></p>
+                    <p id="viewPostMeta" class="post-meta"></p>
+                    <div class="post-view-actions">
+                        <button class="edit-post-btn">Edit</button>
+                        <button class="delete-post-btn">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="../js/data.js"></script>
         <script src="../js/timeline.js"></script>
+        <script src="../js/viewPost.js"></script>
         <script src="../js/search.js"></script>
         <script src="../js/addPost.js"></script>
         <script src="../js/inbox.js"></script>
