@@ -10,7 +10,7 @@ const posts = [
     },
     {
         id: 2,
-        imageUrl: "../assets/IMG_2945.jpg",
+        imageUrl: "../assets/IMG_2945.JPG",
         caption: "what is happening?",
         uploader: "tootsieroll",
         mediaType: "Image",
@@ -46,7 +46,7 @@ const posts = [
     },
     {
         id: 6,
-        imageUrl: "../assets/IMG_2945.jpg",
+        imageUrl: "../assets/IMG_2945.JPG",
         caption: "what is happening?",
         uploader: "tootsieroll",
         mediaType: "Image",
@@ -82,7 +82,7 @@ const posts = [
     },
     {
         id: 10,
-        imageUrl: "../assets/IMG_2945.jpg",
+        imageUrl: "../assets/IMG_2945.JPG",
         caption: "what is happening?",
         uploader: "tootsieroll",
         mediaType: "Image",
