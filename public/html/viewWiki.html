@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Froggly | Profile</title>
+        <title>WikiFrog | Entry</title>
         <link rel="stylesheet" href="../css/shared.css">
-        <link rel="stylesheet" href="../css/profile.css">
+        <link rel="stylesheet" href="../css/wiki.css">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
     <body>
         <header class="navbar">
             <div class="navbar-left">
-                <span class="logo">Froggly!</span>
+                <span class="logo">WikiFrog!</span>
             </div>
             <div class="navbar-right">
                 <a class="button-link" href="../html/index.html">Timeline</a>
@@ -27,28 +27,16 @@
             </div>
         </header>
 
-        <main class="profile-container">
-            <section class="profile-images">
-                <div class="banner-wrapper">
-                    <img src="../assets/defaultbanner.png" alt="Profile banner" class="profile-banner">
-                </div>
-                <div class="avatar-wrapper">
-                    <img src="../assets/defaultpfp.jpg" alt="Profile avatar" class="profile-avatar">
-                </div>
-            </section>
+        <main class="wiki-entry-container">
+            <a href="wiki.html" class="back-link">&larr; Go back</a>
 
-            <section class="profile-info">
-                <h1 class="profile-username">@username</h1>
-                <p class="profile-bio">This is a placeholder. We can customize later!</p>
-                <button class="edit-profile-btn">Edit Profile</button>
-            </section>
-
-            <secton class="profile-posts">
-                <h2>Posts</h2>
-                <div class="profile-posts-grid" id="profileTimeline">
-                    <!-- user's posts will show up here -->
-                </div>
-            </secton>
+            <p class="wiki-card-type" id="entryType"></p>
+            <h1 id="entryName"></h1>
+            <p class="entry-summary" id="entrySummary"></p>
+            <div class="entry-content" id="entryContent"></div>
         </main>
+
+        <script src="../js/wikiData.js"></script>
+        <script src="../js/wikiEntry.js"></script>
     </body>
 </html>

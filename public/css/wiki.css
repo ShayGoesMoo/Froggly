@@ -1,0 +1,78 @@
+/* --------------------------------------------------- WIKI.HTML */
+.wiki-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+.wiki-subtitle {
+    color: #777;
+    margin-bottom: 32px;
+}
+
+.wiki-grid {
+    display: grid;
+}
+
+.wiki-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.wiki-card:hover {
+    border-color: #999;
+}
+
+.wiki-card-type {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    color: #999;
+    margin-bottom: 6px;
+}
+
+.wiki-card-name {
+    font-size: 1.05rem;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.wiki-card-summary {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* --------------------------------------------------- VIEWWIKI.HTML */
+.wiki-entry-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.wiki-summary {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 8px 0 20px;
+    font-family: italic;
+}
+
+.wiki-content {
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
