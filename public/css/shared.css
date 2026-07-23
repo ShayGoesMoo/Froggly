@@ -10,8 +10,8 @@ body {
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
-    background-color: #ffffff;
-    color: #222;
+    background-color: #0d0d0d;
+    color: #fff;
 }
 
 /* --------------------------------------------------- NAVIGATION BAR */
@@ -20,8 +20,9 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 12px 24px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #ddd;
+    background-color: #0d0d0d;
+    color: #fff;
+    border-bottom: 1px solid #262626;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -31,14 +32,21 @@ body {
     font-weight: bold;
     font-size: 1.4rem;
     cursor: pointer;
+    color: #fff;
 }
 
 .navbar-center input {
     width: 600px;
     padding: 8px 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #2f2f2f;
     border-radius: 10px;
     font-family: inherit;
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
+.navbar-center input::placeholder {
+    color: #888;
 }
 
 .navbar-right {
@@ -50,14 +58,19 @@ body {
 .navbar-right button, 
 .navbar-right .button-link {
     padding: 8px 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #2f2f2f;
     border-radius: 10px;
-    background: #fff;
+    background: #1a1a1a;
     cursor: pointer;
     text-decoration: none;
     font-family: inherit;
     font-size: 13px;
-    color: #222;
+    color: #fff;
+}
+
+.navbar-right button:hover,
+.navbar-right .button-link:hover {
+    background: #262626;
 }
 
 .profile-link {
@@ -70,6 +83,6 @@ body {
     height: 32px;
     border-radius: 50%;
     object-fit: cover;
-    background-color: #ccc;
-    border: 1px solid #ddd;
+    background-color: #333;
+    border: 1px solid #2f2f2f;
 }
