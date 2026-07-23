@@ -1,0 +1,31 @@
+.wip-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 24px;
+    text-align: center;
+    min-height: calc(100vh - 65px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .wip-container h1 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+  
+  .wip-message {
+    color: #999;
+    margin-bottom: 24px;
+  }
+  
+  .wip-back-link {
+    color: #c9e34f;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  
+  .wip-back-link:hover {
+    text-decoration: underline;
+  }

@@ -10,7 +10,7 @@ function createPostCard(post) {
     const info = document.createElement("div");
     info.className = "post-info";
     info.innerHTML = `
-        <p class="post-caption"><b>${post.uploader}</b>: ${post.caption}</p>
+        <p class="post-caption"><b>${post.uploader}</b>: ${truncateCaption(post.caption)}</p>
         <p class="post-meta">${formatTimestamp(post.timestamp)} · ${post.tag} · [ ${post.mediaType} ]</p>
     `;
 
@@ -40,6 +40,19 @@ function renderTimeline(postsToRender) {
         const card = createPostCard(post);
         timelineEl.appendChild(card);
     });
+}
+
+function truncateCaption(caption) {
+    const words = caption.trim().split(/\s+/);
+  
+    if (words.length > 8 || caption.length > 40) {
+      const truncated = words.slice(0, 8).join(" ");
+      return truncated.length > 40 
+        ? truncated.slice(0, 40).trim() + "..." 
+        : truncated + "...";
+    }
+  
+    return caption;
 }
 
 renderTimeline(posts);

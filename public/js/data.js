@@ -2,7 +2,7 @@ const posts = [
     {
         id: 1,
         imageUrl: "../assets/1047298088362816862.jpg",
-        caption: "first post on froggly! first post on froggly! first post on froggly!",
+        caption: "first post on froggly! first post on froggly! first post on froggly!first post on froggly! first post on froggly! first post on froggly!first post on froggly! first post on froggly! first post on froggly!first post on froggly! first post on froggly! first post on froggly!",
         uploader: "samjankens",
         mediaType: "Image",
         tag: "#Dean, #Khael",

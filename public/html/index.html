@@ -9,24 +9,19 @@
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&amp;family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&amp;family=Mukta+Vaani:wght@200;300;400;500;600;700;800&amp;family=Noto+Serif+NP+Hmong:wght@400..700&amp;family=Noto+Serif+Oriya:wght@400..700&amp;family=Nunito:ital,wght@0,200..1000;1,200..1000&amp;display=swap" rel="stylesheet">    
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
     </head>
     <body>
-        <!-- split the navbar into three sections; left, center, and right -->
-        <!-- the css will spread them cleanly across the entire bar -->
         <header class="navbar">
-            <!-- section 1: left -->
             <div class="navbar-left">
                 <span class="logo">Froggly!</span>
             </div>
-            <!-- section 2: center -->
+
             <div class="navbar-center">
-                <!-- give the search bar an ID because it will be used to fetch with document.getElementbyId -->
                 <input type="text" id="searchInput" placeholder="Looking for something? (¬_ ´¬ )">
             </div>
-            <!-- section 3: right -->
+
             <div class="navbar-right">
-                <!-- inbox modal -->
                 <div class="inbox-wrapper">
                     <button id="inboxBtn">Inbox</button>
                     <div id="inboxModal" class="inbox-modal hidden">
@@ -35,23 +30,18 @@
                     </div>            
                 </div>
                 <button id="addPostBtn">Add Post +</button>
-                <a class="button-link" href="../index.html">Timeline</a>
-                <a class="button-link" href="../html/changelog.html">Changelog</a>
-                <a class="button-link" href="../html/wiki.html">WikiFrog</a>
+                <a class="button-link" href="../html/wip.html">Changelog</a>
 
-                <!-- profile button -->
-                <a href="../html/profile.html" class="profile-link">
+                <a href="../html/wip.html" class="profile-link">
                     <img src="../assets/defaultpfp.jpg" alt="Profile" class="navbar-avatar">
                 </a>
             </div>
         </header>
 
-        <!-- this section will be empty for the most part and filled with timeline.js -->
         <main id="timeline" class="timeline-grid">
             <!-- posts will be added here! -->
         </main>
 
-        <!-- this is the post modal (initially hidden) -->
         <div id="addPostModal" class="modal hidden">
             <div class="modal-content">
                 <button id="closeModalBtn" class="close-btn">&times;</button>
@@ -67,18 +57,40 @@
             </div>
         </div>
 
-        <!-- this is the individual post modal (initially hidden) -->
         <div id="viewPostModal" class="modal hidden">
-            <div class="modal-content post-view-content">
-                <button id="closeViewPostBtn" class="close-btn">&times;</button>
-                <img id="viewPostImage" src="" alt="">
-                <div class="post-view-info">
-                    <p id="viewPostCaption"></p>
-                    <p id="viewPostMeta" class="post-meta"></p>
-                    <div class="post-view-actions">
-                        <button class="edit-post-btn">Edit</button>
-                        <button class="delete-post-btn">Delete</button>
+            <div class="lightbox">
+          
+                <div class="lightbox-header">
+                    <div class="lightbox-title-group">
+                        <h2 id="viewPostCaption" class="lightbox-title"></h2>
+                        <p class="lightbox-meta-line">
+                        Added by <span id="viewPostUploader" class="lightbox-uploader"></span>
+                        </p>
                     </div>
+                    <div class="lightbox-header-actions">
+                        <button id="closeViewPostBtn" class="close-btn">&times;</button>
+                        <div class="dropdown-wrapper">
+                            <button id="postOptionsBtn" class="options-btn">&#8942;</button>
+                            <div id="postOptionsMenu" class="post-options-menu hidden">
+                                <button class="edit-post-btn">Edit</button>
+                                <button class="delete-post-btn">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          
+              <div class="lightbox-body">
+                    <button id="prevPostBtn" class="lightbox-nav-arrow lightbox-nav-left">&#10094;</button>
+            
+                    <div class="lightbox-image-area">
+                    <img id="viewPostImage" src="" alt="">
+                    </div>
+            
+                    <button id="nextPostBtn" class="lightbox-nav-arrow lightbox-nav-right">&#10095;</button>
+                </div>
+            
+                <div class="lightbox-thumbnail-strip" id="thumbnailStrip">
+                    <!-- thumbnails render here -->
                 </div>
             </div>
         </div>
