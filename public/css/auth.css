@@ -48,6 +48,7 @@ body {
 }
 
 .container input[type="text"],
+.container input[type="email"],
 .container input[type="password"],
 .container input[type="date"] {
     padding: 8px;
