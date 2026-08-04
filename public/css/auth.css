@@ -48,6 +48,7 @@ body {
 }
 
 .container input[type="text"],
+.container input[type="email"],
 .container input[type="password"],
 .container input[type="date"] {
     padding: 8px;
@@ -67,6 +68,14 @@ body {
     color: #666;
     margin-top: 14px;
     line-height: 1.4;
+}
+
+.container .login {
+    font-size: 12px;
+    color: #666;
+    margin-top: 14px;
+    line-height: 1.4;
+    text-align: center;
 }
 
 .container input[type="submit"] {
