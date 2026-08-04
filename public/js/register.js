@@ -1,4 +1,4 @@
-document.querySelector("form").addEventListener("submit", async (event) => {
+document.querySelector("form").addEventListener("submit", async (e) => {
     e.preventDefault(); //stops the page from reloading
 
     const name = document.getElementById("display_name").value;
@@ -20,7 +20,11 @@ document.querySelector("form").addEventListener("submit", async (event) => {
 
     // NOTE TO SELF: DO NOT LET THE USER SEE CRITICAL ERRORS ON THE FRONT END
     if (error) {
-        alert("Error creating account: " + error.message);
+        if (error.message.includes("already registered") || error.status === 422) {
+            alert("This email is already registered. Please log in or use a different email.");
+        } else {
+            alert("Error creating account: " + error.message);
+        }
         return;
     }
 

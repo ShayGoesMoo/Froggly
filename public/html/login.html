@@ -12,10 +12,10 @@
             <div class="container">
                 <form>
                     <label>Username or Email</label>
-                    <input type="text" name="user_pass" placeholder="Username or Email..." required>
+                    <input type="text" id="identifier" name="identifer" placeholder="Username or Email..." required>
 
                     <label>Password</label>
-                    <input type="password" name="user_password" placeholder="Password..." required>
+                    <input type="password" id="password" name="password" placeholder="Password..." required>
 
                     <p class="disclaimer">By completing registeration or logging in with an existing account, you agree to the <a href="/">user agreement</a> and <a href="/">privacy policy</a>.</p>
                     <input type="submit" value="Login">
@@ -24,5 +24,9 @@
                 </form>
             </div>
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script src="../js/supabase-config.js"></script>
+        <script src="../js/login.js"></script>
     </body>
 </html>
