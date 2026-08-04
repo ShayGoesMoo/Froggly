@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Froggly | Register</title>
+
+        <link rel="stylesheet" href="../css/auth.css">
+    </head>
+    <body>
+        <div class="register">
+            <h2>Register</h2>
+            <div class="container">
+                <form>
+                    <label>Name</label>
+                    <input type="text" id="display_name" name="display_name" placeholder="Name..." required>
+
+                    <label>Username</label>
+                    <input type="text" id="username" name="username" placeholder="Username..." required>
+                    
+                    <label>Email</label>
+                    <input type="email" id="email_address" name="email_address" placeholder="Email Address..." required>
+
+                    <label>Password</label>
+                    <input type="password" id="user_password" name="user_password" placeholder="Password..." required>
+                    
+                    <label>Confirm Password</label>
+                    <input type="password" id="confirm_user_password" name="confirm_user_password" placeholder="Confirm Password..." required>
+
+                    <p class="disclaimer">By completing registeration or logging in with an existing account, you agree to the <a href="/">user agreement</a> and <a href="/">privacy policy</a>.</p>
+                    <input type="submit" value="Register">
+
+                    <p class="login">Already have an account? <a href="../html/login.html">Login here</a>.</p>
+                </form>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script src="../js/supabase-config.js"></script>
+        <script src="../js/register.js"></script>
+    </body>
+</html>
