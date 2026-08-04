@@ -1,4 +1,4 @@
-/* index.css */
+/* auth.css */
 
 * {
     box-sizing: border-box;
@@ -9,78 +9,75 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f4f4f4;
-    color: #333;
-}
-
-/* Navigation bar */
-.navigation-bar {
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-    padding: 12px 24px;
-}
-
-.nav-wrapper {
-    max-width: 1100px;
-    margin: 0 auto;
+    min-height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    justify-content: center;
+    padding: 20px;
 }
 
-.nav-wrapper .left,
-.nav-wrapper .right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.nav-wrapper .middle {
-    flex: 1;
+.register {
+    width: 100%;
     max-width: 400px;
 }
 
-.logo img {
-    height: 32px;
-    display: block;
+.register h2 {
+    text-align: center;
+    margin-bottom: 16px;
+    color: #333;
 }
 
-.middle input[type="search"] {
-    width: 100%;
-    padding: 8px 12px;
+.container {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 24px;
+}
+
+.container form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.container label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+}
+
+.container input[type="text"],
+.container input[type="password"],
+.container input[type="date"] {
+    padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
+    width: 100%;
 }
 
-.right a {
+.container input[type="checkbox"] {
+    margin-top: 14px;
+    margin-right: 6px;
+}
+
+.container a {
     color: #333;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.right a:hover {
     text-decoration: underline;
 }
 
-.user img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: #ddd;
-    display: block;
-    object-fit: cover;
+.container input[type="submit"] {
+    margin-top: 16px;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
-/* Main content */
-main {
-    max-width: 700px;
-    margin: 24px auto;
-    padding: 0 16px;
-}
-
-.timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+.container input[type="submit"]:hover {
+    background-color: #555;
 }
