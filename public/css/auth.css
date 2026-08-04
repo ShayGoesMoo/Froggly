@@ -57,14 +57,16 @@ body {
     width: 100%;
 }
 
-.container input[type="checkbox"] {
-    margin-top: 14px;
-    margin-right: 6px;
-}
-
 .container a {
     color: #333;
     text-decoration: underline;
+}
+
+.container .disclaimer {
+    font-size: 12px;
+    color: #666;
+    margin-top: 14px;
+    line-height: 1.4;
 }
 
 .container input[type="submit"] {
