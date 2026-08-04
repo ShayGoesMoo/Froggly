@@ -12,16 +12,18 @@
             <div class="nav-wrapper">
                 <div class="left">
                     <div class="logo">
-                        <img src="" alt="Froggly logo">
+                        <img src="../assets/logo 1.png" alt="Froggly logo">
                     </div>
                 </div>
                 <div class="middle">
                     <input type="search" placeholder="Search...">
+                    <button type="button">New Post</button>
+                    <button type="button" id="logout-btn">Logout</button>
                 </div>
                 <div class="right">
                     <a href="/">Changelog</a>
                     <div class="user">
-                        <img src="" alt="User avatar">
+                        <img src="../assets/default profile picture.png" alt="User avatar">
                     </div>
                 </div>
             </div>
@@ -32,5 +34,9 @@
                 
             </div>
         </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script src="../js/supabase-config.js"></script>
+        <script src="../js/logout.js"></script>
     </body>
 </html>
