@@ -185,20 +185,20 @@
 
         <script>
             // save scroll position whenever the user clicks into a post
-document.querySelectorAll(".timeline-item a").forEach((link) => {
-    link.addEventListener("click", () => {
-        sessionStorage.setItem("timelineScroll", window.scrollY);
-    });
-});
+            document.querySelectorAll(".timeline-item a").forEach((link) => {
+                link.addEventListener("click", () => {
+                    sessionStorage.setItem("timelineScroll", window.scrollY);
+                });
+            });
 
-// restore scroll position on page load (covers cases where history.back() alone doesn't restore it)
-window.addEventListener("load", () => {
-    const savedScroll = sessionStorage.getItem("timelineScroll");
-    if (savedScroll !== null) {
-        window.scrollTo(0, parseInt(savedScroll, 10));
-        sessionStorage.removeItem("timelineScroll"); // clear it so it doesn't persist stale on future visits
-    }
-});
+            // restore scroll position on page load (covers cases where history.back() alone doesn't restore it)
+            window.addEventListener("load", () => {
+                const savedScroll = sessionStorage.getItem("timelineScroll");
+                if (savedScroll !== null) {
+                    window.scrollTo(0, parseInt(savedScroll, 10));
+                    sessionStorage.removeItem("timelineScroll"); // clear it so it doesn't persist stale on future visits
+                }
+            });
         </script>
     </body>
 </html>
