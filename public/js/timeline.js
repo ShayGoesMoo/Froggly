@@ -1,7 +1,7 @@
 async function loadTimeline() {
     const { data: posts, error } = await supabaseClient
         .from("posts")
-        .select("id, username, media_url, media_type")
+        .select("id, media_url, media_type, users(username)")
         .order("created_at", { ascending: false });
 
     if (error) {
@@ -10,6 +10,7 @@ async function loadTimeline() {
     }
 
     const timeline = document.querySelector(".timeline");
+    timeline.innerHTML = ""; // clear the static placeholder before appending real posts
 
     posts.forEach((post) => {
         const item = document.createElement("a");
@@ -27,7 +28,6 @@ async function loadTimeline() {
             </div>
         `;
 
-        // save scroll position when this specific post is clicked
         item.addEventListener("click", () => {
             sessionStorage.setItem("timelineScroll", window.scrollY);
         });
