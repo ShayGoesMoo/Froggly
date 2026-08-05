@@ -33,13 +33,13 @@
 
         <main class="post-view">
             <div class="post-media">
-        <img src="" alt="Post media" id="post-image">
-        <button class="fullscreen-btn" id="fullscreen-btn" aria-label="View fullscreen">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-            </svg>
-        </button>
-    </div>
+                <img src="../assets/logo 1.png" alt="Post media" id="post-image">
+                <button class="fullscreen-btn" id="fullscreen-btn" aria-label="View fullscreen">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                    </svg>
+                </button>
+            </div>
 
             <div class="post-sidebar">
                 <div class="post-header">
@@ -113,12 +113,17 @@
         </main>
 
         <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" id="lightbox-close" aria-label="Close">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 6 6 18M6 6l12 12"/>
-        </svg>
-    </button>
-    <img src="" alt="Fullscreen media" id="lightbox-image">
-</div>
+            <button class="lightbox-close" id="lightbox-close" aria-label="Close">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6 6 18M6 6l12 12"/>
+                </svg>
+            </button>
+            <img src="" alt="Fullscreen media" id="lightbox-image">
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script src="../js/supabase-config.js"></script>
+        <script src="../js/post.js"></script>
+        <script src="../js/logout.js"></script>
     </body>
 </html>
