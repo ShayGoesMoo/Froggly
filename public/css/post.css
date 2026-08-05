@@ -225,3 +225,24 @@
 .lightbox-close:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }
+
+.back-btn {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 34px;
+    height: 34px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.back-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
