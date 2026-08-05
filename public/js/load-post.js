@@ -10,7 +10,8 @@ async function loadPost() {
 
     const { data: post, error } = await supabaseClient
         .from("posts")
-        .select("*")
+        .select("id, media_url, media_type, users(username)")
+        order("created_at", { ascending: false })
         .eq("id", postId)
         .single();
 

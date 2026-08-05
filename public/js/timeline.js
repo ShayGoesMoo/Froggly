@@ -22,7 +22,7 @@ async function loadTimeline() {
                 <span class="media-type">${post.media_type}</span>
             </div>
             <div class="item-info">
-                <span class="username">${post.username}</span>
+                <span class="username">${post.users.username}</span>
                 <span class="type-label">${post.media_type}</span>
             </div>
         `;
