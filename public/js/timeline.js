@@ -1,0 +1,39 @@
+async function loadTimeline() {
+    const { data: posts, error } = await supabaseClient
+        .from("posts")
+        .select("id, username, media_url, media_type")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Failed to load timeline:", error);
+        return;
+    }
+
+    const timeline = document.querySelector(".timeline");
+
+    posts.forEach((post) => {
+        const item = document.createElement("a");
+        item.href = `post.html?id=${post.id}`;
+        item.className = "timeline-item";
+
+        item.innerHTML = `
+            <div class="thumbnail">
+                <img src="${post.media_url}" alt="">
+                <span class="media-type">${post.media_type}</span>
+            </div>
+            <div class="item-info">
+                <span class="username">${post.username}</span>
+                <span class="type-label">${post.media_type}</span>
+            </div>
+        `;
+
+        // save scroll position when this specific post is clicked
+        item.addEventListener("click", () => {
+            sessionStorage.setItem("timelineScroll", window.scrollY);
+        });
+
+        timeline.appendChild(item);
+    });
+}
+
+loadTimeline();
