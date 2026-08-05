@@ -131,3 +131,28 @@ const { data, error } = await supabaseClient
     ]);
 
 console.log(data, error);
+
+
+
+
+
+
+
+
+-- posts table
+alter table posts drop constraint posts_user_id_fkey;
+alter table posts add constraint posts_user_id_fkey 
+    foreign key (user_id) references users(id);
+
+-- comments table
+alter table comments drop constraint comments_user_id_fkey;
+alter table comments add constraint comments_user_id_fkey 
+    foreign key (user_id) references users(id);
+
+
+
+
+select conname, conrelid::regclass 
+from pg_constraint 
+where conrelid in ('posts'::regclass, 'comments'::regclass) 
+and contype = 'f';
