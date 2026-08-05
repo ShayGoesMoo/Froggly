@@ -63,6 +63,11 @@ main {
     margin-top: 2px;
 }
 
+a.timeline-item {
+    text-decoration: none;
+    color: inherit;
+}
+
 /* Responsive: fewer columns on smaller screens */
 @media (max-width: 1100px) {
     .timeline {
