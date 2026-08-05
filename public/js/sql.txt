@@ -1,0 +1,16 @@
+create table posts (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid references auth.users(id) not null,
+    media_url text not null,
+    media_type text not null,
+    caption text,
+    created_at timestamptz default now()
+);
+
+create table comments (
+    id uuid primary key default gen_random_uuid(),
+    post_id uuid references posts(id) not null,
+    user_id uuid references auth.users(id) not null,
+    comment_text text not null,
+    created_at timestamptz default now()
+);
