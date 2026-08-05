@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Froggly | Post</title>
+
+        <link rel="stylesheet" href="../css/index.css">
+        <link rel="stylesheet" href="../css/post.css">
+    </head>
+    <body>
+        <header class="navigation-bar">
+            <div class="nav-wrapper">
+                <div class="left">
+                    <div class="logo">
+                        <img src="" alt="Froggly logo">
+                    </div>
+                </div>
+                <div class="middle">
+                    <input type="search" placeholder="Search...">
+                </div>
+                <div class="right">
+                    <a href="/">Changelog</a>
+                    <div class="user">
+                        <img src="" alt="User avatar">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="post-view">
+            <div class="post-media">
+                <img src="" alt="Post media">
+            </div>
+
+            <div class="post-sidebar">
+                <div class="post-header">
+                    <img class="uploader-avatar" src="" alt="Uploader avatar">
+                    <div class="uploader-info">
+                        <span class="username">username</span>
+                        <span class="media-type">Image</span>
+                    </div>
+                </div>
+
+                <div class="post-caption">
+                    <p>Caption text goes here describing the post.</p>
+                </div>
+
+                <div class="comment-section">
+                    <div class="comment-list">
+                        <div class="comment">
+                            <span class="comment-username">commenter</span>
+                            <span class="comment-text">This is a comment.</span>
+                        </div>
+                        <!-- repeat .comment for each comment -->
+                    </div>
+
+                    <form class="comment-form">
+                        <input type="text" placeholder="Add a comment..." required>
+                        <input type="submit" value="Post">
+                    </form>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
