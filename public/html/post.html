@@ -132,5 +132,17 @@
         <script src="../js/supabase-config.js"></script>
         <script src="../js/post.js"></script>
         <script src="../js/logout.js"></script>
+
+        <script>
+            document.getElementById("back-btn").addEventListener("click", () => {
+    // if we got here from the timeline via normal navigation, this restores scroll natively
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        // fallback: no history to go back to (e.g. direct link), just go to timeline
+        window.location.href = "index.html";
+    }
+});
+        </script>
     </body>
 </html>
