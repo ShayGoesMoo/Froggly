@@ -14,3 +14,64 @@ create table comments (
     comment_text text not null,
     created_at timestamptz default now()
 );
+
+
+alter table posts enable row level security;
+
+-- anyone can view posts (public timeline)
+create policy "Posts are viewable by everyone"
+on posts
+for select
+to authenticated, anon
+using (true);
+
+-- only logged-in users can create posts, and only as themselves
+create policy "Users can insert their own posts"
+on posts
+for insert
+to authenticated
+with check (auth.uid() = user_id);
+
+-- users can only update their own posts
+create policy "Users can update their own posts"
+on posts
+for update
+to authenticated
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
+
+-- users can only delete their own posts
+create policy "Users can delete their own posts"
+on posts
+for delete
+to authenticated
+using (auth.uid() = user_id);
+
+
+alter table comments enable row level security;
+
+-- anyone can view comments
+create policy "Comments are viewable by everyone"
+on comments
+for select
+to authenticated, anon
+using (true);
+
+-- only logged-in users can comment, and only as themselves
+create policy "Users can insert their own comments"
+on comments
+for insert
+to authenticated
+with check (auth.uid() = user_id);
+
+-- users can only delete their own comments (moderation later can extend this)
+create policy "Users can delete their own comments"
+on comments
+for delete
+to authenticated
+using (auth.uid() = user_id);
+
+
+select tablename, rowsecurity from pg_tables where tablename in ('posts', 'comments');
+
+select * from pg_policies where tablename in ('posts', 'comments');
