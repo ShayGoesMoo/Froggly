@@ -75,3 +75,59 @@ using (auth.uid() = user_id);
 select tablename, rowsecurity from pg_tables where tablename in ('posts', 'comments');
 
 select * from pg_policies where tablename in ('posts', 'comments');
+
+
+const { data: { session } } = await supabaseClient.auth.getSession();
+console.log(session?.user?.id);
+
+const { data: { session } } = await supabaseClient.auth.getSession();
+
+const { data, error } = await supabaseClient
+    .from("posts")
+    .insert([
+        {
+            user_id: session.user.id,
+            media_url: "https://placehold.co/600x400",
+            media_type: "image",
+            caption: "Test post from console",
+        },
+    ])
+    .select(); // .select() returns the inserted row back, useful for grabbing the new post's id
+
+console.log(data, error);
+
+
+const { data: { session } } = await supabaseClient.auth.getSession();
+
+const { data, error } = await supabaseClient
+    .from("comments")
+    .insert([
+        {
+            post_id: "PASTE_POST_ID_HERE", // from step 2's returned data
+            user_id: session.user.id,
+            comment_text: "Test comment from console",
+        },
+    ])
+    .select();
+
+console.log(data, error);
+
+const { data, error } = await supabaseClient
+    .from("posts")
+    .select("id, media_url, media_type, users(username)");
+
+console.log(data, error);
+
+
+const { data, error } = await supabaseClient
+    .from("posts")
+    .insert([
+        {
+            user_id: "00000000-0000-0000-0000-000000000000", // fake id, not you
+            media_url: "https://placehold.co/600x400",
+            media_type: "image",
+            caption: "This should fail",
+        },
+    ]);
+
+console.log(data, error);
