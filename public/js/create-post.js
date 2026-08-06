@@ -103,6 +103,7 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
                 media_url: urlData.publicUrl,
                 media_type: detectedMediaType,
                 caption: caption,
+                thumbnail_url: thumbnailUrl,
             },
         ])
         .select()
@@ -153,11 +154,6 @@ async function generateThumbnail(videoFile) {
     });
 }
 
-
-
-
-
-
 // inside your submit handler, after the main media upload succeeds:
 
 let thumbnailUrl = null;
@@ -177,18 +173,3 @@ if (detectedMediaType === "video") {
         thumbnailUrl = thumbUrlData.publicUrl;
     }
 }
-
-// then include it in your posts insert:
-const { data: newPost, error: insertError } = await supabaseClient
-    .from("posts")
-    .insert([
-        {
-            user_id: session.user.id,
-            media_url: urlData.publicUrl,
-            media_type: detectedMediaType,
-            caption: caption,
-            thumbnail_url: thumbnailUrl,
-        },
-    ])
-    .select()
-    .single();

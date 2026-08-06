@@ -23,14 +23,13 @@ async function loadPost() {
 
     if (post.media_type === "video") {
         existingImg.remove();
-
         const video = document.createElement("video");
         video.id = "post-image";
         video.src = post.media_url;
         video.controls = true;
-        video.playsInline = true; // prevents auto-fullscreen on mobile Safari
-        video.preload = "metadata"; // loads just enough to show the first frame + duration, not the whole file
-
+        video.playsInline = true;
+        video.preload = "metadata";
+        if (post.thumbnail_url) video.poster = post.thumbnail_url;
         mediaContainer.insertBefore(video, mediaContainer.firstChild);
     } else {
         existingImg.src = post.media_url;
@@ -72,14 +71,4 @@ async function loadComments() {
 loadPost();
 
 
-if (post.media_type === "video") {
-    existingImg.remove();
-    const video = document.createElement("video");
-    video.id = "post-image";
-    video.src = post.media_url;
-    video.controls = true;
-    video.playsInline = true;
-    video.preload = "metadata";
-    if (post.thumbnail_url) video.poster = post.thumbnail_url;
-    mediaContainer.insertBefore(video, mediaContainer.firstChild);
-}
+
