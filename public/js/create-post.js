@@ -152,3 +152,43 @@ async function generateThumbnail(videoFile) {
         video.addEventListener("error", reject);
     });
 }
+
+
+
+
+
+
+// inside your submit handler, after the main media upload succeeds:
+
+let thumbnailUrl = null;
+
+if (detectedMediaType === "video") {
+    const thumbBlob = await generateThumbnail(selectedFile);
+    const thumbPath = `${session.user.id}/${crypto.randomUUID()}.jpg`;
+
+    const { error: thumbUploadError } = await supabaseClient.storage
+        .from("post-media")
+        .upload(thumbPath, thumbBlob);
+
+    if (!thumbUploadError) {
+        const { data: thumbUrlData } = supabaseClient.storage
+            .from("post-media")
+            .getPublicUrl(thumbPath);
+        thumbnailUrl = thumbUrlData.publicUrl;
+    }
+}
+
+// then include it in your posts insert:
+const { data: newPost, error: insertError } = await supabaseClient
+    .from("posts")
+    .insert([
+        {
+            user_id: session.user.id,
+            media_url: urlData.publicUrl,
+            media_type: detectedMediaType,
+            caption: caption,
+            thumbnail_url: thumbnailUrl,
+        },
+    ])
+    .select()
+    .single();
