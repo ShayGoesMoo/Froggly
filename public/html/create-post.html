@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Froggly | New Post</title>
+
+        <link rel="stylesheet" href="../css/index.css">
+        <link rel="stylesheet" href="../css/navigation-bar.css">
+        <link rel="stylesheet" href="../css/create-post.css">
+    </head>
+    <body>
+        <header class="navigation-bar">
+            <div class="nav-wrapper">
+                <div class="left">
+                    <div class="logo">
+                        <img src="../assets/logo 1.png" alt="Froggly logo">
+                    </div>
+                </div>
+                <div class="middle">
+                    <input type="search" placeholder="Search...">
+                </div>
+                <div class="right">
+                    <button type="button" id="cancel-btn">Cancel</button>
+                    <button type="submit" form="create-post-form" id="publish-btn">Publish</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="create-post-view">
+            <form id="create-post-form">
+                <div class="upload-panel" id="upload-panel">
+                    <input type="file" id="media-input" accept="image/*,video/*" hidden required>
+
+                    <div class="upload-placeholder" id="upload-placeholder">
+                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 16V4m0 0L7 9m5-5 5 5M5 20h14"/>
+                        </svg>
+                        <p>Click to upload a photo, video, or gif</p>
+                        <span class="upload-hint">We recommend using high quality media</span>
+                    </div>
+
+                    <div class="preview-wrapper" id="preview-wrapper" style="display: none;">
+                        <img id="preview-image" alt="Preview">
+                        <video id="preview-video" controls style="display: none;"></video>
+                        <button type="button" class="change-media-btn" id="change-media-btn">Change</button>
+                    </div>
+                </div>
+
+                <div class="details-panel">
+                    <label for="caption">Caption</label>
+                    <textarea id="caption" name="caption" placeholder="Tell everyone what this post is about..." rows="6"></textarea>
+
+                    <label for="media-type-display">Media Type</label>
+                    <input type="text" id="media-type-display" disabled placeholder="Detected automatically">
+                </div>
+            </form>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script src="../js/supabase-config.js"></script>
+        <script src="../js/create-post.js"></script>
+    </body>
+</html>
