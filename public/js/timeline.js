@@ -18,8 +18,8 @@ async function loadTimeline() {
         item.className = "timeline-item";
 
         const mediaHTML = post.media_type === "video"
-            ? `<video src="${post.media_url}" muted playsinline></video>`
-            : `<img src="${post.media_url}" alt="">`;
+    ? `<img src="${post.thumbnail_url || post.media_url}" alt="">`
+    : `<img src="${post.media_url}" alt="">`;
 
         item.innerHTML = `
             <div class="thumbnail">
