@@ -68,6 +68,10 @@
                     sessionStorage.removeItem("timelineScroll"); // clear it so it doesn't persist stale on future visits
                 }
             });
+
+            document.querySelector(".middle button[type='button']").addEventListener("click", () => {
+    window.location.href = "create-post.html";
+});
         </script>
     </body>
 </html>
