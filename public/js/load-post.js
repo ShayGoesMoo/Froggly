@@ -70,3 +70,16 @@ async function loadComments() {
 }
 
 loadPost();
+
+
+if (post.media_type === "video") {
+    existingImg.remove();
+    const video = document.createElement("video");
+    video.id = "post-image";
+    video.src = post.media_url;
+    video.controls = true;
+    video.playsInline = true;
+    video.preload = "metadata";
+    if (post.thumbnail_url) video.poster = post.thumbnail_url;
+    mediaContainer.insertBefore(video, mediaContainer.firstChild);
+}
