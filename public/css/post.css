@@ -29,6 +29,14 @@
     display: block;
 }
 
+.post-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    background-color: #000;
+}
+
 /* Right: sidebar */
 .post-sidebar {
     flex: 1;
