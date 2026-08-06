@@ -19,22 +19,22 @@ async function loadPost() {
     }
 
     const mediaContainer = document.querySelector(".post-media");
-const existingImg = document.getElementById("post-image");
+    const existingImg = document.getElementById("post-image");
 
-if (post.media_type === "video") {
-    existingImg.remove();
+    if (post.media_type === "video") {
+        existingImg.remove();
 
-    const video = document.createElement("video");
-    video.id = "post-image";
-    video.src = post.media_url;
-    video.controls = true;
-    video.playsInline = true; // prevents auto-fullscreen on mobile Safari
-    video.preload = "metadata"; // loads just enough to show the first frame + duration, not the whole file
+        const video = document.createElement("video");
+        video.id = "post-image";
+        video.src = post.media_url;
+        video.controls = true;
+        video.playsInline = true; // prevents auto-fullscreen on mobile Safari
+        video.preload = "metadata"; // loads just enough to show the first frame + duration, not the whole file
 
-    mediaContainer.insertBefore(video, mediaContainer.firstChild);
-} else {
-    existingImg.src = post.media_url;
-}
+        mediaContainer.insertBefore(video, mediaContainer.firstChild);
+    } else {
+        existingImg.src = post.media_url;
+    }
     
     document.querySelector(".uploader-info .username").textContent = post.users.username;
     document.querySelector(".uploader-info .media-type").textContent = post.media_type;
