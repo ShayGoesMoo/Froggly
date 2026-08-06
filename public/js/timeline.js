@@ -1,7 +1,7 @@
 async function loadTimeline() {
     const { data: posts, error } = await supabaseClient
         .from("posts")
-        .select("id, media_url, media_type, users(username)")
+        .select("id, media_url, media_type, thumbnail_url, users(username)")
         .order("created_at", { ascending: false });
 
     if (error) {
@@ -10,7 +10,7 @@ async function loadTimeline() {
     }
 
     const timeline = document.querySelector(".timeline");
-    timeline.innerHTML = ""; // clear the static placeholder before appending real posts
+    timeline.innerHTML = "";
 
     posts.forEach((post) => {
         const item = document.createElement("a");
@@ -18,8 +18,8 @@ async function loadTimeline() {
         item.className = "timeline-item";
 
         const mediaHTML = post.media_type === "video"
-    ? `<img src="${post.thumbnail_url || post.media_url}" alt="">`
-    : `<img src="${post.media_url}" alt="">`;
+            ? `<img src="${post.thumbnail_url || post.media_url}" alt="">`
+            : `<img src="${post.media_url}" alt="">`;
 
         item.innerHTML = `
             <div class="thumbnail">
