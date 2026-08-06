@@ -122,3 +122,33 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
 document.getElementById("cancel-btn").addEventListener("click", () => {
     window.location.href = "index.html";
 });
+
+
+async function generateThumbnail(videoFile) {
+    return new Promise((resolve, reject) => {
+        const video = document.createElement("video");
+        video.preload = "metadata";
+        video.muted = true;
+        video.playsInline = true;
+        video.src = URL.createObjectURL(videoFile);
+
+        video.addEventListener("loadeddata", () => {
+            video.currentTime = 0.1; // seek slightly in, frame 0 is sometimes black
+        });
+
+        video.addEventListener("seeked", () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob((blob) => {
+                URL.revokeObjectURL(video.src);
+                resolve(blob);
+            }, "image/jpeg", 0.8);
+        });
+
+        video.addEventListener("error", reject);
+    });
+}
