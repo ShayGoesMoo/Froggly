@@ -10,13 +10,13 @@ const mediaTypeDisplay = document.getElementById("media-type-display");
 let selectedFile = null;
 let detectedMediaType = null;
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB, adjust as you like
+
 // clicking the panel opens the file picker (unless clicking "Change")
 uploadPanel.addEventListener("click", (e) => {
     if (e.target === changeMediaBtn) return;
     mediaInput.click();
 });
-
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB, adjust as you like
 
 mediaInput.addEventListener("change", () => {
     const file = mediaInput.files[0];
@@ -51,7 +51,6 @@ mediaInput.addEventListener("change", () => {
 
 document.getElementById("create-post-form").addEventListener("submit", async (e) => {
     e.preventDefault();
-    console.log("Form submitted, file:", selectedFile)
 
     if (!selectedFile) {
         alert("Please select a photo, video, or gif to upload.");
@@ -59,7 +58,6 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
     }
 
     const { data: { session } } = await supabaseClient.auth.getSession();
-    console.log("Current session:", session)
     if (!session) {
         alert("You need to be logged in to post.");
         return;
@@ -72,13 +70,10 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
     // 1. Upload the file to Supabase Storage
     const fileExt = selectedFile.name.split(".").pop();
     const filePath = `${session.user.id}/${crypto.randomUUID()}.${fileExt}`;
-    console.log("Uploading file to path:", filePath, "size:", selectedFile.size, "type:", selectedFile.type);
 
     const { error: uploadError } = await supabaseClient.storage
         .from("post-media")
         .upload(filePath, selectedFile);
-    
-    console.log("Upload result:", uploadError ? "Error: " + uploadError.message : "Success");
 
     if (uploadError) {
         alert("Upload failed: " + uploadError.message);
@@ -91,6 +86,25 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
     const { data: urlData } = supabaseClient.storage
         .from("post-media")
         .getPublicUrl(filePath);
+
+    // 2.5. Generate + upload a thumbnail if it's a video
+    let thumbnailUrl = null;
+
+    if (detectedMediaType === "video") {
+        const thumbBlob = await generateThumbnail(selectedFile);
+        const thumbPath = `${session.user.id}/${crypto.randomUUID()}.jpg`;
+
+        const { error: thumbUploadError } = await supabaseClient.storage
+            .from("post-media")
+            .upload(thumbPath, thumbBlob);
+
+        if (!thumbUploadError) {
+            const { data: thumbUrlData } = supabaseClient.storage
+                .from("post-media")
+                .getPublicUrl(thumbPath);
+            thumbnailUrl = thumbUrlData.publicUrl;
+        }
+    }
 
     // 3. Insert the post record
     const caption = document.getElementById("caption").value.trim();
@@ -124,7 +138,6 @@ document.getElementById("cancel-btn").addEventListener("click", () => {
     window.location.href = "index.html";
 });
 
-
 async function generateThumbnail(videoFile) {
     return new Promise((resolve, reject) => {
         const video = document.createElement("video");
@@ -152,24 +165,4 @@ async function generateThumbnail(videoFile) {
 
         video.addEventListener("error", reject);
     });
-}
-
-// inside your submit handler, after the main media upload succeeds:
-
-let thumbnailUrl = null;
-
-if (detectedMediaType === "video") {
-    const thumbBlob = await generateThumbnail(selectedFile);
-    const thumbPath = `${session.user.id}/${crypto.randomUUID()}.jpg`;
-
-    const { error: thumbUploadError } = await supabaseClient.storage
-        .from("post-media")
-        .upload(thumbPath, thumbBlob);
-
-    if (!thumbUploadError) {
-        const { data: thumbUrlData } = supabaseClient.storage
-            .from("post-media")
-            .getPublicUrl(thumbPath);
-        thumbnailUrl = thumbUrlData.publicUrl;
-    }
 }
