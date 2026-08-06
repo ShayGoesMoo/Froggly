@@ -13,31 +13,31 @@ async function loadTimeline() {
     timeline.innerHTML = ""; // clear the static placeholder before appending real posts
 
     posts.forEach((post) => {
-    const item = document.createElement("a");
-    item.href = `post.html?id=${post.id}`;
-    item.className = "timeline-item";
+        const item = document.createElement("a");
+        item.href = `post.html?id=${post.id}`;
+        item.className = "timeline-item";
 
-    const mediaHTML = post.media_type === "video"
-        ? `<video src="${post.media_url}" muted playsinline></video>`
-        : `<img src="${post.media_url}" alt="">`;
+        const mediaHTML = post.media_type === "video"
+            ? `<video src="${post.media_url}" muted playsinline></video>`
+            : `<img src="${post.media_url}" alt="">`;
 
-    item.innerHTML = `
-        <div class="thumbnail">
-            ${mediaHTML}
-            <span class="media-type">${post.media_type}</span>
-        </div>
-        <div class="item-info">
-            <span class="username">${post.users.username}</span>
-            <span class="type-label">${post.media_type}</span>
-        </div>
-    `;
+        item.innerHTML = `
+            <div class="thumbnail">
+                ${mediaHTML}
+                <span class="media-type">${post.media_type}</span>
+            </div>
+            <div class="item-info">
+                <span class="username">${post.users.username}</span>
+                <span class="type-label">${post.media_type}</span>
+            </div>
+        `;
 
-    item.addEventListener("click", () => {
-        sessionStorage.setItem("timelineScroll", window.scrollY);
+        item.addEventListener("click", () => {
+            sessionStorage.setItem("timelineScroll", window.scrollY);
+        });
+
+        timeline.appendChild(item);
     });
-
-    timeline.appendChild(item);
-});
 }
 
 loadTimeline();
