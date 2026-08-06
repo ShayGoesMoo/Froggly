@@ -71,16 +71,25 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
     const fileExt = selectedFile.name.split(".").pop();
     const filePath = `${session.user.id}/${crypto.randomUUID()}.${fileExt}`;
 
-    const { error: uploadError } = await supabaseClient.storage
-        .from("post-media")
-        .upload(filePath, selectedFile);
+    // NEW
+window.currentAccessToken = session.access_token; // needed by uploadWithProgress
 
-    if (uploadError) {
-        alert("Upload failed: " + uploadError.message);
-        publishBtn.disabled = false;
-        publishBtn.textContent = "Publish";
-        return;
-    }
+const progressWrapper = document.getElementById("upload-progress");
+const progressBar = document.getElementById("upload-progress-bar");
+progressWrapper.style.display = "block";
+
+try {
+    await uploadWithProgress(filePath, selectedFile, (percent) => {
+        progressBar.style.width = `${percent}%`;
+        publishBtn.textContent = `Uploading... ${percent}%`;
+    });
+} catch (uploadError) {
+    alert("Upload failed: " + uploadError.message);
+    publishBtn.disabled = false;
+    publishBtn.textContent = "Publish";
+    progressWrapper.style.display = "none";
+    return;
+}
 
     // 2. Get the public URL for the uploaded file
     const { data: urlData } = supabaseClient.storage
