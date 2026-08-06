@@ -166,3 +166,27 @@ async function generateThumbnail(videoFile) {
         video.addEventListener("error", reject);
     });
 }
+
+function uploadWithProgress(filePath, file, onProgress) {
+    return new Promise((resolve, reject) => {
+        const url = `${SUPABASE_URL}/storage/v1/object/post-media/${filePath}`;
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+        xhr.setRequestHeader("Authorization", `Bearer ${window.currentAccessToken}`);
+        xhr.setRequestHeader("x-upsert", "false");
+
+        xhr.upload.addEventListener("progress", (e) => {
+            if (e.lengthComputable) {
+                const percent = Math.round((e.loaded / e.total) * 100);
+                onProgress(percent);
+            }
+        });
+
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) resolve();
+            else reject(new Error(xhr.responseText));
+        };
+        xhr.onerror = () => reject(new Error("Upload failed"));
+        xhr.send(file);
+    });
+}
