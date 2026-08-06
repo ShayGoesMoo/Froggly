@@ -114,3 +114,19 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
 document.getElementById("cancel-btn").addEventListener("click", () => {
     window.location.href = "index.html";
 });
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB, adjust as you like
+
+mediaInput.addEventListener("change", () => {
+    const file = mediaInput.files[0];
+    if (!file) return;
+
+    if (file.size > MAX_FILE_SIZE) {
+        alert(`File is too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Max size is ${MAX_FILE_SIZE / 1024 / 1024}MB.`);
+        mediaInput.value = ""; // reset the input
+        return;
+    }
+
+    selectedFile = file;
+    // ...rest of your existing handler unchanged
+});
