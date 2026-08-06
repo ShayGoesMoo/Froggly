@@ -182,6 +182,7 @@ function uploadWithProgress(filePath, file, onProgress) {
         const xhr = new XMLHttpRequest();
         xhr.open("POST", url);
         xhr.setRequestHeader("Authorization", `Bearer ${window.currentAccessToken}`);
+        xhr.setRequestHeader("apikey", SUPABASE_ANON_KEY);
         xhr.setRequestHeader("x-upsert", "false");
 
         xhr.upload.addEventListener("progress", (e) => {
@@ -193,9 +194,9 @@ function uploadWithProgress(filePath, file, onProgress) {
 
         xhr.onload = () => {
             if (xhr.status >= 200 && xhr.status < 300) resolve();
-            else reject(new Error(xhr.responseText));
+            else reject(new Error(`Upload failed with status ${xhr.status}: ${xhr.responseText}`));
         };
-        xhr.onerror = () => reject(new Error("Upload failed"));
+        xhr.onerror = () => reject(new Error("Network error during upload"));
         xhr.send(file);
     });
 }
