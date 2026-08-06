@@ -43,6 +43,7 @@ mediaInput.addEventListener("change", () => {
 
 document.getElementById("create-post-form").addEventListener("submit", async (e) => {
     e.preventDefault();
+    console.log("Form submitted, file:", selectedFile)
 
     if (!selectedFile) {
         alert("Please select a photo, video, or gif to upload.");
@@ -50,6 +51,7 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
     }
 
     const { data: { session } } = await supabaseClient.auth.getSession();
+    console.log("Current session:", session)
     if (!session) {
         alert("You need to be logged in to post.");
         return;
@@ -62,10 +64,13 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
     // 1. Upload the file to Supabase Storage
     const fileExt = selectedFile.name.split(".").pop();
     const filePath = `${session.user.id}/${crypto.randomUUID()}.${fileExt}`;
+    console.log("Uploading file to path:", filePath, "size:", selectedFile.size, "type:", selectedFile.type);
 
     const { error: uploadError } = await supabaseClient.storage
         .from("post-media")
         .upload(filePath, selectedFile);
+    
+    console.log("Upload result:", uploadError ? "Error: " + uploadError.message : "Success");
 
     if (uploadError) {
         alert("Upload failed: " + uploadError.message);

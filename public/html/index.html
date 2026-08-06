@@ -19,7 +19,7 @@
                 </div>
                 <div class="middle">
                     <input type="search" placeholder="Search...">
-                    <button type="button">New Post</button>
+                    <button type="button" id="create-post">New Post</button>
                     <button type="button">Changelog</button>
                     <button type="button" id="logout-btn">Logout</button>
                 </div>
@@ -33,18 +33,18 @@
 
         <main>
             <div class="timeline">
-    <a href="post.html?id=POST_ID_HERE" class="timeline-item">
-        <div class="thumbnail">
-            <img src="..." alt="">
-            <span class="media-type">Image</span>
-        </div>
-        <div class="item-info">
-            <span class="username">username</span>
-            <span class="type-label">Image</span>
-        </div>
-    </a>
-    <!-- repeat for each post -->
-</div>
+                <a href="post.html?id=POST_ID_HERE" class="timeline-item">
+                    <div class="thumbnail">
+                        <img src="..." alt="">
+                        <span class="media-type">Image</span>
+                    </div>
+                    <div class="item-info">
+                        <span class="username">username</span>
+                        <span class="type-label">Image</span>
+                    </div>
+                </a>
+                <!-- repeat for each post -->
+            </div>
         </main>
 
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -69,9 +69,9 @@
                 }
             });
 
-            document.querySelector(".middle button[type='button']").addEventListener("click", () => {
-    window.location.href = "create-post.html";
-});
+            document.querySelector("#create-post").addEventListener("click", () => {
+                window.location.href = "create-post.html";
+            });
         </script>
     </body>
 </html>
