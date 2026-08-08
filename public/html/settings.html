@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Froggly | Settings</title>
+
+        <link rel="stylesheet" href="../css/index.css">
+        <link rel="stylesheet" href="../css/navigation-bar.css">
+        <link rel="stylesheet" href="../css/settings.css">
+    </head>
+    <body>
+        <header class="navigation-bar">
+            <div class="nav-wrapper">
+                <div class="left">
+                    <div class="logo">
+                        <img src="../assets/logo 1.png" alt="Froggly logo">
+                    </div>
+                </div>
+                <div class="middle">
+                    <input type="search" placeholder="Search...">
+                </div>
+                <div class="right">
+                    <a href="index.html">Back to Timeline</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="settings-view">
+            <h2>Settings</h2>
+
+            <!-- Profile picture -->
+            <section class="settings-card">
+                <h3>Profile Picture</h3>
+                <div class="pfp-row">
+                    <img src="../assets/default profile picture.png" alt="Current avatar" id="current-avatar">
+                    <div class="pfp-actions">
+                        <input type="file" id="avatar-input" accept="image/*" hidden>
+                        <button type="button" id="avatar-btn">Change Picture</button>
+                        <span class="settings-hint">JPG or PNG, up to 5MB</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Display name -->
+            <section class="settings-card">
+                <h3>Display Name</h3>
+                <form id="display-name-form">
+                    <input type="text" id="display-name-input" placeholder="Display name" required>
+                    <button type="submit">Save</button>
+                </form>
+            </section>
+
+            <!-- Username -->
+            <section class="settings-card">
+                <h3>Username</h3>
+                <form id="username-form">
+                    <input type="text" id="username-input" placeholder="Username" required>
+                    <button type="submit">Save</button>
+                </form>
+                <span class="settings-hint" id="username-status"></span>
+            </section>
+
+            <!-- Password -->
+            <section class="settings-card">
+                <h3>Change Password</h3>
+                <form id="password-form">
+                    <label>New Password</label>
+                    <input type="password" id="new-password-input" placeholder="New password" required>
+
+                    <label>Confirm New Password</label>
+                    <input type="password" id="confirm-password-input" placeholder="Confirm new password" required>
+
+                    <button type="submit">Update Password</button>
+                </form>
+            </section>
+
+            <!-- Delete account -->
+            <section class="settings-card danger-zone">
+                <h3>Delete Account</h3>
+                <p class="settings-hint">This permanently deletes your account and all your posts. This cannot be undone.</p>
+                <button type="button" id="delete-account-btn">Delete My Account</button>
+            </section>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script src="../js/supabase-config.js"></script>
+        <script src="../js/settings.js"></script>
+    </body>
+</html>
