@@ -4,6 +4,7 @@
     max-width: 600px;
     margin: 32px auto;
     padding: 0 16px;
+    font-family: inherit;
 }
 
 .settings-view h2 {
@@ -42,6 +43,7 @@
     padding: 8px 10px;
     border: 1px solid #ccc;
     font-size: 14px;
+    font-family: inherit;
 }
 
 .settings-card button {
@@ -53,6 +55,7 @@
     border: none;
     font-size: 14px;
     cursor: pointer;
+    font-family: inherit;
 }
 
 .settings-card button:hover {

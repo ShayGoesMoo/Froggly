@@ -7,7 +7,10 @@
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Noto Serif NP Hmong", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
     background-color: #f4f4f4;
     color: #333;
 }

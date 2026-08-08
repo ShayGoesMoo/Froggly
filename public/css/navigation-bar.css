@@ -4,6 +4,7 @@
     border-bottom: 1px solid #d1d9e0;
     padding: 0 16px;
     height: 62px;
+    font-family: inherit;
 }
 
 .nav-wrapper {
@@ -44,6 +45,7 @@
     border: 1px solid #d1d9e0;
     font-size: 14px;
     background-color: #f6f8fa;
+    font-family: inherit;
 }
 
 .middle input[type="search"]:focus {
@@ -51,6 +53,7 @@
     border-color: #0969da;
     background-color: #fff;
     box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
+    font-family: inherit;
 }
 
 .middle button[type="button"] {
@@ -60,6 +63,7 @@
     font-size: 14px;
     background-color: #f6f8fa;
     cursor: pointer;
+    font-family: inherit;
 }
 
 .right a {
