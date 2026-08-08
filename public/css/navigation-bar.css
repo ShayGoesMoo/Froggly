@@ -42,7 +42,6 @@
     max-width: 500px;
     padding: 6px 12px;
     border: 1px solid #d1d9e0;
-    border-radius: 4px;
     font-size: 14px;
     background-color: #f6f8fa;
 }
@@ -58,7 +57,6 @@
     margin-left: 8px;
     padding: 6px 12px;
     border: 1px solid #d1d9e0;
-    border-radius: 4px;
     font-size: 14px;
     background-color: #f6f8fa;
     cursor: pointer;
@@ -78,7 +76,6 @@
 .user img {
     width: 32px;
     height: 32px;
-    border-radius: 50%;
     background-color: #d1d9e0;
     display: block;
     object-fit: cover;

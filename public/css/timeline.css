@@ -7,7 +7,7 @@ main {
 
 .timeline {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 20px;
 }
 
@@ -22,7 +22,6 @@ main {
     aspect-ratio: 1 / 1;
     background-color: #e9ecef;
     border: 1px solid #d1d9e0;
-    border-radius: 6px;
     overflow: hidden;
 }
 
@@ -48,7 +47,6 @@ main {
     color: #fff;
     font-size: 11px;
     padding: 2px 6px;
-    border-radius: 4px;
 }
 
 .item-info {
