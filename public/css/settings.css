@@ -1,0 +1,123 @@
+/* settings.css */
+
+.settings-view {
+    max-width: 600px;
+    margin: 32px auto;
+    padding: 0 16px;
+}
+
+.settings-view h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.settings-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.settings-card h3 {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.settings-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.settings-card label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #555;
+    margin-top: 6px;
+}
+
+.settings-card input[type="text"],
+.settings-card input[type="password"] {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.settings-card button {
+    align-self: flex-start;
+    margin-top: 8px;
+    padding: 8px 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.settings-card button:hover {
+    background-color: #555;
+}
+
+.settings-hint {
+    display: block;
+    font-size: 12px;
+    color: #888;
+    margin-top: 6px;
+}
+
+/* Profile picture row */
+.pfp-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.pfp-row img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #eee;
+}
+
+.pfp-actions {
+    display: flex;
+    flex-direction: column;
+}
+
+.pfp-actions button {
+    padding: 6px 14px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.pfp-actions button:hover {
+    background-color: #555;
+}
+
+/* Danger zone */
+.danger-zone {
+    border-color: #e0b4b4;
+    background-color: #fff6f6;
+}
+
+.danger-zone h3 {
+    color: #a33;
+}
+
+.danger-zone button {
+    background-color: #c0392b;
+}
+
+.danger-zone button:hover {
+    background-color: #a33025;
+}
