@@ -9,14 +9,23 @@ async function loadPost() {
 
     const { data: post, error } = await supabaseClient
         .from("posts")
-        .select("id, media_url, media_type, caption, users(username)")
+        .select("id, media_url, media_type, caption, thumbnail_url, users(username, avatar_url)")
         .eq("id", postId)
         .single();
 
-    if (error || !post) {
-        console.error("Failed to load post:", error);
-        return;
-    }
+        if (error || !post) {
+            console.error("Failed to load post:", error);
+            return;
+        }
+
+        document.getElementById("post-image").src = post.media_url;
+        document.querySelector(".uploader-info .username").textContent = post.users.username;
+        document.querySelector(".uploader-info .media-type").textContent = post.media_type;
+        document.querySelector(".post-caption p").textContent = post.caption ?? "";
+
+        if (post.users.avatar_url) {
+            document.querySelector(".uploader-avatar").src = post.users.avatar_url;
+        }
 
     const mediaContainer = document.querySelector(".post-media");
     const existingImg = document.getElementById("post-image");
@@ -69,6 +78,4 @@ async function loadComments() {
 }
 
 loadPost();
-
-
 

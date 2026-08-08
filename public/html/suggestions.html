@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Froggly | Suggestions</title>
+
+        <link rel="stylesheet" href="../css/index.css">
+        <link rel="stylesheet" href="../css/navigation-bar.css">
+        <link rel="stylesheet" href="../css/suggestions.css">
+    </head>
+    <body>
+        <header class="navigation-bar">
+            <div class="nav-wrapper">
+                <div class="left">
+                    <div class="logo">
+                        <img src="../assets/logo 1.png" alt="Froggly logo">
+                    </div>
+                </div>
+                <div class="middle">
+                    <input type="search" placeholder="Search...">
+                </div>
+                <div class="right">
+                    <a href="index.html">Back to Timeline</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="suggestions-view">
+            <h2>Send a Suggestion</h2>
+            <p class="suggestions-hint">Found a bug or have an idea? Let us know below.</p>
+
+            <form id="suggestion-form">
+                <label for="issue-text">Your Suggestion or Issue</label>
+                <textarea id="issue-text" rows="6" placeholder="Describe what happened or what you'd like to see..." required></textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+
+            <p class="suggestions-status" id="suggestions-status"></p>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script src="../js/supabase-config.js"></script>
+        <script src="../js/suggestions.js"></script>
+    </body>
+</html>

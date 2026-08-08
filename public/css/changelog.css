@@ -1,0 +1,83 @@
+/* changelog.css */
+
+.changelog-view {
+    max-width: 650px;
+    margin: 32px auto;
+    padding: 0 16px;
+}
+
+.changelog-view h2 {
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.changelog-hint {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 24px;
+}
+
+.changelog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.changelog-entry {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 18px 20px;
+}
+
+.changelog-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.changelog-date {
+    font-size: 13px;
+    color: #888;
+}
+
+.changelog-tag {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 2px 8px;
+}
+
+.tag-new {
+    background-color: #e6f4ea;
+    color: #1e7d34;
+}
+
+.tag-fix {
+    background-color: #fdecea;
+    color: #b3261e;
+}
+
+.tag-improvement {
+    background-color: #e8f0fe;
+    color: #1a56c4;
+}
+
+.changelog-entry h3 {
+    font-size: 16px;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.changelog-entry ul {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.changelog-entry li {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.4;
+}

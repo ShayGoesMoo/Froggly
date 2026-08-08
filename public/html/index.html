@@ -20,8 +20,9 @@
                 <div class="middle">
                     <input type="search" placeholder="Search...">
                     <button type="button" id="create-post">New Post</button>
-                    <button type="button">Changelog</button>
-                    <button type="button">Settings</button>
+                    <button type="button" id="suggestions-btn">Suggestions</button>
+                    <button type="button" id="changelog-btn">Changelog</button>
+                    <button type="button" id="settings-btn">Settings</button>
                     <button type="button" id="logout-btn">Logout</button>
                 </div>
                 <div class="right">
@@ -72,6 +73,18 @@
 
             document.querySelector("#create-post").addEventListener("click", () => {
                 window.location.href = "create-post.html";
+            });
+
+            document.querySelector("#settings-btn").addEventListener("click", () => {
+                window.location.href = "settings.html";
+            });
+
+            document.getElementById("suggestions-btn").addEventListener("click", () => {
+                window.location.href = "suggestions.html";
+            });
+
+            document.getElementById("changelog-btn").addEventListener("click", () => {
+                window.location.href = "changelog.html";
             });
         </script>
     </body>

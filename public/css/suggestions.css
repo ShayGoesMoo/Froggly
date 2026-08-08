@@ -1,0 +1,61 @@
+/* suggestions.css */
+
+.suggestions-view {
+    max-width: 500px;
+    margin: 32px auto;
+    padding: 0 16px;
+}
+
+.suggestions-view h2 {
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.suggestions-hint {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+#suggestion-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+}
+
+#suggestion-form label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+#suggestion-form textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+#suggestion-form button {
+    align-self: flex-start;
+    padding: 8px 18px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#suggestion-form button:hover {
+    background-color: #555;
+}
+
+.suggestions-status {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #2a7a2a;
+}
