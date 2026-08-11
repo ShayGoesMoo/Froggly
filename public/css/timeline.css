@@ -1,12 +1,13 @@
 /* Main content */
 main {
-    max-width: 1350px;
-    margin: 28px auto;
+    max-width: 1280px;
+    margin: 0 auto 20px;
     padding: 0 16px;
 }
 
 .timeline {
-    column-count: 5;
+    margin-top: 10px;
+    column-count: 4;
     column-gap: 20px;
 }
 
