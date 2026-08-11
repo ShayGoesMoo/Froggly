@@ -45,8 +45,7 @@
             <div class="video-info">
                 <div class="video-text">
                     <div class="video-title">${escapeHtml(video.title)}</div>
-                    <div class="channel-name">${escapeHtml(video.channel)}</div>
-                    <div class="video-meta">${video.views} &middot; ${video.uploaded}</div>
+                    <div class="video-meta">${escapeHtml(video.channel)} &middot; ${video.views} &middot; ${video.uploaded}</div>
                 </div>
             </div>
         `;
