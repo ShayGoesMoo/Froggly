@@ -98,6 +98,31 @@ async function searchVideos(query) {
     }
 }
 
+async function searchVideosLite(query, maxResults = 6) {
+    const q = query.trim();
+    if (!q) return [];
+
+    try {
+        const searchUrl = `${YOUTUBE_API_BASE}/search?part=snippet&type=video&maxResults=${maxResults}&q=${encodeURIComponent(q)}&key=${YOUTUBE_API_KEY}`;
+        const searchRes = await fetch(searchUrl);
+        if (!searchRes.ok) {
+            console.error("YouTube search.list error:", await searchRes.text());
+            return [];
+        }
+        const searchData = await searchRes.json();
+        const items = searchData.items || [];
+
+        return items.map(item => ({
+            id: item.id.videoId,
+            title: item.snippet.title,
+            thumbnail: item.snippet.thumbnails.medium.url,
+        }));
+    } catch (err) {
+        console.error("YouTube API request failed:", err);
+        return [];
+    }
+}
+
 // Debounced suggestions so the dropdown doesn't fire a request on every keystroke
 let suggestionsDebounceTimer;
 function getSuggestions(query, limit = 6) {
@@ -109,8 +134,8 @@ function getSuggestions(query, limit = 6) {
             return;
         }
         suggestionsDebounceTimer = setTimeout(async () => {
-            const results = await searchVideos(q);
-            resolve(results.slice(0, limit).map(v => ({ id: v.id, title: v.title, thumbnail: v.thumbnail })));
-        }, 300);
+            const results = await searchVideosLite(q, limit);
+            resolve(results);
+        }, 150);
     });
 }
