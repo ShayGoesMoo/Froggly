@@ -38,6 +38,7 @@
 .nav-wrapper .middle {
     flex: 1;
     display: flex;
+    align-items: center;
     justify-content: center;
 }
 
@@ -93,6 +94,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    white-space: nowrap;
 }
 
 .middle button[type="button"] svg {

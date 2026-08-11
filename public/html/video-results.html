@@ -28,6 +28,13 @@
                         Home
                     </button>
 
+                    <button type="button" id="video-home">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 3l14 9-14 9V3z"/>
+                        </svg>
+                        Videos
+                    </button>
+
                     <span class="divider"></span>
 
                     <button type="button" id="suggestions-btn">
@@ -105,9 +112,12 @@
             </div>
         </main>
 
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script src="../js/supabase-config.js"></script>
         <script src="../js/video-search-data.js"></script>
         <script src="../js/video-results.js"></script>
         <script src="../js/video-search.js"></script>
+        <script src="../js/logout.js"></script>
 
         <script>
             document.querySelector("#create-post").addEventListener("click", () => {
@@ -124,6 +134,10 @@
             });
             document.getElementById("home-btn").addEventListener("click", () => {
                 window.location.href = "index.html";
+            });
+
+            document.getElementById("video-home").addEventListener("click", () => {
+                window.location.href = "video-search.html";
             });
         </script>
     </body>

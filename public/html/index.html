@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="../css/index.css">
         <link rel="stylesheet" href="../css/navigation-bar.css">
         <link rel="stylesheet" href="../css/timeline.css">
+        <link rel="stylesheet" href="../css/video-search.css">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,6 +28,13 @@
                             <path d="M3 11l9-8 9 8M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/>
                         </svg>
                         Home
+                    </button>
+
+                    <button type="button" id="video-home">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 3l14 9-14 9V3z"/>
+                        </svg>
+                        Videos
                     </button>
 
                     <span class="divider"></span>
@@ -62,7 +70,10 @@
 
                     <span class="divider"></span>
 
-                    <input type="search" placeholder="Search..."> 
+                    <div class="video-search-wrapper">
+                        <input type="search" id="video-search-input" placeholder="Search videos..." autocomplete="off">
+                        <ul id="suggestions-list" class="suggestions-list hidden"></ul>
+                    </div> 
 
                     <div class="right">
                         <div class="user">
@@ -98,6 +109,8 @@
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <script src="../js/supabase-config.js"></script>
         <script src="../js/timeline.js"></script>
+        <script src="../js/video-search-data.js"></script>
+        <script src="../js/video-search.js"></script>
         <script src="../js/logout.js"></script>
 
         <script>
@@ -135,6 +148,10 @@
 
             document.getElementById("home-btn").addEventListener("click", () => {
                 window.location.href = "index.html";
+            });
+
+            document.getElementById("video-home").addEventListener("click", () => {
+                window.location.href = "video-search.html";
             });
         </script>
     </body>
