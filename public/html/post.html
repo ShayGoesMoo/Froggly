@@ -114,6 +114,9 @@
 
                     <img src="" alt="loading..." id="post-image">
 
+                    <!-- YouTube player mounts here -->
+                    <div id="youtube-player-container" style="display: none;"></div>
+
                     <!-- Video title overlay (only shown for video posts, via JS) -->
                     <div class="video-title-overlay" id="video-title-overlay" style="display: none;"></div>
 
@@ -244,6 +247,7 @@
             </div>
         </div>
 
+        <script src="https://www.youtube.com/iframe_api"></script>
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <script src="../js/supabase-config.js"></script>
         <script src="../js/post.js"></script>

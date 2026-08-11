@@ -27,7 +27,7 @@
     results.forEach((video) => {
         const card = document.createElement("a");
         card.className = "video-card";
-        card.href = `watch.html?id=${encodeURIComponent(video.id)}`;
+        card.href = `post.html?youtube=${encodeURIComponent(video.id)}`;
         card.dataset.videoId = video.id;
 
         card.addEventListener("click", () => {
