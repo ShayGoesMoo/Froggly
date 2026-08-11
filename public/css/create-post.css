@@ -24,7 +24,7 @@
     cursor: pointer;
     overflow: hidden;
     position: relative;
-    border-radius: 4px;
+   border-radius: 12px;
 }
 
 .upload-panel:hover {
@@ -77,7 +77,7 @@
     padding: 8px 14px;
     background-color: rgba(0, 0, 0, 0.6);
     color: #f5f5f5;
-    border-radius: 4px;
+   border-radius: 12px;
     border: none;
     font-size: 13px;
     cursor: pointer;
@@ -156,7 +156,7 @@
 
 #cancel-btn {
     margin-left: 8px;
-    border-radius: 4px;
+   border-radius: 12px;
     padding: 6px 12px;
     border: 1px solid #222222;
     font-size: 14px;
@@ -176,7 +176,7 @@
 
 #publish-btn {
     margin-left: 8px;
-    border-radius: 4px;
+   border-radius: 12px;
     padding: 6px 12px;
     border: 1px solid #27751d;
     font-size: 14px;

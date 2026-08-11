@@ -30,8 +30,8 @@ async function loadPost() {
         video.src = post.media_url;
         video.playsInline = true;
         video.preload = "metadata";
-        // no "controls" attribute — using custom controls instead
-
+        video.autoplay = true;
+        
         mediaContainer.insertBefore(video, mediaContainer.firstChild);
 
         document.getElementById("video-title-overlay").style.display = "block";
@@ -45,7 +45,7 @@ async function loadPost() {
 
     document.getElementById("post-title-display").textContent = post.title ?? "";
     document.querySelector(".uploader-info .username").textContent = post.users.username;
-    document.querySelector(".uploader-info .media-type").textContent = post.media_type;
+    document.querySelector(".uploader-info .media-type").textContent = "Published: " + post.media_type;
     document.querySelector(".post-caption p").textContent = post.caption ?? "";
 
     if (post.users.avatar_url) {
@@ -90,7 +90,7 @@ async function loadComments() {
 async function loadRecommended() {
     const { data: posts, error } = await supabaseClient
         .from("posts")
-        .select("id, media_url, media_type, thumbnail_url, users(username)")
+        .select("id, title, media_url, caption, media_type, thumbnail_url, users(username)")
         .eq("media_type", "video")
         .neq("id", postId)
         .order("created_at", { ascending: false })
@@ -116,8 +116,8 @@ async function loadRecommended() {
                 <img src="${thumbSrc}" alt="">
             </div>
             <div class="recommended-info">
-                <span class="username">${post.users.username}</span>
-                <span class="type-label">${post.media_type}</span>
+                <span class="username">${post.title}</span>
+                <span class="type-label">${post.caption || post.users.username}</span>
             </div>
         `;
 
