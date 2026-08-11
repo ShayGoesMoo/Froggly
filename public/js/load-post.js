@@ -131,9 +131,12 @@ function loadYouTubePost(videoId) {
     }
 
     // No comment section or recommended panel for YouTube videos — hide those areas
-    document.querySelector(".comment-panel").style.display = "none";
-    document.getElementById("recommended-panel").style.display = "none";
-}
+    const commentPanel = document.querySelector(".comment-panel");
+    if (commentPanel) commentPanel.style.display = "none";
+
+    const recommendedPanel = document.getElementById("recommended-panel");
+    if (recommendedPanel) recommendedPanel.style.display = "none";
+    }
 
 function createYouTubePlayer(videoId) {
     new YT.Player("youtube-player-container", {
