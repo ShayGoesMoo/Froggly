@@ -43,7 +43,6 @@
                 <span class="duration">${video.duration}</span>
             </div>
             <div class="video-info">
-                <img class="channel-avatar" src="${video.channelAvatar}" alt="">
                 <div class="video-text">
                     <div class="video-title">${escapeHtml(video.title)}</div>
                     <div class="channel-name">${escapeHtml(video.channel)}</div>
