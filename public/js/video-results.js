@@ -27,10 +27,15 @@
     results.forEach((video) => {
         const card = document.createElement("a");
         card.className = "video-card";
-        card.href = `https://www.youtube.com/watch?v=${video.id}`;
-        card.target = "_blank";
-        card.rel = "noopener";
+        card.href = `watch.html?id=${encodeURIComponent(video.id)}`;
         card.dataset.videoId = video.id;
+
+        card.addEventListener("click", () => {
+            // stash the full video info so watch.html can show title/channel/views
+            // without an extra API call; if it's missing (e.g. direct link, refresh),
+            // watch.html just falls back to showing the player alone.
+            sessionStorage.setItem("watch:" + video.id, JSON.stringify(video));
+        });
 
         card.innerHTML = `
             <div class="thumbnail">
