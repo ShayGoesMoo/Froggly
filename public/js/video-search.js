@@ -66,8 +66,12 @@
             }
         }
 
-        input.addEventListener("input", () => {
-            const suggestions = getSuggestions(input.value);
+        let requestId = 0;
+        input.addEventListener("input", async () => {
+            const thisRequest = ++requestId;
+            const suggestions = await getSuggestions(input.value);
+            // if the user kept typing while this request was in flight, drop the stale result
+            if (thisRequest !== requestId) return;
             renderSuggestions(suggestions);
         });
 
