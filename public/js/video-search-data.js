@@ -13,7 +13,7 @@
  * debounced (300ms) so fast typing doesn't burn through quota.
  */
 
-const YOUTUBE_API_KEY = "YOUR_API_KEY_HERE";
+const YOUTUBE_API_KEY = "AIzaSyAiBgtsYjrn74QhhnRSz0F0njyx9qLskuY";
 const YOUTUBE_API_BASE = "https://www.googleapis.com/youtube/v3";
 
 const TRENDING_QUERIES = ["frog species", "javascript tutorial", "css grid", "youtube api", "nature sounds"];
