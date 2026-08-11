@@ -15,7 +15,7 @@ async function loadPost() {
 
     const { data: post, error } = await supabaseClient
         .from("posts")
-        .select("id, media_url, media_type, title, caption, thumbnail_url, users(username, avatar_url)")
+        .select("id, title, media_url, caption, media_type, thumbnail_url, users!posts_user_id_fkey(username)")
         .eq("id", postId)
         .single();
 
@@ -58,7 +58,6 @@ async function loadPost() {
         video.playsInline = true;
         video.preload = "metadata";
         video.autoplay = true;
-        video.muted = true;
 
         mediaContainer.insertBefore(video, mediaContainer.firstChild);
 
@@ -85,8 +84,47 @@ async function loadPost() {
         document.querySelector(".uploader-avatar").src = post.users.avatar_url;
     }
 
+    recordView(postId);
+
     loadComments();
     loadRecommended();
+}
+
+async function recordView(postId) {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) return;
+
+    const { data: existing } = await supabaseClient
+        .from("post_views")
+        .select("post_id")
+        .eq("post_id", postId)
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+
+    if (existing) return; // already viewed, nothing to do
+
+    const { error } = await supabaseClient
+        .from("post_views")
+        .insert([{ post_id: postId, user_id: session.user.id }]);
+
+    if (error) {
+        console.error("Failed to record view:", error);
+    }
+}
+
+async function loadViewCount(postId) {
+    const { count, error } = await supabaseClient
+        .from("post_views")
+        .select("*", { count: "exact", head: true })
+        .eq("post_id", postId);
+
+    if (error) {
+        console.error("Failed to load view count:", error);
+        return;
+    }
+
+    const viewsEl = document.querySelector(".uploader-info .media-type"); // or wherever you want to display it
+    // adjust the selector/target based on where you actually want views shown on post.html
 }
 
 function loadYouTubePost(videoId) {
@@ -159,7 +197,7 @@ loadPost();
 async function loadComments() {
     const { data: comments, error } = await supabaseClient
         .from("comments")
-        .select("id, comment_text, users(username)")
+        .select("id, comment_text, users!comments_user_id_fkey(username)")
         .eq("post_id", postId)
         .order("created_at", { ascending: true });
 
@@ -190,7 +228,7 @@ async function loadComments() {
 async function loadRecommended() {
     const { data: posts, error } = await supabaseClient
         .from("posts")
-        .select("id, title, media_url, caption, media_type, thumbnail_url, users(username)")
+        .select("id, title, media_url, caption, media_type, thumbnail_url, users!posts_user_id_fkey(username)")
         .eq("media_type", "video")
         .neq("id", postId)
         .order("created_at", { ascending: false })
