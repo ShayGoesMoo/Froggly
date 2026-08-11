@@ -8,20 +8,82 @@
         <link rel="stylesheet" href="../css/index.css">
         <link rel="stylesheet" href="../css/navigation-bar.css">
         <link rel="stylesheet" href="../css/settings.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Mukta+Vaani:wght@200;300;400;500;600;700;800&family=Noto+Serif+NP+Hmong:wght@400..700&family=Noto+Serif+Oriya:wght@400..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">    
     </head>
     <body>
         <header class="navigation-bar">
             <div class="nav-wrapper">
                 <div class="left">
                     <div class="logo">
-                        <img src="../assets/logo 1.png" alt="Froggly logo">
+                        
                     </div>
                 </div>
                 <div class="middle">
-                    <input type="search" placeholder="Search...">
-                </div>
-                <div class="right">
-                    <a href="index.html">Back to Timeline</a>
+                    <button type="button" id="home-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 11l9-8 9 8M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/>
+                        </svg>
+                        Home
+                    </button>
+
+                    <span class="divider"></span>
+
+                    <button type="button" id="suggestions-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        Suggestions
+                    </button>
+
+                    <button type="button" id="changelog-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 8v4l3 3M12 3a9 9 0 1 0 9 9"/>
+                            <path d="M12 3v4h4"/>
+                        </svg>
+                        Changelog
+                    </button>
+
+                    <button type="button" id="settings-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 
+                            0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 
+                            0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 
+                            2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 
+                            2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 
+                            1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 
+                            0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                        Settings
+                    </button>
+
+                    <span class="divider"></span>
+
+                    <input type="search" placeholder="Search..."> 
+
+                    <div class="right">
+                        <div class="user">
+                            <img src="../assets/default profile picture.png" alt="User avatar">
+                        </div>
+                    </div>
+
+                    <span class="divider"></span>
+
+                    <button type="button" id="create-post">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        New Post
+                    </button>
+
+                    <span class="divider"></span>
+
+                    <button type="button" id="logout-btn">
+                        Logout
+                    </button>
                 </div>
             </div>
         </header>
@@ -86,5 +148,44 @@
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <script src="../js/supabase-config.js"></script>
         <script src="../js/settings.js"></script>
+        <script src="../js/logout.js"></script>
+
+        <script>
+            // save scroll position whenever the user clicks into a post
+            document.querySelectorAll(".timeline-item a").forEach((link) => {
+                link.addEventListener("click", () => {
+                    sessionStorage.setItem("timelineScroll", window.scrollY);
+                });
+            });
+
+            // restore scroll position on page load (covers cases where history.back() alone doesn't restore it)
+            window.addEventListener("load", () => {
+                const savedScroll = sessionStorage.getItem("timelineScroll");
+                if (savedScroll !== null) {
+                    window.scrollTo(0, parseInt(savedScroll, 10));
+                    sessionStorage.removeItem("timelineScroll"); // clear it so it doesn't persist stale on future visits
+                }
+            });
+
+            document.querySelector("#create-post").addEventListener("click", () => {
+                window.location.href = "create-post.html";
+            });
+
+            document.querySelector("#settings-btn").addEventListener("click", () => {
+                window.location.href = "settings.html";
+            });
+
+            document.getElementById("suggestions-btn").addEventListener("click", () => {
+                window.location.href = "suggestions.html";
+            });
+
+            document.getElementById("changelog-btn").addEventListener("click", () => {
+                window.location.href = "changelog.html";
+            });
+
+            document.getElementById("home-btn").addEventListener("click", () => {
+                window.location.href = "index.html";
+            });
+        </script>
     </body>
 </html>

@@ -1,7 +1,7 @@
 async function loadTimeline() {
     const { data: posts, error } = await supabaseClient
         .from("posts")
-        .select("id, media_url, media_type, thumbnail_url, users(username)")
+        .select("id, media_url, media_type, thumbnail_url, title, caption, users(username, avatar_url)")
         .order("created_at", { ascending: false });
 
     if (error) {
@@ -21,14 +21,19 @@ async function loadTimeline() {
             ? `<img src="${post.thumbnail_url || post.media_url}" alt="">`
             : `<img src="${post.media_url}" alt="">`;
 
+        const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
+
         item.innerHTML = `
             <div class="thumbnail">
                 ${mediaHTML}
                 <span class="media-type">${post.media_type}</span>
             </div>
             <div class="item-info">
-                <span class="username">${post.users.username}</span>
-                <span class="type-label">${post.media_type}</span>
+                <img class="item-avatar" src="${avatarSrc}" alt="">
+                <div class="item-text">
+                    <span class="username">${post.users.username}</span>
+                    <span class="caption">${post.title || post.caption || ""}</span>
+                </div>
             </div>
         `;
 

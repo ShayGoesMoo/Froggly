@@ -116,6 +116,7 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
     }
 
     // 3. Insert the post record
+    const title = document.getElementById("post-title").value.trim();
     const caption = document.getElementById("caption").value.trim();
 
     const { data: newPost, error: insertError } = await supabaseClient
@@ -125,6 +126,7 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
                 user_id: session.user.id,
                 media_url: urlData.publicUrl,
                 media_type: detectedMediaType,
+                title: title,
                 caption: caption,
                 thumbnail_url: thumbnailUrl,
             },
