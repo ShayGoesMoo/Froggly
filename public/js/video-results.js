@@ -1,4 +1,4 @@
-(function () {
+(async function () {
     const params = new URLSearchParams(window.location.search);
     const query = params.get("q") || "";
 
@@ -13,7 +13,9 @@
     const navInput = document.getElementById("video-search-input");
     if (navInput) navInput.value = query;
 
-    const results = query ? searchVideos(query) : [];
+    countEl.textContent = "Loading...";
+
+    const results = query ? await searchVideos(query) : [];
 
     countEl.textContent = `${results.length} video${results.length === 1 ? "" : "s"} found`;
 
@@ -25,7 +27,9 @@
     results.forEach((video) => {
         const card = document.createElement("a");
         card.className = "video-card";
-        card.href = "#"; // swap for a real watch page/link once available
+        card.href = `https://www.youtube.com/watch?v=${video.id}`;
+        card.target = "_blank";
+        card.rel = "noopener";
         card.dataset.videoId = video.id;
 
         card.innerHTML = `
