@@ -10,8 +10,9 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
     background-color: #0f0f0f; /* fallback while image loads, or if the API call fails */
-    transition: background-image 0.4s ease;
+    transition: background-image 0.4s ease-in-out;
 
     min-height: 100vh;
     display: flex;
