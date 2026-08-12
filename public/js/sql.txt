@@ -1,6 +1,33 @@
-const v = document.getElementById("post-image");
-console.log("readyState:", v.readyState);
-console.log("networkState:", v.networkState);
-console.log("error:", v.error);
-console.log("videoWidth x videoHeight:", v.videoWidth, v.videoHeight);
-console.log("computed size:", getComputedStyle(v).width, getComputedStyle(v).height);
+Deno.serve(async (req) => {
+  const CLIENT_ID = Deno.env.get("IGDB_CLIENT_ID")!;
+  const CLIENT_SECRET = Deno.env.get("IGDB_CLIENT_SECRET")!;
+
+  // Get (or reuse) a Twitch token
+  const tokenRes = await fetch(
+    `https://id.twitch.tv/oauth2/token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials`,
+    { method: "POST" }
+  );
+  const { access_token } = await tokenRes.json();
+
+  const offset = Math.floor(Math.random() * 200);
+  const igdbRes = await fetch("https://api.igdb.com/v4/games", {
+    method: "POST",
+    headers: {
+      "Client-ID": CLIENT_ID,
+      "Authorization": `Bearer ${access_token}`,
+    },
+    body: `fields name, cover.url, rating; where rating > 75 & cover != null; sort rating desc; limit 20; offset ${offset};`,
+  });
+  const games = await igdbRes.json();
+
+  if (!games.length) {
+    return new Response(JSON.stringify({ error: "no games" }), { status: 404 });
+  }
+
+  const random = games[Math.floor(Math.random() * games.length)];
+  const imageUrl = "https:" + random.cover.url.replace("t_thumb", "t_1080p");
+
+  return new Response(JSON.stringify({ imageUrl }), {
+    headers: { "Content-Type": "application/json" },
+  });
+});
