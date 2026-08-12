@@ -29,12 +29,7 @@
                         Home
                     </button>
 
-                    <button type="button" id="video-home">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 3l14 9-14 9V3z"/>
-                        </svg>
-                        Videos
-                    </button>
+                    
 
                     <span class="divider"></span>
 
@@ -73,7 +68,7 @@
 
                     <div class="right">
                         <div class="user">
-                            <img src="../assets/default profile picture.png" alt="User avatar">
+                            <img src="../assets/placeholder.png" alt="User avatar">
                         </div>
                     </div>
 
@@ -97,7 +92,10 @@
 
         <div class="sub-navbar">
             <div class="sub-navbar-wrapper">
-                <span class="sub-navbar-title">New Post</span>
+                <div class="sub-navbar-tabs">
+                    <button type="button" class="tab-btn active" id="tab-media" data-tab="media">Media</button>
+                    <button type="button" class="tab-btn" id="tab-text" data-tab="text">Text</button>
+                </div>
                 <div class="sub-navbar-actions">
                     <button type="button" id="cancel-btn">Cancel</button>
                     <button type="submit" form="create-post-form" id="publish-btn">Publish</button>
@@ -111,34 +109,50 @@
 
         <main class="create-post-view">
             <form id="create-post-form">
-                <div class="upload-panel" id="upload-panel">
-                    <input type="file" id="media-input" accept="image/*,video/*" hidden required>
 
-                    <div class="upload-placeholder" id="upload-placeholder">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 16V4m0 0L7 9m5-5 5 5M5 20h14"/>
-                        </svg>
-                        <p>Click to upload a photo, video, or gif</p>
-                        <span class="upload-hint">Max 10mb</span>
+                <!-- Media tab panel -->
+                <div class="tab-panel" id="panel-media">
+                    <div class="upload-panel" id="upload-panel">
+                        <input type="file" id="media-input" accept="image/*,video/*" hidden>
+
+                        <div class="upload-placeholder" id="upload-placeholder">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 16V4m0 0L7 9m5-5 5 5M5 20h14"/>
+                            </svg>
+                            <p>Click to upload a photo, video, or gif</p>
+                            <span class="upload-hint">Max 10mb</span>
+                        </div>
+
+                        <div class="preview-wrapper" id="preview-wrapper" style="display: none;">
+                            <img id="preview-image" alt="Preview">
+                            <video id="preview-video" controls style="display: none;"></video>
+                            <button type="button" class="change-media-btn" id="change-media-btn">Change</button>
+                        </div>
                     </div>
 
-                    <div class="preview-wrapper" id="preview-wrapper" style="display: none;">
-                        <img id="preview-image" alt="Preview">
-                        <video id="preview-video" controls style="display: none;"></video>
-                        <button type="button" class="change-media-btn" id="change-media-btn">Change</button>
+                    <div class="details-panel">
+                        <label for="post-title">Title</label>
+                        <input type="text" id="post-title" name="title" placeholder="Give your post a title...">
+
+                        <label for="caption">Caption</label>
+                        <textarea id="caption" name="caption" placeholder="Tell everyone what this post is about..." rows="6"></textarea>
+
+                        <label for="media-type-display">Media Type</label>
+                        <input type="text" id="media-type-display" disabled placeholder="Detected automatically">
                     </div>
                 </div>
 
-                <div class="details-panel">
-                    <label for="post-title">Title</label>
-                    <input type="text" id="post-title" name="title" placeholder="Give your post a title..." required>
+                <!-- Text tab panel -->
+                <div class="tab-panel" id="panel-text" style="display: none;">
+                    <div class="text-post-panel">
+                        <label for="text-title">Title</label>
+                        <input type="text" id="text-title" name="text-title" placeholder="Give your post a title...">
 
-                    <label for="caption">Caption</label>
-                    <textarea id="caption" name="caption" placeholder="Tell everyone what this post is about..." rows="6"></textarea>
-
-                    <label for="media-type-display">Media Type</label>
-                    <input type="text" id="media-type-display" disabled placeholder="Detected automatically">
+                        <label for="text-body">Caption</label>
+                        <textarea id="text-body" name="text-body" placeholder="What's on your mind?" rows="14"></textarea>
+                    </div>
                 </div>
+
             </form>
         </main>
 

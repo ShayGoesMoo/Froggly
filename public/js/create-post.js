@@ -7,10 +7,32 @@ const previewVideo = document.getElementById("preview-video");
 const changeMediaBtn = document.getElementById("change-media-btn");
 const mediaTypeDisplay = document.getElementById("media-type-display");
 
+const tabButtons = document.querySelectorAll(".tab-btn");
+const panels = {
+    media: document.getElementById("panel-media"),
+    text: document.getElementById("panel-text"),
+};
+
+let activeTab = "media";
+
+tabButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        const tab = btn.dataset.tab;
+        activeTab = tab;
+
+        tabButtons.forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
+
+        document.getElementById("panel-media").style.display = tab === "media" ? "flex" : "none";
+        document.getElementById("panel-text").style.display = tab === "text" ? "block" : "none";
+
+        mediaInput.required = tab === "media";
+    });
+});
+
 let selectedFile = null;
 let detectedMediaType = null;
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB, adjust as you like
+const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB, adjust as you like
 
 // clicking the panel opens the file picker (unless clicking "Change")
 uploadPanel.addEventListener("click", (e) => {
@@ -52,11 +74,6 @@ mediaInput.addEventListener("change", () => {
 document.getElementById("create-post-form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    if (!selectedFile) {
-        alert("Please select a photo, video, or gif to upload.");
-        return;
-    }
-
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (!session) {
         alert("You need to be logged in to post.");
@@ -64,6 +81,52 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
     }
 
     const publishBtn = document.getElementById("publish-btn");
+
+    // --- Text post branch ---
+    if (activeTab === "text") {
+        const title = document.getElementById("text-title").value.trim();
+        const body = document.getElementById("text-body").value.trim();
+
+        if (!body) {
+            alert("Please write something before publishing.");
+            return;
+        }
+
+        publishBtn.disabled = true;
+        publishBtn.textContent = "Publishing...";
+
+        const { data: newPost, error: insertError } = await supabaseClient
+            .from("posts")
+            .insert([
+                {
+                    user_id: session.user.id,
+                    media_url: null,
+                    media_type: "text",
+                    title: title,
+                    caption: body,
+                    thumbnail_url: null,
+                },
+            ])
+            .select()
+            .single();
+
+        if (insertError) {
+            alert("Failed to create post: " + insertError.message);
+            publishBtn.disabled = false;
+            publishBtn.textContent = "Publish";
+            return;
+        }
+
+        window.location.href = `post.html?id=${newPost.id}`;
+        return;
+    }
+
+    // --- Media post branch (unchanged from before) ---
+    if (!selectedFile) {
+        alert("Please select a photo, video, or gif to upload.");
+        return;
+    }
+
     publishBtn.disabled = true;
     publishBtn.textContent = "Publishing...";
 
@@ -71,7 +134,6 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
     const fileExt = selectedFile.name.split(".").pop();
     const filePath = `${session.user.id}/${crypto.randomUUID()}.${fileExt}`;
 
-    // NEW
     window.currentAccessToken = session.access_token; // needed by uploadWithProgress
 
     const progressWrapper = document.getElementById("upload-progress");
@@ -100,18 +162,23 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
     let thumbnailUrl = null;
 
     if (detectedMediaType === "video") {
-        const thumbBlob = await generateThumbnail(selectedFile);
-        const thumbPath = `${session.user.id}/${crypto.randomUUID()}.jpg`;
+        try {
+            const thumbBlob = await generateThumbnail(selectedFile);
+            const thumbPath = `${session.user.id}/${crypto.randomUUID()}.jpg`;
 
-        const { error: thumbUploadError } = await supabaseClient.storage
-            .from("post-media")
-            .upload(thumbPath, thumbBlob);
-
-        if (!thumbUploadError) {
-            const { data: thumbUrlData } = supabaseClient.storage
+            const { error: thumbUploadError } = await supabaseClient.storage
                 .from("post-media")
-                .getPublicUrl(thumbPath);
-            thumbnailUrl = thumbUrlData.publicUrl;
+                .upload(thumbPath, thumbBlob);
+
+            if (!thumbUploadError) {
+                const { data: thumbUrlData } = supabaseClient.storage
+                    .from("post-media")
+                    .getPublicUrl(thumbPath);
+                thumbnailUrl = thumbUrlData.publicUrl;
+            }
+        } catch (thumbError) {
+            console.error("Thumbnail generation failed, proceeding without one:", thumbError);
+            // thumbnailUrl stays null — post still gets created, just without a thumbnail
         }
     }
 
@@ -145,6 +212,7 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
     window.location.href = `post.html?id=${newPost.id}`;
 });
 
+
 document.getElementById("cancel-btn").addEventListener("click", () => {
     window.location.href = "index.html";
 });
@@ -157,11 +225,17 @@ async function generateThumbnail(videoFile) {
         video.playsInline = true;
         video.src = URL.createObjectURL(videoFile);
 
+        const timeout = setTimeout(() => {
+            URL.revokeObjectURL(video.src);
+            reject(new Error("Thumbnail generation timed out"));
+        }, 8000); // give it 8 seconds, then bail
+
         video.addEventListener("loadeddata", () => {
-            video.currentTime = 0.1; // seek slightly in, frame 0 is sometimes black
+            video.currentTime = 0.1;
         });
 
         video.addEventListener("seeked", () => {
+            clearTimeout(timeout);
             const canvas = document.createElement("canvas");
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
@@ -174,7 +248,11 @@ async function generateThumbnail(videoFile) {
             }, "image/jpeg", 0.8);
         });
 
-        video.addEventListener("error", reject);
+        video.addEventListener("error", (e) => {
+            clearTimeout(timeout);
+            URL.revokeObjectURL(video.src);
+            reject(e);
+        });
     });
 }
 

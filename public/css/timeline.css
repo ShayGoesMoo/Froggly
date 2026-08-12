@@ -1,12 +1,12 @@
 /* Main content */
 main {
-    max-width: 1280px;
+    max-width: 1360px;
     margin: 0 auto 20px;
     padding: 0 16px;
 }
 
 .timeline {
-    margin-top: 10px;
+    margin-top: 20px;
     column-count: 4;
     column-gap: 20px;
 }
@@ -19,6 +19,7 @@ main {
     border-radius: 12px;
     overflow: hidden;
     background-color: #131313;
+    min-height: 160px;
 }
 
 .thumbnail {
@@ -77,9 +78,24 @@ main {
     font-weight: bold;
     color: #f5f5f5;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 6;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    margin-bottom: 2px;
+    
+}
+
+.item-info .item-caption {
+    font-size: 13px;
+    color: #e7e7e7;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 8;
+    line-height: 1.4;
+    overflow: hidden;
+    margin-bottom: 2px;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
     margin-bottom: 2px;
 }
 

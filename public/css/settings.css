@@ -1,27 +1,28 @@
 /* settings.css */
 
 .settings-view {
-    max-width: 600px;
+    max-width: 500px;
     margin: 32px auto;
     padding: 0 16px;
     font-family: inherit;
 }
 
 .settings-view h2 {
-    margin-bottom: 20px;
-    color: #333;
+    margin-bottom: 6px;
+    color: #f5f5f5;
 }
 
 .settings-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: #131313;
+    border: 1px solid #222222;
     padding: 20px;
     margin-bottom: 16px;
+    border-radius: 12px;
 }
 
 .settings-card h3 {
     font-size: 15px;
-    color: #333;
+    color: #f5f5f5;
     margin-bottom: 12px;
 }
 
@@ -34,38 +35,43 @@
 .settings-card label {
     font-size: 13px;
     font-weight: bold;
-    color: #555;
+    color: #f5f5f5;
     margin-top: 6px;
 }
 
 .settings-card input[type="text"],
 .settings-card input[type="password"] {
     padding: 8px 10px;
-    border: 1px solid #ccc;
+    background-color: #222222;
+    border: 1px solid #222222;
+    color: #f5f5f5;
     font-size: 14px;
     font-family: inherit;
+    border-radius: 8px;
 }
 
 .settings-card button {
     align-self: flex-start;
     margin-top: 8px;
     padding: 8px 16px;
-    background-color: #333;
-    color: #fff;
-    border: none;
+    background-color: #131313;
+    border: 1px solid #222222;
+    border-radius: 8px;
+    color: #f5f5f5;
     font-size: 14px;
     cursor: pointer;
     font-family: inherit;
 }
 
 .settings-card button:hover {
-    background-color: #555;
+    background-color: #272727;
+    border-color: #292929;
 }
 
 .settings-hint {
     display: block;
     font-size: 12px;
-    color: #888;
+    color: #e7e7e7;
     margin-top: 6px;
 }
 
@@ -81,6 +87,7 @@
     height: 64px;
     object-fit: cover;
     background-color: #eee;
+    border-radius: 50%;
 }
 
 .pfp-actions {
@@ -88,25 +95,7 @@
     flex-direction: column;
 }
 
-.pfp-actions button {
-    padding: 6px 14px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    font-size: 13px;
-    cursor: pointer;
-    width: fit-content;
-}
-
-.pfp-actions button:hover {
-    background-color: #555;
-}
-
 /* Danger zone */
-.danger-zone {
-    border-color: #e0b4b4;
-    background-color: #fff6f6;
-}
 
 .danger-zone h3 {
     color: #a33;

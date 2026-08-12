@@ -1,21 +1,15 @@
 const params = new URLSearchParams(window.location.search);
 const postId = params.get("id");
-const youtubeId = params.get("youtube");
 
 async function loadPost() {
-    if (youtubeId) {
-        loadYouTubePost(youtubeId);
-        return;
-    }
-
     if (!postId) {
-        console.error("No post id or youtube id in URL");
+        console.error("No post id in URL");
         return;
     }
 
     const { data: post, error } = await supabaseClient
         .from("posts")
-        .select("id, title, media_url, caption, media_type, thumbnail_url, users!posts_user_id_fkey(username)")
+        .select("id, title, media_url, caption, media_type, thumbnail_url, created_at, users!posts_user_id_fkey(display_name, username, avatar_url)")
         .eq("id", postId)
         .single();
 
@@ -24,33 +18,24 @@ async function loadPost() {
         return;
     }
 
+    if (post.media_type === "text") {
+        loadTextPost(post);
+        return;
+    }
+
+    if (post.media_type === "image" || post.media_type === "gif") {
+        loadImagePost(post);
+        return;
+    }
+
     const mediaContainer = document.querySelector(".post-media");
     const existingImg = document.getElementById("post-image");
-    const youtubeContainer = document.getElementById("youtube-player-container");
     const fullscreenBtn = document.getElementById("fullscreen-btn");
 
-    if (post.media_type === "youtube") {
-        // Hide native image/video and custom controls entirely — YouTube requires
-        // its own controls to remain visible and unmodified.
-        existingImg.style.display = "none";
-        document.getElementById("video-controls").style.display = "none";
-        document.getElementById("video-title-overlay").style.display = "none";
-        document.getElementById("replay-overlay").classList.remove("active");
-        fullscreenBtn.style.display = "none"; // YouTube's player has its own fullscreen button
+    if (post.media_type === "video") {
+        document.querySelector(".post-view").classList.add("video-post-layout");
 
-        youtubeContainer.style.display = "block";
-
-        const videoId = extractYouTubeId(post.media_url);
-
-        if (window.YT && window.YT.Player) {
-            createYouTubePlayer(videoId);
-        } else {
-            // API script may not have loaded yet — wait for it
-            window.onYouTubeIframeAPIReady = () => createYouTubePlayer(videoId);
-        }
-    } else if (post.media_type === "video") {
         existingImg.remove();
-        youtubeContainer.style.display = "none";
 
         const video = document.createElement("video");
         video.id = "post-image";
@@ -67,25 +52,32 @@ async function loadPost() {
         fullscreenBtn.style.display = "flex";
 
         setupCustomControls(video);
-    } else {
-        // image post
-        youtubeContainer.style.display = "none";
-        existingImg.style.display = "block";
-        existingImg.src = post.media_url;
-        fullscreenBtn.style.display = "flex";
-    }
 
-    document.getElementById("post-title-display").textContent = post.title ?? "";
-    document.querySelector(".uploader-info .username").textContent = post.users.username;
-    document.querySelector(".uploader-info .media-type").textContent = post.media_type;
-    document.querySelector(".post-caption p").textContent = post.caption ?? "";
+        const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
+        const uploadedText = formatUploaded(post.created_at);
 
-    if (post.users.avatar_url) {
-        document.querySelector(".uploader-avatar").src = post.users.avatar_url;
+        // fetch the view count before building the details HTML
+        const { count: viewCount } = await supabaseClient
+            .from("post_views")
+            .select("*", { count: "exact", head: true })
+            .eq("post_id", postId);
+
+        document.querySelector(".post-details").innerHTML = `
+            <div class="video-post-details">
+                <div class="video-post-title">${post.title ?? ""}</div>
+                <div class="video-post-header">
+                    <img class="video-post-avatar" src="${avatarSrc}" alt="">
+                    <div class="video-post-header-text">
+                        <span class="video-post-username">${post.users.username}</span>
+                        <span class="video-post-meta">${viewCount ?? 0} views &middot; ${uploadedText}</span>
+                    </div>
+                </div>
+                ${post.caption ? `<div class="video-post-caption">${post.caption}</div>` : ""}
+            </div>
+        `;
     }
 
     recordView(postId);
-
     loadComments();
     loadRecommended();
 }
@@ -127,71 +119,6 @@ async function loadViewCount(postId) {
     // adjust the selector/target based on where you actually want views shown on post.html
 }
 
-function loadYouTubePost(videoId) {
-    const mediaContainer = document.querySelector(".post-media");
-    const existingImg = document.getElementById("post-image");
-    const youtubeContainer = document.getElementById("youtube-player-container");
-    const fullscreenBtn = document.getElementById("fullscreen-btn");
-
-    existingImg.style.display = "none";
-    document.getElementById("video-controls").style.display = "none";
-    document.getElementById("video-title-overlay").style.display = "none";
-    document.getElementById("replay-overlay").classList.remove("active");
-    fullscreenBtn.style.display = "none";
-
-    youtubeContainer.style.display = "block";
-
-    if (window.YT && window.YT.Player) {
-        createYouTubePlayer(videoId);
-    } else {
-        window.onYouTubeIframeAPIReady = () => createYouTubePlayer(videoId);
-    }
-
-    // Try to restore stashed info from the search results page, if available
-    const stashed = sessionStorage.getItem("watch:" + videoId);
-    if (stashed) {
-        try {
-            const video = JSON.parse(stashed);
-            document.getElementById("post-title-display").textContent = video.title || "";
-            document.querySelector(".uploader-info .username").textContent = video.channel || "";
-            document.querySelector(".uploader-info .media-type").textContent = "YouTube";
-            document.querySelector(".post-caption p").textContent = "";
-            if (video.channelAvatar) {
-                document.querySelector(".uploader-avatar").src = video.channelAvatar;
-            }
-        } catch (e) {
-            console.error("Failed to parse stashed video info:", e);
-        }
-    } else {
-        document.getElementById("post-title-display").textContent = "";
-        document.querySelector(".uploader-info .username").textContent = "";
-        document.querySelector(".uploader-info .media-type").textContent = "YouTube";
-    }
-
-    // No comment section or recommended panel for YouTube videos — hide those areas
-    const commentPanel = document.querySelector(".comment-panel");
-    if (commentPanel) commentPanel.style.display = "none";
-
-    const recommendedPanel = document.getElementById("recommended-panel");
-    if (recommendedPanel) recommendedPanel.style.display = "none";
-    }
-
-function createYouTubePlayer(videoId) {
-    new YT.Player("youtube-player-container", {
-        videoId: videoId,
-        playerVars: {
-            autoplay: 1,
-            rel: 0,
-            modestbranding: 1,
-        },
-        events: {
-            onError: (event) => {
-                console.error("YouTube player error, code:", event.data);
-            },
-        },
-    });
-}
-
 loadPost();
 
 async function loadComments() {
@@ -208,6 +135,10 @@ async function loadComments() {
 
     const commentList = document.getElementById("comment-list");
     commentList.innerHTML = "";
+
+    // update the comment count wherever it's shown (tweet-card action bar, etc.)
+    const countEl = document.getElementById("tweet-comment-count");
+    if (countEl) countEl.textContent = comments.length;
 
     if (comments.length === 0) {
         commentList.innerHTML = `<p class="no-comments">It's kinda dry in here...</p>`;
@@ -248,19 +179,157 @@ async function loadRecommended() {
         item.className = "recommended-item";
 
         const thumbSrc = post.thumbnail_url || post.media_url;
+        const title = truncateText(post.title ?? post.users.username, 60);
+        const caption = truncateText(post.caption ?? "", 80);
 
         item.innerHTML = `
             <div class="recommended-thumb">
                 <img src="${thumbSrc}" alt="">
             </div>
             <div class="recommended-info">
-                <span class="username">${post.title}</span>
-                <span class="type-label">${post.caption || post.users.username}</span>
+                <div class="rec-title">${title}</div>
+                <div class="rec-caption">${caption}</div>
             </div>
         `;
 
         panel.appendChild(item);
     });
+}
+
+function loadTextPost(post) {
+    const postView = document.querySelector(".post-view");
+    postView.classList.add("text-post-layout");
+
+    document.getElementById("post-media").style.display = "none";
+
+    const recommendedPanel = document.getElementById("recommended-panel");
+    if (recommendedPanel) recommendedPanel.style.display = "none";
+
+    const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
+    const uploadedText = formatUploaded(post.created_at);
+
+    const postDetails = document.querySelector(".post-details");
+    postDetails.innerHTML = `
+        <div class="tweet-card">
+            <div class="tweet-header">
+                <img class="tweet-avatar" src="${avatarSrc}" alt="">
+                <div class="tweet-header-text">
+                    <span class="tweet-username">${post.users.display_name}</span>
+                    <span class="tweet-handle">@${post.users.username}</span>
+                </div>
+            </div>
+
+            ${post.title ? `<div class="tweet-title">${post.title}</div>` : ""}
+            <div class="tweet-content">${post.caption ?? ""}</div>
+
+            <div class="tweet-meta">${uploadedText}</div>
+
+            <div class="tweet-actions">
+                <button type="button" class="tweet-action-btn" aria-label="Comment">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span id="tweet-comment-count">0</span>
+                </button>
+
+                <button type="button" class="tweet-action-btn" aria-label="Views">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <span id="tweet-view-count">0</span>
+                </button>
+            </div>
+        </div>
+    `;
+
+    recordView(postId);
+    loadComments();
+    loadTweetViewCount(postId);
+}
+
+async function loadTweetViewCount(postId) {
+    const { count, error } = await supabaseClient
+        .from("post_views")
+        .select("*", { count: "exact", head: true })
+        .eq("post_id", postId);
+
+    if (!error) {
+        const el = document.getElementById("tweet-view-count");
+        if (el) el.textContent = count;
+    }
+}
+
+function loadImagePost(post) {
+    const postView = document.querySelector(".post-view");
+    postView.classList.add("text-post-layout"); // reuse the same centered single-column layout
+
+    document.getElementById("post-media").style.display = "none"; // hide the old dedicated media box — media now lives inside the card
+
+    const recommendedPanel = document.getElementById("recommended-panel");
+    if (recommendedPanel) recommendedPanel.style.display = "none";
+
+    const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
+    const uploadedText = formatUploaded(post.created_at);
+
+    const postDetails = document.querySelector(".post-details");
+    postDetails.innerHTML = `
+        <div class="tweet-card">
+            <div class="tweet-header">
+                <img class="tweet-avatar" src="${avatarSrc}" alt="">
+                <div class="tweet-header-text">
+                    <span class="tweet-username">${post.users.display_name}</span>
+                    <span class="tweet-handle">@${post.users.username}</span>
+                </div>
+            </div>
+
+            ${post.title ? `<div class="tweet-title">${post.title}</div>` : ""}
+            ${post.caption ? `<div class="tweet-content">${post.caption}</div>` : ""}
+
+            <div class="tweet-media">
+                <img src="${post.media_url}" alt="">
+            </div>
+
+            <div class="tweet-meta">${uploadedText}</div>
+
+            <div class="tweet-actions">
+                <button type="button" class="tweet-action-btn" aria-label="Comment">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span id="tweet-comment-count">0</span>
+                </button>
+
+                <button type="button" class="tweet-action-btn" aria-label="Views">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <span id="tweet-view-count">0</span>
+                </button>
+            </div>
+        </div>
+    `;
+
+    recordView(postId);
+    loadComments();
+    loadTweetViewCount(postId);
+}
+
+function formatUploaded(dateStr) {
+    const date = new Date(dateStr);
+    const diffMs = Date.now() - date.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays < 1) return "today";
+    if (diffDays < 7) return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) === 1 ? "" : "s"} ago`;
+    if (diffDays < 365) return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) === 1 ? "" : "s"} ago`;
+    return `${Math.floor(diffDays / 365)} year${Math.floor(diffDays / 365) === 1 ? "" : "s"} ago`;
+}
+
+function truncateText(text, maxLength) {
+    if (!text) return "";
+    return text.length > maxLength ? text.slice(0, maxLength).trim() + "…" : text;
 }
 
 document.getElementById("comment-form").addEventListener("submit", async (e) => {

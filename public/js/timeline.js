@@ -47,7 +47,8 @@ async function loadTimeline() {
             <div class="item-info">
                 <div class="item-text">
                     <span class="item-title">${post.title || ""}</span>
-                    <span class="item-meta">${post.users.username} &middot; ${viewsText} &middot; ${uploadedText}</span>
+                    <span class="item-caption">${post.caption}</span>
+                    <span class="item-meta"><b>${post.users.username}</b> posted a/an <b>${post.media_type}</b> ${uploadedText}</span>
                 </div>
             </div>
         `;

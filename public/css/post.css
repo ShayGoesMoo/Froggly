@@ -24,7 +24,7 @@
     background-color: #0f0f0f;
     border: 1px solid #222222;
     border-bottom: none;
-   border-radius: 12px;
+    border-radius: 12px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     overflow: hidden;
@@ -50,6 +50,108 @@
     object-fit: contain;
     display: block;
     background-color: #000;
+}
+
+/* Video-post layout: centered column, bigger player, comments below */
+.post-view.video-post-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2.2fr) minmax(280px, 320px);
+    grid-template-areas:
+        "main    recommended"
+        "comments recommended";
+    align-items: start;
+    gap: 20px;
+    max-width: 1500px;
+    height: calc(100vh - 100px); /* fixed viewport height minus your nav bar height, adjust as needed */
+}
+
+.post-view.video-post-layout .post-main {
+    grid-area: main;
+    width: 100%;
+}
+
+.post-view.video-post-layout .comment-panel {
+    grid-area: comments;
+    width: 100%;
+    min-height: 0; /* required for flex children to actually shrink and scroll internally */
+    overflow-y: auto;
+}
+
+.post-view.video-post-layout .recommended-panel {
+    grid-area: recommended;
+    height: 100%; /* fills the fixed-height grid row */
+    overflow-y: auto;
+    position: static; /* remove sticky — no longer needed with a fixed-height grid */
+}
+
+.post-view.video-post-layout .comment-panel,
+.post-view.video-post-layout .recommended-panel {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* old Edge/IE, harmless to include */
+}
+
+.post-view.video-post-layout .comment-panel::-webkit-scrollbar,
+.post-view.video-post-layout .recommended-panel::-webkit-scrollbar {
+    display: none; /* Chrome, Edge, Safari */
+}
+
+/* Details area below the player, video posts */
+.video-post-details {
+    background-color: #0f0f0f;
+    border: 1px solid #222222;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-top: 16px;
+}
+
+.video-post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.video-post-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #222222;
+    flex-shrink: 0;
+}
+
+.video-post-header-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.video-post-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #f5f5f5;
+    margin-bottom: 8px;
+}
+
+.video-post-username {
+    font-size: 14px;
+    font-weight: bold;
+    color: #f5f5f5;
+}
+
+.video-post-meta {
+    font-size: 12px;
+    color: #a0a0a0;
+}
+
+.video-post-caption {
+    font-size: 14px;
+    color: #e7e7e7;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    padding-top: 8px;
+    border-top: 1px solid #222222;
 }
 
 /* Video title overlay */
@@ -149,7 +251,7 @@
 .post-details {
     background-color: #0f0f0f;
     border: 1px solid #222222;
-   border-radius: 12px;
+    border-radius: 12px;
     padding: 16px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -213,7 +315,7 @@
     flex-direction: column;
     background-color: #0f0f0f;
     border: 1px solid #222222;
-   border-radius: 12px;
+    border-radius: 12px;
 }
 
 .comment-list {
@@ -295,31 +397,20 @@
     padding: 20px 0;
 }
 
-/* Right panel: recommended */
-.recommended-panel {
-    flex: 1;
-    min-width: 260px;
-    max-height: 80vh;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
+/* Right panel: recommended — bigger thumbnails, title + caption below */
 .recommended-item {
-    display: flex;
-    gap: 10px;
+    display: block;
     text-decoration: none;
     color: inherit;
 }
 
 .recommended-thumb {
-    width: 120px;
+    width: 100%;
     aspect-ratio: 16 / 9;
-    flex-shrink: 0;
-    background-color: #222222;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
+    background-color: #222222;
+    margin-bottom: 8px;
 }
 
 .recommended-thumb img {
@@ -330,26 +421,28 @@
 }
 
 .recommended-info {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
+    display: block;
 }
 
-.recommended-info .username {
-    font-size: 13px;
+.recommended-info .rec-title {
+    font-size: 14px;
     font-weight: bold;
     color: #f5f5f5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
 }
 
-.recommended-info .type-label {
+.recommended-info .rec-caption {
     font-size: 12px;
-    color: #c5c5c5;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    white-space: nowrap;
+    color: #a0a0a0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 20ch;
+    margin-bottom: 20px;
 }
 
 /* Fullscreen / back buttons */
@@ -366,6 +459,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    visibility: hidden;
 }
 
 .fullscreen-btn:hover {
@@ -386,6 +480,7 @@
     justify-content: center;
     cursor: pointer;
     z-index: 2;
+    visibility: hidden;
 }
 
 .back-btn:hover {
@@ -484,14 +579,137 @@
     background-color: rgba(255, 255, 255, 0.25);
 }
 
-#youtube-player-container {
-    width: 100%;
-    height: 100%;
+/* Text-post layout: centered single column, Twitter-style card */
+.post-view.text-post-layout {
+    flex-direction: column;
+    align-items: center;
+    max-width: 500px;
 }
 
-#youtube-player-container iframe {
+.post-view.text-post-layout .post-main {
+    width: 100%;
+    order: 1;
+}
+
+.post-view.text-post-layout .comment-panel {
+    width: 100%;
+    max-height: none;
+    min-width: unset;
+    order: 2;
+}
+
+.tweet-card {
+    background-color: #0f0f0f;
+    border: 1px solid #222222;
+    border-radius: 12px;
+    padding: 16px 20px;
+    color: #f5f5f5;
+}
+
+.tweet-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.tweet-header .tweet-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #222222;
+    flex-shrink: 0;
+}
+
+.tweet-header-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.tweet-header .tweet-username {
+    font-size: 15px;
+    font-weight: bold;
+    color: #f5f5f5;
+}
+
+.tweet-header .tweet-handle {
+    font-size: 13px;
+    color: #71767b;
+}
+
+.tweet-title {
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    line-height: 1.35;
+}
+
+.tweet-content {
+    font-size: 16px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    color: #e7e9ea;
+    margin-bottom: 14px;
+}
+
+.tweet-meta {
+    font-size: 13px;
+    color: #71767b;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #222222;
+    margin-bottom: 10px;
+}
+
+.tweet-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    max-width: 425px;
+}
+
+.tweet-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: #71767b;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 20px;
+}
+
+.tweet-action-btn:hover {
+    color: #f5f5f5;
+    background-color: #131313;
+}
+
+.tweet-action-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.tweet-media {
+    margin-bottom: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #222222;
+    max-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+}
+
+.tweet-media img {
     width: 100%;
     height: 100%;
+    max-height: 500px;
+    object-fit: contain;
     display: block;
 }
 
