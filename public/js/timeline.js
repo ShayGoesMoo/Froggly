@@ -31,9 +31,26 @@ async function loadTimeline() {
         item.href = `post.html?id=${post.id}`;
         item.className = "timeline-item";
 
-        const mediaHTML = post.media_type === "video"
-            ? `<img src="${post.thumbnail_url || post.media_url}" alt="">`
-            : `<img src="${post.media_url}" alt="">`;
+        let mediaHTML;
+
+        if (post.media_type === "text") {
+            mediaHTML = `
+                <div class="text-thumb-placeholder">
+                    <span class="text-thumb-title">${""}</span>
+                </div>
+            `;
+        } else if (post.media_type === "video") {
+            mediaHTML = post.thumbnail_url
+                ? `<img src="${post.thumbnail_url}" alt="">`
+                : `<div class="video-placeholder-thumb">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 3l14 9-14 9V3z"/>
+                    </svg>
+                </div>`;
+        } else {
+            mediaHTML = `<img src="${post.media_url}" alt="">`;
+        }
+
 
         const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
         const viewsText = formatViews(viewCounts[post.id] || 0);
