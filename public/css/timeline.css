@@ -19,7 +19,7 @@ main {
     border-radius: 12px;
     overflow: hidden;
     background-color: #131313;
-    min-height: 160px;
+    min-height: 80px;
 }
 
 .thumbnail {
@@ -114,15 +114,148 @@ a.timeline-item {
     color: inherit;
 }
 
-/* Responsive: fewer columns on smaller screens */
+.timeline-item {
+    position: relative; /* anchor for the menu button */
+}
+
+.item-menu-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 22px;
+    height: 22px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.item-menu-btn svg {
+    width: 12px;
+    height: 12px;
+}
+
+.item-menu-dropdown {
+    position: absolute;
+    top: 34px;
+    right: 8px;
+    background-color: #131313;
+    border: 1px solid #292929;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 3;
+    display: none;
+    min-width: 120px;
+}
+
+.item-menu-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.item-menu-dropdown.active {
+    display: block;
+}
+
+.item-menu-dropdown button {
+    width: 100%;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    color: #e05252;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.item-menu-dropdown button:hover {
+    background-color: #1a1a1a;
+}
+
+.tweet-card {
+    position: relative;
+}
+
+.tweet-menu-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: #71767b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.tweet-menu-btn:hover {
+    background-color: #131313;
+    color: #f5f5f5;
+}
+
+.tweet-menu-dropdown {
+    position: absolute;
+    top: 52px;
+    right: 16px;
+    background-color: #131313;
+    border: 1px solid #292929;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 5;
+    display: none;
+    min-width: 130px;
+}
+
+.tweet-menu-dropdown.active {
+    display: block;
+}
+
+.tweet-menu-dropdown button {
+    width: 100%;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    color: #e05252;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.tweet-menu-dropdown button:hover {
+    background-color: #1a1a1a;
+}
+
 @media (max-width: 1100px) {
     .timeline {
-        column-count: 4;
+        column-count: 3;
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
     .timeline {
         column-count: 2;
+        column-gap: 14px;
+    }
+
+    main {
+        padding: 0 10px;
+    }
+}
+
+@media (max-width: 500px) {
+    .timeline {
+        column-count: 1;
+    }
+
+    .item-info .item-title {
+        font-size: 15px;
     }
 }

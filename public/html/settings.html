@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="../css/index.css">
         <link rel="stylesheet" href="../css/navigation-bar.css">
         <link rel="stylesheet" href="../css/settings.css">
+        <link rel="stylesheet" href="../css/states.css">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,33 +23,31 @@
                     </div>
                 </div>
                 <div class="middle">
-                    <button type="button" id="home-btn">
+                    <button type="button" id="home-btn" aria-label="Home">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M3 11l9-8 9 8M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/>
                         </svg>
-                        Home
+                        <span class="btn-label">Home</span>
                     </button>
-
-                    
 
                     <span class="divider"></span>
 
-                    <button type="button" id="suggestions-btn">
+                    <button type="button" id="suggestions-btn" aria-label="Suggestions">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                         </svg>
-                        Suggestions
+                        <span class="btn-label">Suggestions</span>
                     </button>
 
-                    <button type="button" id="changelog-btn">
+                    <button type="button" id="changelog-btn" aria-label="Changelog">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M12 8v4l3 3M12 3a9 9 0 1 0 9 9"/>
                             <path d="M12 3v4h4"/>
                         </svg>
-                        Changelog
+                        <span class="btn-label">CHangelog</span>
                     </button>
 
-                    <button type="button" id="settings-btn">
+                    <button type="button" id="settings-btn" aria-label="Settings">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="3"/>
                             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 
@@ -59,7 +58,7 @@
                             1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 
                             0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                         </svg>
-                        Settings
+                        <span class="btn-label">Settings</span>
                     </button>
 
                     <span class="divider"></span>
@@ -74,16 +73,16 @@
 
                     <span class="divider"></span>
 
-                    <button type="button" id="create-post">
+                    <button type="button" id="create-post" aria-label="New Post">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M12 5v14M5 12h14"/>
                         </svg>
-                        New Post
+                        <span class="btn-label">New Post</span>
                     </button>
 
                     <span class="divider"></span>
 
-                    <button type="button" id="logout-btn">
+                    <button type="button" id="logout-btn" aria-label="Logout">
                         Logout
                     </button>
                 </div>

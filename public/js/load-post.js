@@ -45,6 +45,9 @@ async function loadPost() {
         video.playsInline = true;
         video.preload = "metadata";
         video.autoplay = true;
+        video.play().catch((err) => {
+            console.warn("Autoplay failed or video not ready yet:", err);
+        });
 
         mediaContainer.insertBefore(video, mediaContainer.firstChild);
 
@@ -71,7 +74,7 @@ async function loadPost() {
                     <img class="video-post-avatar" src="${avatarSrc}" alt="">
                     <div class="video-post-header-text">
                         <span class="video-post-username">${post.users.username}</span>
-                        <span class="video-post-meta">${viewCount ?? 0} views &middot; ${uploadedText}</span>
+                        <span class="video-post-meta">${viewCount ?? 0} views &middot; ${formatExactDateTime(post.created_at)}</span>
                     </div>
                 </div>
                 ${post.caption ? `<div class="video-post-caption">${post.caption}</div>` : ""}
@@ -224,7 +227,7 @@ function loadTextPost(post) {
             ${post.title ? `<div class="tweet-title">${post.title}</div>` : ""}
             <div class="tweet-content">${post.caption ?? ""}</div>
 
-            <div class="tweet-meta">${uploadedText}</div>
+            <div class="tweet-meta">${formatExactDateTime(post.created_at)}</div>
 
             <div class="tweet-actions">
                 <button type="button" class="tweet-action-btn" aria-label="Comment">
@@ -292,7 +295,7 @@ function loadImagePost(post) {
                 <img src="${post.media_url}" alt="">
             </div>
 
-            <div class="tweet-meta">${uploadedText}</div>
+            <div class="tweet-meta">${formatExactDateTime(post.created_at)}</div>
 
             <div class="tweet-actions">
                 <button type="button" class="tweet-action-btn" aria-label="Comment">
@@ -332,6 +335,24 @@ function formatUploaded(dateStr) {
 function truncateText(text, maxLength) {
     if (!text) return "";
     return text.length > maxLength ? text.slice(0, maxLength).trim() + "…" : text;
+}
+
+function formatExactDateTime(dateStr) {
+    const date = new Date(dateStr);
+
+    const datePart = date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+    });
+
+    const timePart = date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+    });
+
+    return `${timePart} · ${datePart}`;
 }
 
 document.getElementById("comment-form").addEventListener("submit", async (e) => {

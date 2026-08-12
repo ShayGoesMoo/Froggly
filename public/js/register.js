@@ -1,24 +1,49 @@
-document.querySelector("form").addEventListener("submit", async (e) => {
-    e.preventDefault(); //stops the page from reloading
+document.getElementById("register-form").addEventListener("submit", async (e) => {
+    e.preventDefault(); // stops the page from reloading
+
+    // --- Step 1: run all format validations ---
+    const usernameValid = validateUsername();
+    const passwordValid = validatePassword();
+    const confirmValid = validateConfirmPassword();
+
+    if (!usernameValid || !passwordValid || !confirmValid) {
+        return; // hints are already showing the specific problem, nothing more to do
+    }
 
     const name = document.getElementById("display_name").value;
-    const username = document.getElementById("username").value;
-    const email = document.getElementById("email_address").value;
-    const password = document.getElementById("user_password").value;
-    const confirmPassword = document.getElementById("confirm_user_password").value;
+    const username = usernameInput.value;
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
 
-    if (password !== confirmPassword) {
-        alert("Passwords do not match!");
+    // --- Step 2: final authoritative availability check right before signup ---
+    const { data: existingUsername } = await supabaseClient
+        .from("users")
+        .select("username")
+        .ilike("username", username)
+        .maybeSingle();
+
+    if (existingUsername) {
+        setState(usernameInput, usernameHint, false, "That username is already taken");
         return;
     }
 
-    // create the auth user
+    const { data: existingEmail } = await supabaseClient
+        .from("users")
+        .select("email_address")
+        .ilike("email_address", email)
+        .maybeSingle();
+
+    if (existingEmail) {
+        setState(emailInput, emailHint, false, "An account with this email already exists");
+        return;
+    }
+
+    // --- Step 3: create the auth user ---
     const { data, error } = await supabaseClient.auth.signUp({
         email: email,
         password: password,
     });
 
-    // NOTE TO SELF: DO NOT LET THE USER SEE CRITICAL ERRORS ON THE FRONT END
     if (error) {
         if (error.message.includes("already registered") || error.status === 422) {
             alert("This email is already registered. Please log in or use a different email.");
@@ -28,7 +53,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
         return;
     }
 
-    // insert the user into the users table
+    // --- Step 4: insert the user into the users table ---
     const { error: insertError } = await supabaseClient.from("users").insert([
         {
             id: data.user.id,
@@ -44,5 +69,5 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     }
 
     alert("Registration successful!");
-    window.location.href = "../html/index.html"; // redirect to the index page after successful registration
+    window.location.href = "../html/index.html";
 });

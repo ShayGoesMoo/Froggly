@@ -134,3 +134,76 @@
     background-color: #222222;
     margin: 5px 16px;
 }
+
+@media (max-width: 900px) {
+    .nav-wrapper {
+        gap: 8px;
+    }
+
+    .middle button[type="button"] span,
+    .middle button[type="button"] {
+        font-size: 13px;
+        padding: 5px 8px;
+    }
+
+    .video-search-wrapper,
+    .middle input[type="search"] {
+        max-width: 160px;
+    }
+}
+
+@media (max-width: 700px) {
+    .navigation-bar {
+        height: auto;
+        padding: 8px 10px;
+    }
+
+    .nav-wrapper {
+        flex-wrap: wrap;
+        row-gap: 8px;
+    }
+
+    .middle {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        justify-content: flex-start;
+        gap: 4px;
+        padding-bottom: 4px;
+    }
+
+    /* hide button text on small screens, keep icons */
+    .middle button[type="button"] span,
+    .middle button[type="button"] {
+        white-space: nowrap;
+    }
+
+    .middle input[type="search"] {
+        display: none; /* move search into a dedicated mobile search page/icon if needed */
+    }
+
+    .divider {
+        display: none;
+    }
+
+    .logo img {
+        height: 36px;
+        width: 36px;
+    }
+}
+
+@media (max-width: 700px) {
+    .middle button[type="button"] {
+        padding: 8px;
+        justify-content: center;
+    }
+
+    .middle button[type="button"] .btn-label {
+        display: none;
+    }
+
+    .middle button[type="button"] svg {
+        margin: 0; /* remove any gap that was reserved for the text */
+    }
+}

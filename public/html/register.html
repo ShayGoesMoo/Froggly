@@ -6,33 +6,43 @@
         <title>Froggly | Register</title>
 
         <link rel="stylesheet" href="../css/auth.css">
+        <link rel="stylesheet" href="../css/states.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Mukta+Vaani:wght@200;300;400;500;600;700;800&family=Noto+Serif+NP+Hmong:wght@400..700&family=Noto+Serif+Oriya:wght@400..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">    
     </head>
     <body>
         <div id="bg-layer-a" class="bg-layer"></div>
         <div id="bg-layer-b" class="bg-layer"></div>
         <div class="register">
             <div class="container">
-                <form>
-                    <label>Name</label>
-                    <input type="text" id="display_name" name="display_name" placeholder="Name..." required>
+                <form id="register-form">
+                    <label>Display Name:</label>
+                    <input type="text" name="display_name" id="display_name" placeholder="Name..." required>
+                    <span class="field-hint" id="display_name-hint"></span>
 
-                    <label>Username</label>
-                    <input type="text" id="username" name="username" placeholder="Username..." required>
-                    
-                    <label>Email</label>
-                    <input type="email" id="email_address" name="email_address" placeholder="Email Address..." required>
+                    <label>Username:</label>
+                    <input type="text" name="username" id="username" placeholder="Username..." required maxlength="12">
+                    <span class="field-hint" id="username-hint">3–12 characters: letters, numbers, underscores, periods, dashes</span>
 
-                    <label>Password</label>
-                    <input type="password" id="user_password" name="user_password" placeholder="Password..." required>
-                    
-                    <label>Confirm Password</label>
-                    <input type="password" id="confirm_user_password" name="confirm_user_password" placeholder="Confirm Password..." required>
+                    <label>Email:</label>
+                    <input type="email" name="email_address" id="email_address" placeholder="Email Address..." required>
+                    <span class="field-hint" id="email_address-hint"></span>
+
+                    <label>Password:</label>
+                    <input type="password" name="user_password" id="user_password" placeholder="Password..." required>
+                    <span class="field-hint" id="user_password-hint">8+ characters, with uppercase, lowercase, a number, and a symbol</span>
+
+                    <label>Confirm Password:</label>
+                    <input type="password" name="confirm_user_password" id="confirm_user_password" placeholder="Confirm Password..." required>
+                    <span class="field-hint" id="confirm_user_password-hint"></span>
 
                     <p class="disclaimer">By completing registeration or logging in with an existing account, you agree to the <a href="/">user agreement</a> and <a href="/">privacy policy</a>.</p>
                     <input type="submit" id="submit" value="Register">
 
                     <p class="login">Already have an account? <a href="../html/login.html">Login here</a>.</p>
-                </form>
+                </form> 
             </div>
         </div>
 
@@ -40,5 +50,6 @@
         <script src="../js/supabase-config.js"></script>
         <script src="../js/register.js"></script>
         <script src="../js/game-backgrounds.js"></script>
+        <script src="../js/register-validation.js"></script>
     </body>
 </html>

@@ -713,7 +713,6 @@
     display: block;
 }
 
-/* Stack everything on smaller screens */
 @media (max-width: 1100px) {
     .post-view {
         flex-direction: column;
@@ -724,5 +723,66 @@
         width: 100%;
         max-height: none;
         min-width: unset;
+    }
+
+    .post-view.video-post-layout {
+        display: flex;
+        flex-direction: column;
+        height: auto; /* release the fixed height used for independent scrolling */
+    }
+
+    .post-view.video-post-layout .post-main {
+        order: 1;
+    }
+
+    .post-view.video-post-layout .comment-panel {
+        order: 2;
+        max-height: 400px; /* keep some scroll containment rather than unbounded height */
+        overflow-y: auto;
+    }
+
+    .post-view.video-post-layout .recommended-panel {
+        order: 3;
+        position: static;
+        height: auto;
+        max-height: none;
+        overflow-y: visible;
+    }
+}
+
+@media (max-width: 700px) {
+    .post-media,
+    .post-view.video-post-layout .post-media {
+        aspect-ratio: 16 / 9;
+        max-height: 50vh;
+    }
+
+    .tweet-card,
+    .video-post-details {
+        padding: 14px;
+    }
+
+    .tweet-title,
+    .video-post-title {
+        font-size: 16px;
+    }
+
+    .comment-form input[type="text"] {
+        max-width: none;
+    }
+}
+
+@media (max-width: 500px) {
+    .post-view.text-post-layout,
+    .post-view.video-post-layout {
+        max-width: 100%;
+    }
+
+    main.post-view {
+        padding: 0 10px;
+    }
+
+    .recommended-thumb {
+        aspect-ratio: 16 / 9;
     }
 }

@@ -108,3 +108,18 @@
 .danger-zone button:hover {
     background-color: #a33025;
 }
+
+@media (max-width: 600px) {
+    .settings-view,
+    .suggestions-view,
+    .changelog-view {
+        margin: 16px auto;
+        padding: 0 12px;
+    }
+
+    .pfp-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}

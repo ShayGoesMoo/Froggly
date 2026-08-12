@@ -323,18 +323,34 @@
     color: #555;
 }
 
-@media (max-width: 750px) {
-    #create-post-form {
-        flex-direction: column;
-    }
-
-    .tab-panel {
+@media (max-width: 900px) {
+    #panel-media {
         flex-direction: column;
     }
 
     .upload-panel {
+        max-width: 100%;
         width: 100%;
         aspect-ratio: 4 / 3;
     }
 }
 
+@media (max-width: 600px) {
+    .sub-navbar-wrapper {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .sub-navbar-title {
+        display: none; /* save space on small screens */
+    }
+
+    .create-post-view {
+        margin: 14px auto;
+        padding: 0 10px;
+    }
+
+    .text-post-panel textarea {
+        min-height: 180px;
+    }
+}

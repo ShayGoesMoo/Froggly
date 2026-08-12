@@ -1,11 +1,43 @@
 async function loadTimeline() {
+    const timeline = document.querySelector(".timeline");
+
+    timeline.innerHTML = `
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            Loading posts...
+        </div>
+    `;
+
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    const currentUserId = session?.user?.id || null;
+
     const { data: posts, error } = await supabaseClient
         .from("posts")
-        .select("id, media_url, media_type, thumbnail_url, title, caption, created_at, users!posts_user_id_fkey(username, avatar_url)")
+        .select("id, user_id, media_url, media_type, thumbnail_url, title, caption, created_at, users!posts_user_id_fkey(username, avatar_url)")
         .order("created_at", { ascending: false });
 
     if (error) {
         console.error("Failed to load timeline:", error.message, error);
+        timeline.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-title">Something went wrong</div>
+                <div class="empty-subtext">Try refreshing the page</div>
+            </div>
+        `;
+        return;
+    }
+
+    if (posts.length === 0) {
+        timeline.innerHTML = `
+            <div class="empty-state">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 4h16v16H4z"/>
+                    <path d="M4 15l4-4 4 4 6-6"/>
+                </svg>
+                <div class="empty-title">No posts yet</div>
+                <div class="empty-subtext">Be the first to share something</div>
+            </div>
+        `;
         return;
     }
 
@@ -23,7 +55,6 @@ async function loadTimeline() {
         });
     }
 
-    const timeline = document.querySelector(".timeline");
     timeline.innerHTML = "";
 
     posts.forEach((post) => {
@@ -51,12 +82,24 @@ async function loadTimeline() {
             mediaHTML = `<img src="${post.media_url}" alt="">`;
         }
 
-
         const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
         const viewsText = formatViews(viewCounts[post.id] || 0);
         const uploadedText = formatUploaded(post.created_at);
+        const isOwner = currentUserId && currentUserId === post.user_id;
 
         item.innerHTML = `
+            ${isOwner ? `
+                <button type="button" class="item-menu-btn" data-post-id="${post.id}" aria-label="Post options">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <circle cx="12" cy="5" r="1.5"/>
+                        <circle cx="12" cy="12" r="1.5"/>
+                        <circle cx="12" cy="19" r="1.5"/>
+                    </svg>
+                </button>
+                <div class="item-menu-dropdown" data-post-id="${post.id}">
+                    <button type="button" class="delete-post-btn" data-post-id="${post.id}">Delete post</button>
+                </div>
+            ` : ""}
             <div class="thumbnail">
                 ${mediaHTML}
                 <span class="media-type">${post.media_type}</span>
@@ -65,16 +108,62 @@ async function loadTimeline() {
                 <div class="item-text">
                     <span class="item-title">${post.title || ""}</span>
                     <span class="item-caption">${post.caption}</span>
-                    <span class="item-meta"><b>${post.users.username}</b> posted a/an <b>${post.media_type}</b> ${uploadedText}</span>
+                    <span class="item-meta"><b>@${post.users.username}</b> posted this ${uploadedText}</span>
                 </div>
             </div>
         `;
 
-        item.addEventListener("click", () => {
+        item.addEventListener("click", (e) => {
+            // don't navigate if the click was on the menu button or dropdown
+            if (e.target.closest(".item-menu-btn") || e.target.closest(".item-menu-dropdown")) {
+                e.preventDefault();
+                return;
+            }
             sessionStorage.setItem("timelineScroll", window.scrollY);
         });
 
         timeline.appendChild(item);
+    });
+
+    // wire up menu toggles
+    document.querySelectorAll(".item-menu-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const dropdown = document.querySelector(`.item-menu-dropdown[data-post-id="${btn.dataset.postId}"]`);
+            document.querySelectorAll(".item-menu-dropdown").forEach((d) => {
+                if (d !== dropdown) d.classList.remove("active");
+            });
+            dropdown.classList.toggle("active");
+        });
+    });
+
+    // wire up delete buttons
+    document.querySelectorAll(".delete-post-btn").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const confirmed = confirm("Delete this post permanently? This cannot be undone.");
+            if (!confirmed) return;
+
+            const { error } = await supabaseClient
+                .from("posts")
+                .delete()
+                .eq("id", btn.dataset.postId);
+
+            if (error) {
+                alert("Failed to delete post: " + error.message);
+                return;
+            }
+
+            btn.closest(".timeline-item").remove();
+        });
+    });
+
+    // close any open dropdown when clicking elsewhere
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".item-menu-dropdown").forEach((d) => d.classList.remove("active"));
     });
 }
 
