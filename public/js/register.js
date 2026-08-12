@@ -46,9 +46,9 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
 
     if (error) {
         if (error.message.includes("already registered") || error.status === 422) {
-            alert("This email is already registered. Please log in or use a different email.");
+            showToast("This email is already registered. Please log in or use a different email.", "error");
         } else {
-            alert("Error creating account: " + error.message);
+            showToast("Error creating account: " + error.message, "error");
         }
         return;
     }
@@ -64,10 +64,10 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
     ]);
 
     if (insertError) {
-        alert("Account created, but user save failed: " + insertError.message);
+        showToast("Account created, but user save failed: " + insertError.message, "error");
         return;
     }
 
-    alert("Registration successful!");
+    showToast("Registration successful!", "success");
     window.location.href = "../html/index.html";
 });

@@ -45,7 +45,7 @@ mediaInput.addEventListener("change", () => {
     if (!file) return;
 
     if (file.size > MAX_FILE_SIZE) {
-        alert(`File is too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Max size is ${MAX_FILE_SIZE / 1024 / 1024}MB.`);
+        showToast(`File is too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Max size is ${MAX_FILE_SIZE / 1024 / 1024}MB.`, "error");
         mediaInput.value = ""; // reset the input
         return;
     }
@@ -76,7 +76,7 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
 
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (!session) {
-        alert("You need to be logged in to post.");
+        showToast("You need to be logged in to post.", "error");
         return;
     }
 
@@ -88,7 +88,7 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
         const body = document.getElementById("text-body").value.trim();
 
         if (!body) {
-            alert("Please write something before publishing.");
+            showToast("Please write something before publishing.", "error");
             return;
         }
 
@@ -111,7 +111,7 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
             .single();
 
         if (insertError) {
-            alert("Failed to create post: " + insertError.message);
+            showToast("Failed to create post: " + insertError.message, "error");
             publishBtn.disabled = false;
             publishBtn.textContent = "Publish";
             return;
@@ -123,7 +123,7 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
 
     // --- Media post branch (unchanged from before) ---
     if (!selectedFile) {
-        alert("Please select a photo, video, or gif to upload.");
+        showToast("Please select a photo, video, or gif to upload.", "error");
         return;
     }
 
@@ -146,7 +146,7 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
             publishBtn.textContent = `Uploading... ${percent}%`;
         });
     } catch (uploadError) {
-        alert("Upload failed: " + uploadError.message);
+        showToast("Upload failed: " + uploadError.message, "error");
         publishBtn.disabled = false;
         publishBtn.textContent = "Publish";
         progressWrapper.style.display = "none";
@@ -202,7 +202,7 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
         .single();
 
     if (insertError) {
-        alert("Failed to create post: " + insertError.message);
+        showToast("Failed to create post: " + insertError.message, "error");
         publishBtn.disabled = false;
         publishBtn.textContent = "Publish";
         return;

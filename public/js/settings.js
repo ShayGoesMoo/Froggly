@@ -40,11 +40,11 @@ document.getElementById("display-name-form").addEventListener("submit", async (e
         .eq("id", currentUser.id);
 
     if (error) {
-        alert("Failed to update display name: " + error.message);
+        showToast("Failed to update display name: " + error.message, "error");
         return;
     }
 
-    alert("Display name updated.");
+    showToast("Display name updated.", "success");
 });
 
 // --- Username ---
@@ -78,18 +78,18 @@ document.getElementById("password-form").addEventListener("submit", async (e) =>
     const confirmPassword = document.getElementById("confirm-password-input").value;
 
     if (newPassword !== confirmPassword) {
-        alert("Passwords do not match.");
+        showToast("Passwords do not match.", "error");
         return;
     }
 
     const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
 
     if (error) {
-        alert("Failed to update password: " + error.message);
+        showToast("Failed to update password: " + error.message, "error");
         return;
     }
 
-    alert("Password updated.");
+    showToast("Password updated.", "success");
     e.target.reset();
 });
 
@@ -103,7 +103,7 @@ document.getElementById("avatar-input").addEventListener("change", async () => {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-        alert("Image must be under 5MB.");
+        showToast("Image must be under 5MB.", "error");
         return;
     }
 
@@ -115,7 +115,7 @@ document.getElementById("avatar-input").addEventListener("change", async () => {
         .upload(filePath, file, { upsert: true });
 
     if (uploadError) {
-        alert("Failed to upload picture: " + uploadError.message);
+        showToast("Failed to upload picture: " + uploadError.message, "error");
         return;
     }
 
@@ -132,7 +132,7 @@ document.getElementById("avatar-input").addEventListener("change", async () => {
         .eq("id", currentUser.id);
 
     if (updateError) {
-        alert("Failed to save picture: " + updateError.message);
+        showToast("Failed to save picture: " + updateError.message, "error");
         return;
     }
 
@@ -159,11 +159,11 @@ document.getElementById("delete-account-btn").addEventListener("click", async ()
     const result = await response.json();
 
     if (!response.ok) {
-        alert("Failed to delete account: " + result.error);
+        showToast("Failed to delete account: " + updateError.message, "error");
         return;
     }
 
-    alert("Your account has been deleted.");
+    showToast("Your account has been deleted.", "success");
     window.location.href = "index.html";
 });
 

@@ -17,7 +17,7 @@ async function handleLogout() {
     const { error } = await supabaseClient.auth.signOut();
 
     if (error) {
-        alert("Error logging out: " + error.message);
+        showToast("Error logging out: " + error.message, "error");
         return;
     }
 

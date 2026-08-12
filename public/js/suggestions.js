@@ -4,7 +4,7 @@ document.getElementById("suggestion-form").addEventListener("submit", async (e) 
     const { data: { session } } = await supabaseClient.auth.getSession();
 
     if (!session) {
-        alert("You need to be logged in to submit a suggestion.");
+        showToast("You need to be logged in to submit a suggestion.", "error");
         return;
     }
 

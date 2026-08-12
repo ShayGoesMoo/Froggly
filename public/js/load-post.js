@@ -366,7 +366,7 @@ document.getElementById("comment-form").addEventListener("submit", async (e) => 
     const { data: { session } } = await supabaseClient.auth.getSession();
 
     if (!session) {
-        alert("You need to be logged in to comment.");
+        showToast("You need to be logged in to comment.", "error");
         return;
     }
 
@@ -381,7 +381,7 @@ document.getElementById("comment-form").addEventListener("submit", async (e) => 
         ]);
 
     if (error) {
-        alert("Failed to post comment: " + error.message);
+        showToast("Failed to post comment: " + error.message, "error");
         return;
     }
 

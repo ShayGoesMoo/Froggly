@@ -93,6 +93,38 @@
 
                 <div class="changelog-entry">
                     <div class="changelog-meta">
+                        <span class="changelog-date">August 12, 2026</span>
+                        <span class="changelog-tag tag-new">New</span>
+                    </div>
+                    <h3>Text Posts, Video Player, ETC.</h3>
+                    <ul>
+                        <li>Replaced browser alert popups with in-app toast notifications</li>
+                        <li>Added text posts, alongside images, gifs, and videos</li>
+                        <li>New tabbed post creation flow — switch between media and text posts on one page</li>
+                        <li>Custom video player with play/pause, volume, scrubbing, fullscreen, and replay</li>
+                        <li>Post pages now redesigned per media type, with a dedicated layout for videos, images, and text posts</li>
+                        <li>Recommended videos sidebar on video posts</li>
+                        <li>Views can be coutned now</li>
+                        <li>Posts can be deleted by their owner</li>
+                    </ul>
+                </div>
+
+                <div class="changelog-entry">
+                    <div class="changelog-meta">
+                        <span class="changelog-date">August 12, 2026</span>
+                        <span class="changelog-tag tag-fix">Fix</span>
+                    </div>
+                    <h3>Polish & Bug Fixes</h3>
+                    <ul>
+                        <li>Fixed comments and view counts occasionally failing to load</li>
+                        <li>Fixed a bug where deleting a post with comments or views would fail</li>
+                        <li>Added loading and empty states across the timeline, comments, and recommendations</li>
+                        <li>Improved mobile and tablet layout across the whole site</li>
+                    </ul>
+                </div>
+
+                <div class="changelog-entry">
+                    <div class="changelog-meta">
                         <span class="changelog-date">August 8, 2026</span>
                         <span class="changelog-tag tag-new">New</span>
                     </div>
@@ -135,6 +167,7 @@
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <script src="../js/supabase-config.js"></script>
         <script src="../js/logout.js"></script>
+        <script src="../js/toast.js"></script>
 
         <script>
             // save scroll position whenever the user clicks into a post
