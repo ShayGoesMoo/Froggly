@@ -324,8 +324,15 @@ function loadImagePost(post) {
 function formatUploaded(dateStr) {
     const date = new Date(dateStr);
     const diffMs = Date.now() - date.getTime();
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    if (diffDays < 1) return "today";
+
+    if (diffSeconds < 60) return "just now";
+    if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes === 1 ? "" : "s"} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? "" : "s"} ago`;
+    if (diffHours < 48) return "yesterday";
     if (diffDays < 7) return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
     if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) === 1 ? "" : "s"} ago`;
     if (diffDays < 365) return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) === 1 ? "" : "s"} ago`;

@@ -15,7 +15,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
             .single();
         
         if (lookupError || !userRow) {
-            alert("No account found with that username.");
+            showToast("No account found with that username.");
             return;
         }
 
@@ -29,10 +29,10 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     });
 
     if (error) {
-        alert("Login failed: " + error.message);
+        showToast("Login failed: " + error.message);
         return;
     }
 
-    alert("Login successful!");
+    showToast("Login successful!");
     window.location.href = "../html/index.html"; // redirect to the index page after successful login
 });
