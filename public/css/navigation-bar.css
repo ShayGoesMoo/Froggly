@@ -61,10 +61,6 @@
     font-family: inherit;
 }
 
-#create-post {
-    margin-left: 0;
-}
-
 #create-post:hover {
     background-color: #27751d;
     border-color: #27751d;
@@ -79,7 +75,6 @@
 #suggestions-btn {
     margin-left: 0;
 }
-
 
 .middle button[type="button"] {
     margin-left: 8px;
@@ -133,6 +128,37 @@
     height: 24px;
     background-color: #222222;
     margin: 5px 16px;
+}
+
+.search-navbar {
+    background-color: #0f0f0f;
+    border-bottom: 1px solid #222222;
+    padding: 10px 16px;
+}
+
+.search-navbar-wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.search-navbar-wrapper input[type="search"] {
+    width: 100%;
+    max-width: 700px;
+    border-radius: 8px;
+    padding: 8px 14px;
+    border: 1px solid #222222;
+    font-size: 14px;
+    background-color: #131313;
+    color: #f5f5f5;
+    font-family: inherit;
+}
+
+.search-navbar-wrapper input[type="search"]:focus {
+    outline: none;
+    border-color: #292929;
+    background-color: #272727;
 }
 
 @media (max-width: 900px) {
@@ -205,5 +231,19 @@
 
     .middle button[type="button"] svg {
         margin: 0; /* remove any gap that was reserved for the text */
+    }
+}
+
+@media (max-width: 900px) {
+    .search-navbar {
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 600px) {
+    .search-navbar-wrapper input[type="search"] {
+        max-width: 100%;
+        font-size: 13px;
+        padding: 7px 12px;
     }
 }

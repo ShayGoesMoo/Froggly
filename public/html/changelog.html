@@ -30,6 +30,13 @@
                         <span class="btn-label">Home</span>
                     </button>
 
+                    <button type="button" id="create-post" aria-label="New Post">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        <span class="btn-label">New Post</span>
+                    </button>
+
                     <span class="divider"></span>
 
                     <button type="button" id="suggestions-btn" aria-label="Suggestions">
@@ -44,7 +51,7 @@
                             <path d="M12 8v4l3 3M12 3a9 9 0 1 0 9 9"/>
                             <path d="M12 3v4h4"/>
                         </svg>
-                        <span class="btn-label">CHangelog</span>
+                        <span class="btn-label">Changelog</span>
                     </button>
 
                     <button type="button" id="settings-btn" aria-label="Settings">
@@ -63,31 +70,24 @@
 
                     <span class="divider"></span>
 
-                    <input type="search" placeholder="Search..."> 
+                    <button type="button" id="logout-btn" aria-label="Logout">
+                        Logout
+                    </button>
 
                     <div class="right">
                         <div class="user">
                             <img src="../assets/placeholder.png" alt="User avatar">
                         </div>
                     </div>
-
-                    <span class="divider"></span>
-
-                    <button type="button" id="create-post" aria-label="New Post">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 5v14M5 12h14"/>
-                        </svg>
-                        <span class="btn-label">New Post</span>
-                    </button>
-
-                    <span class="divider"></span>
-
-                    <button type="button" id="logout-btn" aria-label="Logout">
-                        Logout
-                    </button>
                 </div>
             </div>
         </header>
+
+        <div class="search-navbar">
+            <div class="search-navbar-wrapper">
+                <input type="search" id="global-search-input" placeholder="Search...">
+            </div>
+        </div>
 
         <main class="changelog-view">
             <h2>Changelog</h2>
