@@ -7,12 +7,25 @@
 }
 
 body {
-    background-color: #f4f4f4;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #0f0f0f; /* fallback while image loads, or if the API call fails */
+    transition: background-image 0.4s ease;
+
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: -1;
 }
 
 .register {
@@ -23,13 +36,14 @@ body {
 .register h2 {
     text-align: center;
     margin-bottom: 16px;
-    color: #333;
+    color: #f5f5f5;
 }
 
 .container {
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: #131313;
+    border: 1px solid #222222;
     padding: 24px;
+    border-radius: 12px;
 }
 
 .container form {
@@ -41,7 +55,7 @@ body {
 .container label {
     font-size: 14px;
     font-weight: bold;
-    color: #333;
+    color: #f5f5f5;
     margin-top: 10px;
 }
 
@@ -50,26 +64,39 @@ body {
 .container input[type="password"],
 .container input[type="date"] {
     padding: 8px;
-    border: 1px solid #ccc;
+    background-color: #131313;
+    border: 1px solid #222222;
     font-size: 14px;
+    font-family: inherit;
     width: 100%;
 }
 
+.container input[type="text"]:focus,
+.container input[type="email"]:focus,
+.container input[type="password"]:focus,
+.container input[type="date"]:focus {
+    outline: none;
+    border-color: #292929;
+    background-color: #272727;
+    color: #f5f5f5;
+    font-family: inherit;
+}
+
 .container a {
-    color: #333;
+    color: #c4c4c4;
     text-decoration: underline;
 }
 
 .container .disclaimer {
-    font-size: 12px;
-    color: #666;
+    font-size: 13px;
+    color: #e7e7e7;
     margin-top: 14px;
     line-height: 1.4;
 }
 
 .container .login {
     font-size: 12px;
-    color: #666;
+    color: #e7e7e7;
     margin-top: 14px;
     line-height: 1.4;
     text-align: center;
@@ -77,14 +104,21 @@ body {
 
 .container input[type="submit"] {
     margin-top: 16px;
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
-    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    border: 1px solid #27751d;
     font-size: 14px;
+    background-color: #27751d;
+    color: #f5f5f5;
     cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
 }
 
 .container input[type="submit"]:hover {
-    background-color: #555;
+    background-color: #272727;
+    border-color: #292929;
 }
