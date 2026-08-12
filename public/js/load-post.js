@@ -18,6 +18,8 @@ async function loadPost() {
         return;
     }
 
+    document.getElementById("post-view").style.visibility = "visible"; // reveal only once we know what to show
+
     if (post.media_type === "text") {
         loadTextPost(post);
         return;

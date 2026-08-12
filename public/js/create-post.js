@@ -220,22 +220,23 @@ document.getElementById("cancel-btn").addEventListener("click", () => {
 async function generateThumbnail(videoFile) {
     return new Promise((resolve, reject) => {
         const video = document.createElement("video");
-        video.preload = "metadata";
         video.muted = true;
         video.playsInline = true;
+        video.preload = "auto"; // more reliable than "metadata" for triggering actual frame decode on mobile
         video.src = URL.createObjectURL(videoFile);
 
         const timeout = setTimeout(() => {
-            URL.revokeObjectURL(video.src);
+            cleanup();
             reject(new Error("Thumbnail generation timed out"));
-        }, 8000); // give it 8 seconds, then bail
+        }, 8000);
 
-        video.addEventListener("loadeddata", () => {
-            video.currentTime = 0.1;
-        });
-
-        video.addEventListener("seeked", () => {
+        function cleanup() {
             clearTimeout(timeout);
+            video.pause();
+            URL.revokeObjectURL(video.src);
+        }
+
+        function captureFrame() {
             const canvas = document.createElement("canvas");
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
@@ -243,18 +244,42 @@ async function generateThumbnail(videoFile) {
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
             canvas.toBlob((blob) => {
-                URL.revokeObjectURL(video.src);
-                resolve(blob);
+                cleanup();
+                if (blob) resolve(blob);
+                else reject(new Error("Canvas toBlob returned null"));
             }, "image/jpeg", 0.8);
+        }
+
+        video.addEventListener("loadedmetadata", async () => {
+            try {
+                video.currentTime = 0.1;
+                await video.play(); // actually start playback briefly
+                // give it a couple frames to actually render before capturing
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(captureFrame);
+                });
+            } catch (err) {
+                cleanup();
+                reject(err);
+            }
         });
 
         video.addEventListener("error", (e) => {
-            clearTimeout(timeout);
-            URL.revokeObjectURL(video.src);
+            cleanup();
             reject(e);
         });
     });
 }
+
+const thumbSrc = post.thumbnail_url || null;
+
+const mediaHTML = thumbSrc
+    ? `<img src="${thumbSrc}" alt="">`
+    : `<div class="video-placeholder-thumb">
+           <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
+               <path d="M5 3l14 9-14 9V3z"/>
+           </svg>
+       </div>`;
 
 function uploadWithProgress(filePath, file, onProgress) {
     return new Promise((resolve, reject) => {
