@@ -7,18 +7,28 @@
 }
 
 body {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-color: #0f0f0f; /* fallback while image loads, or if the API call fails */
-    transition: background-image 0.4s ease-in-out;
-
+    background-color: #0f0f0f; 
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
+    position: relative;
+}
+
+.bg-layer {
+    position: fixed;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -2;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.bg-layer.visible {
+    opacity: 1;
 }
 
 body::before {
