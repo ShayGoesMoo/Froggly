@@ -789,9 +789,6 @@ gifPickerBtn.addEventListener("click", () => {
     const isHidden = gifPicker.style.display === "none";
 
     if (isHidden) {
-        const btnRect = gifPickerBtn.getBoundingClientRect();
-        gifPicker.style.top = `${btnRect.bottom + 6}px`;
-        gifPicker.style.left = `${btnRect.left}px`;
         gifPicker.style.display = "flex";
     } else {
         gifPicker.style.display = "none";
