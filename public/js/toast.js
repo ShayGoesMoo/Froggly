@@ -3,6 +3,8 @@
     container.id = "toast-container";
     document.body.appendChild(container);
 
+    const notificationSound = new Audio("../assets/sounds/error.m4a");
+
     window.showToast = function (message, type = "info", duration = 3500) {
         const toast = document.createElement("div");
         toast.className = `toast toast-${type}`;
@@ -14,6 +16,10 @@
         requestAnimationFrame(() => {
             toast.classList.add("show");
         });
+        notificationSound.currentTime = 0;
+        notificationSound.play().catch(err => {
+            console.warn("Sound blocked (likely no user interaction yet):", err);
+        })
 
         setTimeout(() => {
             toast.classList.remove("show");

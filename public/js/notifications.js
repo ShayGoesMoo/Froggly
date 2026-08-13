@@ -68,6 +68,8 @@ function startNotificationPolling() {
     setInterval(pollForNewNotifications, 20000);
 }
 
+const notificationSound = new Audio("../assets/sounds/incoming.m4a");
+
 function showNotificationToast(message, notif) {
     const toast = document.createElement("div");
     toast.className = "notif-toast";
@@ -90,6 +92,10 @@ function showNotificationToast(message, notif) {
     document.body.appendChild(toast);
 
     requestAnimationFrame(() => toast.classList.add("show"));
+    notificationSound.currentTime = 0;
+    notificationSound.play().catch(err => {
+        console.warn("Sound blocked (likely no user interaction yet):", err);
+    })
 
     setTimeout(() => {
         toast.classList.remove("show");
