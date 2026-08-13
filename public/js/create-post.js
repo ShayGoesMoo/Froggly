@@ -7,6 +7,71 @@ const previewVideo = document.getElementById("preview-video");
 const changeMediaBtn = document.getElementById("change-media-btn");
 const mediaTypeDisplay = document.getElementById("media-type-display");
 
+const editParams = new URLSearchParams(window.location.search);
+const editPostId = editParams.get("edit");
+let existingMediaUrl = null;
+let existingThumbnailUrl = null;
+
+async function loadPostForEditing() {
+    const { data: post, error } = await supabaseClient
+        .from("posts")
+        .select("id, user_id, title, caption, media_type, media_url, thumbnail_url")
+        .eq("id", editPostId)
+        .single();
+
+    if (error || !post) {
+        showToast("Couldn't load post for editing", "error");
+        window.location.href = "index.html";
+        return;
+    }
+
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session || session.user.id !== post.user_id) {
+        showToast("You don't have permission to edit this post", "error");
+        window.location.href = "index.html";
+        return;
+    }
+
+    existingMediaUrl = post.media_url;
+    existingThumbnailUrl = post.thumbnail_url;
+    detectedMediaType = post.media_type;
+
+    // update page chrome for edit mode (guarded in case these elements don't exist)
+    const subNavTitle = document.querySelector(".sub-navbar-title");
+    if (subNavTitle) subNavTitle.textContent = "Edit Post";
+
+    const publishBtn = document.getElementById("publish-btn");
+    if (publishBtn) publishBtn.textContent = "Save Changes";
+
+    if (post.media_type === "text") {
+        document.getElementById("tab-text").click();
+        document.getElementById("text-title").value = post.title || "";
+        document.getElementById("text-body").value = post.caption || "";
+    } else {
+        document.getElementById("post-title").value = post.title || "";
+        document.getElementById("caption").value = post.caption || "";
+        mediaTypeDisplay.value = post.media_type;
+
+        uploadPlaceholder.style.display = "none";
+        previewWrapper.style.display = "block";
+
+        if (post.media_type === "video") {
+            previewVideo.src = post.media_url;
+            previewVideo.style.display = "block";
+            previewImage.style.display = "none";
+        } else {
+            previewImage.src = post.media_url;
+            previewImage.style.display = "block";
+            previewVideo.style.display = "none";
+        }
+
+        mediaInput.required = false;
+    }
+}
+if (editPostId) {
+    loadPostForEditing();
+}
+
 const tabButtons = document.querySelectorAll(".tab-btn");
 const panels = {
     media: document.getElementById("panel-media"),
@@ -93,7 +158,31 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
         }
 
         publishBtn.disabled = true;
-        publishBtn.textContent = "Publishing...";
+        publishBtn.textContent = editPostId ? "Saving..." : "Publishing...";
+
+        if (editPostId) {
+            const { error: updateError } = await supabaseClient
+            .from("posts")
+            .update({
+                media_url: urlData.publicUrl,
+                media_type: detectedMediaType,
+                title: title,
+                caption: caption,
+                thumbnail_url: thumbnailUrl,
+                edited_at: new Date().toISOString(),
+            })
+            .eq("id", editPostId);
+
+            if (updateError) {
+                showToast("Failed to save changes: " + updateError.message, "error");
+                publishBtn.disabled = false;
+                publishBtn.textContent = "Save Changes";
+                return;
+            }
+
+            window.location.href = `post.html?id=${editPostId}`;
+            return;
+        }
 
         const { data: newPost, error: insertError } = await supabaseClient
             .from("posts")
@@ -121,8 +210,33 @@ document.getElementById("create-post-form").addEventListener("submit", async (e)
         return;
     }
 
-    // --- Media post branch (unchanged from before) ---
-    if (!selectedFile) {
+    // --- Media post branch ---
+
+    if (editPostId && !selectedFile) {
+        // editing, no new file chosen — just update title/caption
+        publishBtn.disabled = true;
+        publishBtn.textContent = "Saving...";
+
+        const title = document.getElementById("post-title").value.trim();
+        const caption = document.getElementById("caption").value.trim();
+
+        const { error: updateError } = await supabaseClient
+            .from("posts")
+            .update({ title: title, caption: caption, edited_at: new Date().toISOString() })
+            .eq("id", editPostId);
+
+        if (updateError) {
+            showToast("Failed to save changes: " + updateError.message, "error");
+            publishBtn.disabled = false;
+            publishBtn.textContent = "Save Changes";
+            return;
+        }
+
+        window.location.href = `post.html?id=${editPostId}`;
+        return;
+    }
+
+    if (!selectedFile && !editPostId) {
         showToast("Please select a photo, video, or gif to upload.", "error");
         return;
     }
@@ -270,16 +384,6 @@ async function generateThumbnail(videoFile) {
         });
     });
 }
-
-const thumbSrc = post.thumbnail_url || null;
-
-const mediaHTML = thumbSrc
-    ? `<img src="${thumbSrc}" alt="">`
-    : `<div class="video-placeholder-thumb">
-           <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
-               <path d="M5 3l14 9-14 9V3z"/>
-           </svg>
-       </div>`;
 
 function uploadWithProgress(filePath, file, onProgress) {
     return new Promise((resolve, reject) => {

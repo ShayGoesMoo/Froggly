@@ -107,8 +107,15 @@
 .video-post-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
     margin-bottom: 12px;
+}
+
+.video-post-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .video-post-avatar {
@@ -609,8 +616,15 @@
 .tweet-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
     margin-bottom: 12px;
+}
+
+.tweet-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .tweet-header .tweet-avatar {
@@ -693,6 +707,19 @@
     height: 18px;
 }
 
+.tweet-action-btn#like-btn.liked {
+    color: #e0245e;
+}
+
+.tweet-action-btn#like-btn.liked svg {
+    fill: #e0245e;
+    stroke: #e0245e;
+}
+
+.tweet-action-btn#like-btn:hover {
+    color: #e0245e;
+}
+
 .tweet-media {
     margin-bottom: 12px;
     border-radius: 12px;
@@ -711,6 +738,17 @@
     max-height: 500px;
     object-fit: contain;
     display: block;
+}
+
+.item-meta .edited-tag,
+.tweet-meta .edited-tag {
+    color: #666;
+    font-style: italic;
+}
+
+.tweet-username-row {
+    display: flex;
+    align-items: center;
 }
 
 @media (max-width: 1100px) {

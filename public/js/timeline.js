@@ -13,8 +13,7 @@ async function loadTimeline() {
 
     const { data: posts, error } = await supabaseClient
         .from("posts")
-        .select("id, user_id, media_url, media_type, thumbnail_url, title, caption, created_at, users!posts_user_id_fkey(username, avatar_url)")
-        .order("created_at", { ascending: false });
+        .select("id, user_id, media_url, media_type, thumbnail_url, title, caption, created_at, edited_at, users!posts_user_id_fkey(username, avatar_url)")        .order("created_at", { ascending: false });
 
     if (error) {
         console.error("Failed to load timeline:", error.message, error);
@@ -86,6 +85,7 @@ async function loadTimeline() {
         const viewsText = formatViews(viewCounts[post.id] || 0);
         const uploadedText = formatUploaded(post.created_at);
         const isOwner = currentUserId && currentUserId === post.user_id;
+        const editedText = post.edited_at ? " (edited)" : "";
 
         item.innerHTML = `
             ${isOwner ? `
@@ -97,6 +97,7 @@ async function loadTimeline() {
                     </svg>
                 </button>
                 <div class="item-menu-dropdown" data-post-id="${post.id}">
+                    <button type="button" class="edit-post-btn" data-post-id="${post.id}">Edit post</button>
                     <button type="button" class="delete-post-btn" data-post-id="${post.id}">Delete post</button>
                 </div>
             ` : ""}
@@ -108,7 +109,7 @@ async function loadTimeline() {
                 <div class="item-text">
                     <span class="item-title">${post.title || ""}</span>
                     <span class="item-caption">${post.caption}</span>
-                    <span class="item-meta"><b>@${post.users.username}</b> posted this ${uploadedText}</span>
+                    <span class="item-meta"><b>@${post.users.username}</b> posted this ${uploadedText}${editedText}</span>
                 </div>
             </div>
         `;
@@ -158,6 +159,14 @@ async function loadTimeline() {
             }
 
             btn.closest(".timeline-item").remove();
+        });
+    });
+
+    document.querySelectorAll(".edit-post-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = `create-post.html?edit=${btn.dataset.postId}`;
         });
     });
 

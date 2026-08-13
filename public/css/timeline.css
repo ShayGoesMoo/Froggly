@@ -176,6 +176,15 @@ a.timeline-item {
     background-color: #1a1a1a;
 }
 
+.item-menu-dropdown .edit-post-btn {
+    color: #f5f5f5;
+    border-bottom: 1px solid #292929;
+}
+
+.item-menu-dropdown .edit-post-btn:hover {
+    background-color: #1a1a1a;
+}
+
 .tweet-card {
     position: relative;
 }

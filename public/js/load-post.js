@@ -9,8 +9,7 @@ async function loadPost() {
 
     const { data: post, error } = await supabaseClient
         .from("posts")
-        .select("id, title, media_url, caption, media_type, thumbnail_url, created_at, users!posts_user_id_fkey(display_name, username, avatar_url)")
-        .eq("id", postId)
+        .select("id, user_id, title, media_url, caption, media_type, thumbnail_url, created_at, edited_at, users!posts_user_id_fkey(display_name, username, avatar_url)")        .eq("id", postId)
         .single();
 
     if (error || !post) {
@@ -60,6 +59,7 @@ async function loadPost() {
 
         const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
         const uploadedText = formatUploaded(post.created_at);
+        const editedText = post.edited_at ? " (edited)" : "";
 
         // fetch the view count before building the details HTML
         const { count: viewCount } = await supabaseClient
@@ -71,17 +71,21 @@ async function loadPost() {
             <div class="video-post-details">
                 <div class="video-post-title">${post.title ?? ""}</div>
                 <div class="video-post-header">
-                    <img class="video-post-avatar" src="${avatarSrc}" alt="">
-                    <div class="video-post-header-text">
-                        <span class="video-post-username">${post.users.username}</span>
-                        <span class="video-post-meta">${viewCount ?? 0} views &middot; ${formatExactDateTime(post.created_at)}</span>
+                    <div class="video-post-header-left">
+                        <img class="video-post-avatar" src="${avatarSrc}" alt="">
+                        <div class="video-post-header-text">
+                            <span class="video-post-username">${post.users.username}</span>
+                            <span class="video-post-meta">${viewCount ?? 0} views &middot; ${formatExactDateTime(post.created_at)}${editedText}</span>
+                        </div>
                     </div>
+                    <span id="video-follow-slot"></span>
                 </div>
                 ${post.caption ? `<div class="video-post-caption">${post.caption}</div>` : ""}
             </div>
         `;
     }
 
+    setupFollowButton(post.user_id, "#video-follow-slot");
     recordView(postId);
     loadComments();
     loadRecommended();
@@ -201,6 +205,70 @@ async function loadRecommended() {
     });
 }
 
+async function setupFollowButton(profileUserId, containerSelector) {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    // don't show a follow button on your own post, or if not logged in
+    if (!session || session.user.id === profileUserId) return;
+
+    const container = document.querySelector(containerSelector);
+    if (!container) return;
+
+    const { data: existingFollow } = await supabaseClient
+        .from("follows")
+        .select("follower_id")
+        .eq("follower_id", session.user.id)
+        .eq("following_id", profileUserId)
+        .maybeSingle();
+
+    let isFollowing = !!existingFollow;
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "follow-btn" + (isFollowing ? " following" : "");
+    btn.innerHTML = `<span class="follow-btn-text">${isFollowing ? "Following" : "Follow"}</span>`;
+
+    btn.addEventListener("click", async () => {
+        btn.disabled = true;
+
+        if (isFollowing) {
+            const { error } = await supabaseClient
+                .from("follows")
+                .delete()
+                .eq("follower_id", session.user.id)
+                .eq("following_id", profileUserId);
+
+            if (error) {
+                showToast("Failed to unfollow: " + error.message, "error");
+                btn.disabled = false;
+                return;
+            }
+
+            isFollowing = false;
+            btn.classList.remove("following");
+            btn.innerHTML = `<span class="follow-btn-text">Follow</span>`;
+        } else {
+            const { error } = await supabaseClient
+                .from("follows")
+                .insert([{ follower_id: session.user.id, following_id: profileUserId }]);
+
+            if (error) {
+                showToast("Failed to follow: " + error.message, "error");
+                btn.disabled = false;
+                return;
+            }
+
+            isFollowing = true;
+            btn.classList.add("following");
+            btn.innerHTML = `<span class="follow-btn-text">Following</span>`;
+        }
+
+        btn.disabled = false;
+    });
+
+    container.appendChild(btn);
+}
+
 function loadTextPost(post) {
     const postView = document.querySelector(".post-view");
     postView.classList.add("text-post-layout");
@@ -212,24 +280,35 @@ function loadTextPost(post) {
 
     const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
     const uploadedText = formatUploaded(post.created_at);
+    const editedText = post.edited_at ? " (edited)" : "";
 
     const postDetails = document.querySelector(".post-details");
     postDetails.innerHTML = `
         <div class="tweet-card">
             <div class="tweet-header">
-                <img class="tweet-avatar" src="${avatarSrc}" alt="">
-                <div class="tweet-header-text">
-                    <span class="tweet-username">${post.users.display_name}</span>
-                    <span class="tweet-handle">@${post.users.username}</span>
+                <div class="tweet-header-left">
+                    <img class="tweet-avatar" src="${avatarSrc}" alt="">
+                    <div class="tweet-header-text">
+                        <span class="tweet-username">${post.users.display_name}</span>
+                        <span class="tweet-handle">@${post.users.username}</span>
+                    </div>
                 </div>
+                <span id="tweet-follow-slot"></span>
             </div>
 
             ${post.title ? `<div class="tweet-title">${post.title}</div>` : ""}
             <div class="tweet-content">${post.caption ?? ""}</div>
 
-            <div class="tweet-meta">${formatExactDateTime(post.created_at)}</div>
+            <div class="tweet-meta">${formatExactDateTime(post.created_at)}${editedText}</div>
 
             <div class="tweet-actions">
+                <button type="button" class="tweet-action-btn" id="like-btn" aria-label="Like">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" id="like-icon">
+                        <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+                    </svg>
+                    <span id="like-count">0</span>
+                </button>
+
                 <button type="button" class="tweet-action-btn" aria-label="Comment">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -247,6 +326,9 @@ function loadTextPost(post) {
             </div>
         </div>
     `;
+
+    setupFollowButton(post.user_id, "#tweet-follow-slot");
+    setupLikeButton(postId);
 
     recordView(postId);
     loadComments();
@@ -265,6 +347,80 @@ async function loadTweetViewCount(postId) {
     }
 }
 
+async function setupLikeButton(postId) {
+    const likeBtn = document.getElementById("like-btn");
+    const likeIcon = document.getElementById("like-icon");
+    const likeCountEl = document.getElementById("like-count");
+
+    if (!likeBtn) return;
+
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    // load current like count regardless of login state
+    const { count } = await supabaseClient
+        .from("post_likes")
+        .select("*", { count: "exact", head: true })
+        .eq("post_id", postId);
+
+    likeCountEl.textContent = count ?? 0;
+
+    if (!session) {
+        // not logged in — button still visible, but clicking prompts login instead of liking
+        likeBtn.addEventListener("click", () => {
+            showToast("You need to be logged in to like posts.", "error");
+        });
+        return;
+    }
+
+    const { data: existingLike } = await supabaseClient
+        .from("post_likes")
+        .select("post_id")
+        .eq("post_id", postId)
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+
+    let isLiked = !!existingLike;
+    if (isLiked) likeBtn.classList.add("liked");
+
+    likeBtn.addEventListener("click", async () => {
+        likeBtn.disabled = true;
+
+        if (isLiked) {
+            const { error } = await supabaseClient
+                .from("post_likes")
+                .delete()
+                .eq("post_id", postId)
+                .eq("user_id", session.user.id);
+
+            if (error) {
+                showToast("Failed to unlike: " + error.message, "error");
+                likeBtn.disabled = false;
+                return;
+            }
+
+            isLiked = false;
+            likeBtn.classList.remove("liked");
+            likeCountEl.textContent = Math.max(0, parseInt(likeCountEl.textContent) - 1);
+        } else {
+            const { error } = await supabaseClient
+                .from("post_likes")
+                .insert([{ post_id: postId, user_id: session.user.id }]);
+
+            if (error) {
+                showToast("Failed to like: " + error.message, "error");
+                likeBtn.disabled = false;
+                return;
+            }
+
+            isLiked = true;
+            likeBtn.classList.add("liked");
+            likeCountEl.textContent = parseInt(likeCountEl.textContent) + 1;
+        }
+
+        likeBtn.disabled = false;
+    });
+}
+
 function loadImagePost(post) {
     const postView = document.querySelector(".post-view");
     postView.classList.add("text-post-layout"); // reuse the same centered single-column layout
@@ -276,16 +432,20 @@ function loadImagePost(post) {
 
     const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
     const uploadedText = formatUploaded(post.created_at);
+    const editedText = post.edited_at ? " (edited)" : "";
 
     const postDetails = document.querySelector(".post-details");
     postDetails.innerHTML = `
         <div class="tweet-card">
             <div class="tweet-header">
-                <img class="tweet-avatar" src="${avatarSrc}" alt="">
-                <div class="tweet-header-text">
-                    <span class="tweet-username">${post.users.display_name}</span>
-                    <span class="tweet-handle">@${post.users.username}</span>
+                <div class="tweet-header-left">
+                    <img class="tweet-avatar" src="${avatarSrc}" alt="">
+                    <div class="tweet-header-text">
+                        <span class="tweet-username">${post.users.display_name}</span>
+                        <span class="tweet-handle">@${post.users.username}</span>
+                    </div>
                 </div>
+                <span id="tweet-follow-slot"></span>
             </div>
 
             ${post.title ? `<div class="tweet-title">${post.title}</div>` : ""}
@@ -295,9 +455,16 @@ function loadImagePost(post) {
                 <img src="${post.media_url}" alt="">
             </div>
 
-            <div class="tweet-meta">${formatExactDateTime(post.created_at)}</div>
+            <div class="tweet-meta">${formatExactDateTime(post.created_at)}${editedText}</div>
 
             <div class="tweet-actions">
+                <button type="button" class="tweet-action-btn" id="like-btn" aria-label="Like">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" id="like-icon">
+                        <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+                    </svg>
+                    <span id="like-count">0</span>
+                </button>
+
                 <button type="button" class="tweet-action-btn" aria-label="Comment">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -315,6 +482,9 @@ function loadImagePost(post) {
             </div>
         </div>
     `;
+
+    setupFollowButton(post.user_id, "#tweet-follow-slot");
+    setupLikeButton(postId);
 
     recordView(postId);
     loadComments();
