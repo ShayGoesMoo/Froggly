@@ -756,7 +756,7 @@ document.getElementById("comment-form").addEventListener("submit", async (e) => 
             {
                 post_id: postId,
                 user_id: session.user.id,
-                comment_text: commentText || null,
+                comment_text: commentText || "",
                 gif_url: selectedGifUrl,
             },
         ]);
@@ -790,6 +790,7 @@ gifPickerBtn.addEventListener("click", () => {
 
     if (isHidden) {
         gifPicker.style.display = "flex";
+        if (!gifSearchInput.value.trim()) loadTrending();
     } else {
         gifPicker.style.display = "none";
     }
@@ -811,7 +812,12 @@ document.querySelectorAll(".gif-tab").forEach((tab) => {
         document.querySelectorAll(".gif-tab").forEach((t) => t.classList.remove("active"));
         tab.classList.add("active");
         gifMode = tab.dataset.mode;
-        if (gifSearchInput.value.trim()) runGifSearch(gifSearchInput.value.trim());
+        
+        if (gifSearchInput.value.trim()) {
+            runGifSearch(gifSearchInput.value.trim());
+        } else {
+            loadTrending;
+        }
     });
 });
 
@@ -824,24 +830,30 @@ gifSearchInput.addEventListener("input", () => {
 async function runGifSearch(query) {
     if (!query) return;
     const results = gifMode === "gifs" ? await searchGifs(query) : await searchStickers(query);
+}
 
+function renderGifResults(results) {
     gifResults.innerHTML = "";
     results.forEach((gif) => {
         const img = document.createElement("img");
         img.src = gif.preview;
         img.addEventListener("click", () => {
             selectedGifUrl = gif.full;
-
             const previewSlot = document.getElementById("comment-gif-preview");
             const previewImg = document.getElementById("comment-gif-preview-img");
             previewImg.src = gif.preview;
             previewSlot.style.display = "flex";
 
             gifPicker.style.display = "none";
-            document.getElementById("comment-text-input").focus(); // let them type a caption right away
+            document.getElementById("comment-text-input").focus();
         });
         gifResults.appendChild(img);
     });
+}
+
+async function loadTrending() {
+    const results = await getTrendingGifs();
+    renderGifResults(results);
 }
 
 document.getElementById("remove-gif-btn").addEventListener("click", () => {

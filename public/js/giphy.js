@@ -2,7 +2,7 @@ const GIPHY_API_KEY = "g7cZexeOeTzhTiNMu4gN7sZUjRNuSORJ";
 
 async function searchGifs(query) {
     const res = await fetch(
-        `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${encodeURIComponent(query)}&limit=20&rating=pg-13`
+        `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${encodeURIComponent(query)}&limit=39&rating=pg-13`
     );
     if (!res.ok) return [];
     const data = await res.json();
@@ -15,7 +15,7 @@ async function searchGifs(query) {
 
 async function searchStickers(query) {
     const res = await fetch(
-        `https://api.giphy.com/v1/stickers/search?api_key=${GIPHY_API_KEY}&q=${encodeURIComponent(query)}&limit=20&rating=pg-13`
+        `https://api.giphy.com/v1/stickers/search?api_key=${GIPHY_API_KEY}&q=${encodeURIComponent(query)}&limit=39&rating=pg-13`
     );
     if (!res.ok) return [];
     const data = await res.json();
@@ -27,7 +27,7 @@ async function searchStickers(query) {
 }
 
 async function getTrendingGifs() {
-    const res = await fetch(`https://api.giphy.com/v1/gifs/trending?api_key=${GIPHY_API_KEY}&limit=20&rating=pg-13`);
+    const res = await fetch(`https://api.giphy.com/v1/gifs/trending?api_key=${GIPHY_API_KEY}&limit=39&rating=pg-13`);
     if (!res.ok) return [];
     const data = await res.json();
     return data.data.map((g) => ({
