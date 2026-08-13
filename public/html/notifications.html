@@ -3,16 +3,13 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Froggly | Home</title>
+        <title>Froggly | Notifications</title>
 
         <link rel="stylesheet" href="../css/index.css">
         <link rel="stylesheet" href="../css/navigation-bar.css">
-        <link rel="stylesheet" href="../css/timeline.css">
+        <link rel="stylesheet" href="../css/notifications.css">
         <link rel="stylesheet" href="../css/states.css">
         <link rel="stylesheet" href="../css/notification-toast.css">
-
-        <link rel="icon" type="image/png" href="../assets/logo 1.png">
-        <link rel="apple-touch-icon" href="../assets/logo 1.png">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,24 +93,16 @@
             </div>
         </header>
 
-        <!--<div class="search-navbar">
-            <div class="search-navbar-wrapper">
-                <input type="search" id="global-search-input" placeholder="Search...">
-            </div>
-        </div>-->
-
-        <main>
-            <div class="timeline">
-                
-                <!-- repeat for each post -->
-            </div>
+        <main class="notifications-view">
+            <h2>Notifications</h2>
+            <div class="notifications-list" id="notifications-list"></div>
         </main>
 
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <script src="../js/supabase-config.js"></script>
-        <script src="../js/timeline.js"></script>
-        <script src="../js/logout.js"></script>
         <script src="../js/toast.js"></script>
+        <script src="../js/notifications-page.js"></script>
+        <script src="../js/logout.js"></script>
         <script src="../js/notifications.js"></script>
 
         <script>

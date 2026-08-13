@@ -1,6 +1,8 @@
 const params = new URLSearchParams(window.location.search);
 const postId = params.get("id");
 
+let currentPostOwnerId = null;
+
 async function loadPost() {
     if (!postId) {
         console.error("No post id in URL");
@@ -9,13 +11,18 @@ async function loadPost() {
 
     const { data: post, error } = await supabaseClient
         .from("posts")
-        .select("id, user_id, title, media_url, caption, media_type, thumbnail_url, created_at, edited_at, users!posts_user_id_fkey(display_name, username, avatar_url)")        .eq("id", postId)
+        .select("id, user_id, title, media_url, caption, media_type, thumbnail_url, created_at, edited_at, users!posts_user_id_fkey(display_name, username, avatar_url)")
+        .eq("id", postId)
         .single();
 
     if (error || !post) {
         console.error("Failed to load post:", error);
         return;
     }
+
+    currentPostOwnerId = post.user_id; // set this so the comment handler can use it later
+
+    document.getElementById("post-view").style.visibility = "visible";
 
     document.getElementById("post-view").style.visibility = "visible"; // reveal only once we know what to show
 
@@ -249,18 +256,26 @@ async function setupFollowButton(profileUserId, containerSelector) {
             btn.innerHTML = `<span class="follow-btn-text">Follow</span>`;
         } else {
             const { error } = await supabaseClient
-                .from("follows")
-                .insert([{ follower_id: session.user.id, following_id: profileUserId }]);
+            .from("follows")
+            .insert([{ follower_id: session.user.id, following_id: profileUserId }]);
 
-            if (error) {
-                showToast("Failed to follow: " + error.message, "error");
-                btn.disabled = false;
-                return;
-            }
+        if (error) {
+            showToast("Failed to follow: " + error.message, "error");
+            btn.disabled = false;
+            return;
+        }
 
-            isFollowing = true;
-            btn.classList.add("following");
-            btn.innerHTML = `<span class="follow-btn-text">Following</span>`;
+        isFollowing = true;
+        btn.classList.add("following");
+        btn.innerHTML = `<span class="follow-btn-text">Following</span>`;
+
+        await supabaseClient.from("notifications").insert([
+            {
+                recipient_id: profileUserId,
+                actor_id: session.user.id,
+                type: "follow",
+            },
+        ]);
         }
 
         btn.disabled = false;
@@ -376,7 +391,7 @@ function loadTextPost(post) {
     `;
 
     setupFollowButton(post.user_id, "#tweet-follow-slot");
-    setupLikeButton(postId);
+    setupLikeButton(postId, post.user_id);
     setupShareButton(postId);
 
     recordView(postId);
@@ -396,7 +411,7 @@ async function loadTweetViewCount(postId) {
     }
 }
 
-async function setupLikeButton(postId) {
+async function setupLikeButton(postId, postOwnerId) {
     const likeBtn = document.getElementById("like-btn");
     const likeIcon = document.getElementById("like-icon");
     const likeCountEl = document.getElementById("like-count");
@@ -464,6 +479,18 @@ async function setupLikeButton(postId) {
             isLiked = true;
             likeBtn.classList.add("liked");
             likeCountEl.textContent = parseInt(likeCountEl.textContent) + 1;
+
+            // notify the post's owner, unless they liked their own post
+            if (postOwnerId && postOwnerId !== session.user.id) {
+                await supabaseClient.from("notifications").insert([
+                    {
+                        recipient_id: postOwnerId,
+                        actor_id: session.user.id,
+                        type: "like",
+                        post_id: postId,
+                    },
+                ]);
+            }
         }
 
         likeBtn.disabled = false;
@@ -556,7 +583,7 @@ function loadImagePost(post) {
     `;
 
     setupFollowButton(post.user_id, "#tweet-follow-slot");
-    setupLikeButton(postId);
+    setupLikeButton(postId, post.user_id);
     setupShareButton(postId);
 
     recordView(postId);
@@ -633,6 +660,18 @@ document.getElementById("comment-form").addEventListener("submit", async (e) => 
     if (error) {
         showToast("Failed to post comment: " + error.message, "error");
         return;
+    }
+
+    // notify the post's owner, unless they're commenting on their own post
+    if (currentPostOwnerId && currentPostOwnerId !== session.user.id) {
+        await supabaseClient.from("notifications").insert([
+            {
+                recipient_id: currentPostOwnerId,
+                actor_id: session.user.id,
+                type: "comment",
+                post_id: postId,
+            },
+        ]);
     }
 
     input.value = "";

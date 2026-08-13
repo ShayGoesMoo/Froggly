@@ -1,0 +1,34 @@
+.notif-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #131313;
+    border: 1px solid #292929;
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 320px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 2100;
+    cursor: pointer;
+}
+
+.notif-toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notif-toast-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.notif-toast-text {
+    font-size: 13px;
+    color: #f5f5f5;
+}
