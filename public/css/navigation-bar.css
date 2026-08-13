@@ -37,6 +37,7 @@
     left: -20px;
     top: 30%;
     transform: translateY(-50%) rotate(1deg);
+    z-index: -1;
 }
 
 /* Search bar, centered like GitHub's */
@@ -115,6 +116,10 @@
 
 .right a:hover {
     color: #0969da;
+}
+
+.user {
+    cursor: pointer;
 }
 
 .user img {

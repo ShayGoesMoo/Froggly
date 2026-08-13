@@ -116,6 +116,8 @@
                         <li>Posts can now have a like button</li>
                         <li>Posts can be shared via the share icon</li>
                         <li>Notifications now work: Get a toast notification when someone likes your post or follows you</li>
+                        <li>Posts can be archived or set to private</li>
+                        <li>Profiles are now here!</li>
                     </ul>
                 </div>
 
@@ -197,47 +199,6 @@
         <script src="../js/logout.js"></script>
         <script src="../js/toast.js"></script>
         <script src="../js/notifications.js"></script>
-
-        <script>
-            // save scroll position whenever the user clicks into a post
-            document.querySelectorAll(".timeline-item a").forEach((link) => {
-                link.addEventListener("click", () => {
-                    sessionStorage.setItem("timelineScroll", window.scrollY);
-                });
-            });
-
-            // restore scroll position on page load (covers cases where history.back() alone doesn't restore it)
-            window.addEventListener("load", () => {
-                const savedScroll = sessionStorage.getItem("timelineScroll");
-                if (savedScroll !== null) {
-                    window.scrollTo(0, parseInt(savedScroll, 10));
-                    sessionStorage.removeItem("timelineScroll"); // clear it so it doesn't persist stale on future visits
-                }
-            });
-
-            document.querySelector("#create-post").addEventListener("click", () => {
-                window.location.href = "create-post.html";
-            });
-
-            document.querySelector("#settings-btn").addEventListener("click", () => {
-                window.location.href = "settings.html";
-            });
-
-            document.getElementById("suggestions-btn").addEventListener("click", () => {
-                window.location.href = "suggestions.html";
-            });
-
-            document.getElementById("changelog-btn").addEventListener("click", () => {
-                window.location.href = "changelog.html";
-            });
-
-            document.getElementById("home-btn").addEventListener("click", () => {
-                window.location.href = "index.html";
-            });  
-
-            document.getElementById("notifications-btn").addEventListener("click", () => {
-                window.location.href = "notifications.html";
-            }); 
-        </script>
+        <script src="../js/nav-links.js"></script>
     </body>
 </html>

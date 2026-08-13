@@ -3,13 +3,17 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Froggly | Notifications</title>
+        <title>Froggly | Profile</title>
 
+        <link rel="stylesheet" href="../css/profile.css">
         <link rel="stylesheet" href="../css/index.css">
         <link rel="stylesheet" href="../css/navigation-bar.css">
-        <link rel="stylesheet" href="../css/notifications.css">
+        <link rel="stylesheet" href="../css/timeline.css">
         <link rel="stylesheet" href="../css/states.css">
         <link rel="stylesheet" href="../css/notification-toast.css">
+
+        <link rel="icon" type="image/png" href="../assets/logo 1.png">
+        <link rel="apple-touch-icon" href="../assets/logo 1.png">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -93,15 +97,51 @@
             </div>
         </header>
 
-        <main class="notifications-view">
-            <h2>Notifications</h2>
-            <div class="notifications-list" id="notifications-list"></div>
+        <main class="profile-view">
+            <div class="profile-header">
+                <img class="profile-avatar" id="profile-avatar" src="../assets/default profile picture.png" alt="">
+
+                <div class="profile-info">
+                    <div class="profile-name-row">
+                        <span class="profile-display-name" id="profile-display-name">Loading...</span>
+                        <span id="profile-edit-slot"></span>
+                    </div>
+                    <span class="profile-username" id="profile-username"></span>
+                    <p class="profile-bio" id="profile-bio"></p>
+
+                    <div class="profile-stats">
+                        <button type="button" class="stat-link" id="following-stat">
+                            <b id="profile-following-count">0</b> Following
+                        </button>
+                        <button type="button" class="stat-link" id="follower-stat">
+                            <b id="profile-follower-count">0</b> Followers
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-posts-header">Posts</div>
+            <div class="timeline" id="profile-timeline"></div>
         </main>
+
+        <div class="follow-modal" id="follow-modal">
+            <div class="follow-modal-content">
+                <div class="follow-modal-header">
+                    <span id="follow-modal-title">Following</span>
+                    <button type="button" class="follow-modal-close" id="follow-modal-close" aria-label="Close">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 6 6 18M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="follow-modal-list" id="follow-modal-list"></div>
+            </div>
+        </div>
 
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <script src="../js/supabase-config.js"></script>
         <script src="../js/toast.js"></script>
-        <script src="../js/notifications-page.js"></script>
+        <script src="../js/profile.js"></script>
         <script src="../js/logout.js"></script>
         <script src="../js/notifications.js"></script>
         <script src="../js/nav-links.js"></script>

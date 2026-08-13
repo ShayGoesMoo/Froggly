@@ -79,9 +79,13 @@ async function loadPost() {
                 <div class="video-post-title">${post.title ?? ""}</div>
                 <div class="video-post-header">
                     <div class="video-post-header-left">
-                        <img class="video-post-avatar" src="${avatarSrc}" alt="">
+                        <a href="profile.html?id=${post.user_id}">
+                            <img class="video-post-avatar" src="${avatarSrc}" alt="">
+                        </a>
                         <div class="video-post-header-text">
-                            <span class="video-post-username">${post.users.username}</span>
+                            <a href="profile.html?id=${post.user_id}" class="video-post-username-link">
+                                <span class="video-post-username">@${post.users.username}</span>
+                            </a>
                             <span class="video-post-meta">${viewCount ?? 0} views &middot; ${formatExactDateTime(post.created_at)}${editedText}</span>
                         </div>
                     </div>
@@ -138,9 +142,12 @@ async function loadViewCount(postId) {
 loadPost();
 
 async function loadComments() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    const currentUserId = session?.user?.id || null;
+
     const { data: comments, error } = await supabaseClient
         .from("comments")
-        .select("id, comment_text, users!comments_user_id_fkey(username)")
+        .select("id, comment_text, gif_url, created_at, edited_at, user_id, users!comments_user_id_fkey(username, avatar_url)")
         .eq("post_id", postId)
         .order("created_at", { ascending: true });
 
@@ -152,7 +159,6 @@ async function loadComments() {
     const commentList = document.getElementById("comment-list");
     commentList.innerHTML = "";
 
-    // update the comment count wherever it's shown (tweet-card action bar, etc.)
     const countEl = document.getElementById("tweet-comment-count");
     if (countEl) countEl.textContent = comments.length;
 
@@ -164,11 +170,94 @@ async function loadComments() {
     comments.forEach((comment) => {
         const div = document.createElement("div");
         div.className = "comment";
+
+        const avatarSrc = comment.users.avatar_url || "../assets/default profile picture.png";
+        const isOwner = currentUserId === comment.user_id;
+        const editedTag = comment.edited_at ? " (edited)" : "";
+        const timeText = formatUploaded(comment.created_at);
+
         div.innerHTML = `
-            <span class="comment-username">${comment.users.username}</span>
-            <span class="comment-text">${comment.comment_text}</span>
+            <a href="profile.html?id=${comment.user_id}">
+                <img class="comment-avatar" src="${avatarSrc}" alt="">
+            </a>
+            <div class="comment-body">
+                <div class="comment-header">
+                    <a href="profile.html?id=${comment.user_id}" class="comment-username-link">${comment.users.username}</a>
+                    <span class="comment-timestamp">${timeText}${editedTag}</span>
+                </div>
+                <div class="comment-text-display">${comment.comment_text || ""}</div>
+                ${comment.gif_url ? `<img class="comment-gif" src="${comment.gif_url}" alt="">` : ""}
+                ${isOwner ? `
+                    <div class="comment-actions">
+                        <button type="button" class="comment-action-link edit-comment-btn" data-comment-id="${comment.id}">Edit</button>
+                        <button type="button" class="comment-action-link delete-comment-btn" data-comment-id="${comment.id}">Delete</button>
+                    </div>
+                ` : ""}
+            </div>
         `;
+
         commentList.appendChild(div);
+    });
+
+    // wire up edit
+    document.querySelectorAll(".edit-comment-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const commentDiv = btn.closest(".comment");
+            const textDisplay = commentDiv.querySelector(".comment-text-display");
+            const currentText = textDisplay.textContent;
+
+            const input = document.createElement("input");
+            input.type = "text";
+            input.className = "comment-edit-input";
+            input.value = currentText;
+
+            textDisplay.replaceWith(input);
+            input.focus();
+
+            const saveEdit = async () => {
+                const newText = input.value.trim();
+                if (!newText) return;
+
+                const { error } = await supabaseClient
+                    .from("comments")
+                    .update({ comment_text: newText, edited_at: new Date().toISOString() })
+                    .eq("id", btn.dataset.commentId);
+
+                if (error) {
+                    showToast("Failed to update comment: " + error.message, "error");
+                    return;
+                }
+
+                loadComments();
+            };
+
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") saveEdit();
+                if (e.key === "Escape") loadComments();
+            });
+
+            input.addEventListener("blur", saveEdit);
+        });
+    });
+
+    // wire up delete
+    document.querySelectorAll(".delete-comment-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const confirmed = confirm("Delete this comment?");
+            if (!confirmed) return;
+
+            const { error } = await supabaseClient
+                .from("comments")
+                .delete()
+                .eq("id", btn.dataset.commentId);
+
+            if (error) {
+                showToast("Failed to delete comment: " + error.message, "error");
+                return;
+            }
+
+            loadComments();
+        });
     });
 }
 
@@ -327,10 +416,16 @@ function loadTextPost(post) {
         <div class="tweet-card">
             <div class="tweet-header">
                 <div class="tweet-header-left">
-                    <img class="tweet-avatar" src="${avatarSrc}" alt="">
+                    <a href="profile.html?id=${post.user_id}">
+                        <img class="tweet-avatar" src="${avatarSrc}" alt="">
+                    </a>
                     <div class="tweet-header-text">
-                        <span class="tweet-username">${post.users.display_name}</span>
-                        <span class="tweet-handle">@${post.users.username}</span>
+                        <a href="profile.html?id=${post.user_id}" class="tweet-username-link">
+                            <span class="tweet-username">${post.users.display_name}</span>
+                        </a>
+                        <a href="profile.html?id=${post.user_id}" class="tweet-handle-link">
+                            <span class="tweet-handle">@${post.users.username}</span>
+                        </a>
                     </div>
                 </div>
                 <span id="tweet-follow-slot"></span>
@@ -515,10 +610,16 @@ function loadImagePost(post) {
         <div class="tweet-card">
             <div class="tweet-header">
                 <div class="tweet-header-left">
-                    <img class="tweet-avatar" src="${avatarSrc}" alt="">
+                    <a href="profile.html?id=${post.user_id}">
+                        <img class="tweet-avatar" src="${avatarSrc}" alt="">
+                    </a>
                     <div class="tweet-header-text">
-                        <span class="tweet-username">${post.users.display_name}</span>
-                        <span class="tweet-handle">@${post.users.username}</span>
+                        <a href="profile.html?id=${post.user_id}" class="tweet-username-link">
+                            <span class="tweet-username">${post.users.display_name}</span>
+                        </a>
+                        <a href="profile.html?id=${post.user_id}" class="tweet-handle-link">
+                            <span class="tweet-handle">@${post.users.username}</span>
+                        </a>
                     </div>
                 </div>
                 <span id="tweet-follow-slot"></span>
@@ -632,13 +733,15 @@ function formatExactDateTime(dateStr) {
     return `${timePart} · ${datePart}`;
 }
 
+let selectedGifUrl = null;
+
 document.getElementById("comment-form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const input = e.target.querySelector("input[type='text']");
+    const input = document.getElementById("comment-text-input");
     const commentText = input.value.trim();
 
-    if (!commentText) return;
+    if (!commentText && !selectedGifUrl) return;
 
     const { data: { session } } = await supabaseClient.auth.getSession();
 
@@ -653,7 +756,8 @@ document.getElementById("comment-form").addEventListener("submit", async (e) => 
             {
                 post_id: postId,
                 user_id: session.user.id,
-                comment_text: commentText,
+                comment_text: commentText || null,
+                gif_url: selectedGifUrl,
             },
         ]);
 
@@ -662,20 +766,90 @@ document.getElementById("comment-form").addEventListener("submit", async (e) => 
         return;
     }
 
-    // notify the post's owner, unless they're commenting on their own post
     if (currentPostOwnerId && currentPostOwnerId !== session.user.id) {
         await supabaseClient.from("notifications").insert([
-            {
-                recipient_id: currentPostOwnerId,
-                actor_id: session.user.id,
-                type: "comment",
-                post_id: postId,
-            },
+            { recipient_id: currentPostOwnerId, actor_id: session.user.id, type: "comment", post_id: postId },
         ]);
     }
 
     input.value = "";
+    selectedGifUrl = null;
+    document.getElementById("comment-gif-preview").style.display = "none";
+    document.getElementById("gif-picker").style.display = "none";
     loadComments();
+});
+
+const gifPickerBtn = document.getElementById("gif-picker-btn");
+const gifPicker = document.getElementById("gif-picker");
+const gifSearchInput = document.getElementById("gif-search-input");
+const gifResults = document.getElementById("gif-results");
+let gifMode = "gifs";
+
+gifPickerBtn.addEventListener("click", () => {
+    const isHidden = gifPicker.style.display === "none";
+
+    if (isHidden) {
+        const btnRect = gifPickerBtn.getBoundingClientRect();
+        gifPicker.style.top = `${btnRect.bottom + 6}px`;
+        gifPicker.style.left = `${btnRect.left}px`;
+        gifPicker.style.display = "flex";
+    } else {
+        gifPicker.style.display = "none";
+    }
+});
+
+document.addEventListener("click", (e) => {
+    if (
+        gifPicker.style.display !== "none" &&
+        !gifPicker.contains(e.target) &&
+        e.target !== gifPickerBtn &&
+        !gifPickerBtn.contains(e.target)
+    ) {
+        gifPicker.style.display = "none";
+    }
+});
+
+document.querySelectorAll(".gif-tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+        document.querySelectorAll(".gif-tab").forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+        gifMode = tab.dataset.mode;
+        if (gifSearchInput.value.trim()) runGifSearch(gifSearchInput.value.trim());
+    });
+});
+
+let gifSearchTimer;
+gifSearchInput.addEventListener("input", () => {
+    clearTimeout(gifSearchTimer);
+    gifSearchTimer = setTimeout(() => runGifSearch(gifSearchInput.value.trim()), 400);
+});
+
+async function runGifSearch(query) {
+    if (!query) return;
+    const results = gifMode === "gifs" ? await searchGifs(query) : await searchStickers(query);
+
+    gifResults.innerHTML = "";
+    results.forEach((gif) => {
+        const img = document.createElement("img");
+        img.src = gif.preview;
+        img.addEventListener("click", () => {
+            selectedGifUrl = gif.full;
+
+            const previewSlot = document.getElementById("comment-gif-preview");
+            const previewImg = document.getElementById("comment-gif-preview-img");
+            previewImg.src = gif.preview;
+            previewSlot.style.display = "flex";
+
+            gifPicker.style.display = "none";
+            document.getElementById("comment-text-input").focus(); // let them type a caption right away
+        });
+        gifResults.appendChild(img);
+    });
+}
+
+document.getElementById("remove-gif-btn").addEventListener("click", () => {
+    selectedGifUrl = null;
+    document.getElementById("comment-gif-preview").style.display = "none";
 });
 
 loadPost();

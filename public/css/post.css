@@ -118,6 +118,15 @@
     gap: 12px;
 }
 
+.video-post-username-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.video-post-username-link:hover .video-post-username {
+    text-decoration: underline;
+}
+
 .video-post-avatar {
     width: 44px;
     height: 44px;
@@ -354,6 +363,8 @@
     gap: 8px;
     padding: 12px 16px;
     border-top: 1px solid #222222;
+    position: relative;
+    flex-wrap: wrap;
 }
 
 .comment-form input[type="text"] {
@@ -378,7 +389,7 @@
 
 .comment-form input[type="submit"] {
     margin-left: 8px;
-    border-radius: 12px;
+    border-radius: 8px;
     padding: 6px 12px;
     border: 1px solid #27751d;
     font-size: 14px;
@@ -402,6 +413,198 @@
     font-size: 14px;
     text-align: center;
     padding: 20px 0;
+}
+
+#gif-picker-btn {
+    background: none;
+    border: none;
+    color: #a0a0a0;
+    cursor: pointer;
+    padding: 6px;
+}
+
+#gif-picker-btn:hover {
+    color: #f5f5f5;
+}
+
+.gif-picker {
+    position: fixed;
+    top: 100%; /* sits directly below the form instead of floating above */
+    left: 16px;
+    right: 16px;
+    margin-top: 6px;
+    background-color: #131313;
+    border: 1px solid #292929;
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 1000;
+    max-height: 320px;
+    display: flex;
+    flex-direction: column;
+}
+
+.gif-picker input[type="search"] {
+    padding: 6px 10px;
+    border: 1px solid #292929;
+    border-radius: 6px;
+    background-color: #0f0f0f;
+    color: #f5f5f5;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.gif-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.gif-tab {
+    padding: 4px 10px;
+    border-radius: 14px;
+    border: 1px solid #292929;
+    background-color: #0f0f0f;
+    color: #a0a0a0;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.gif-tab.active {
+    background-color: #f5f5f5;
+    color: #0f0f0f;
+    border-color: #f5f5f5;
+}
+
+.gif-results {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    overflow-y: auto;
+}
+
+.gif-results img {
+    width: 100%;
+    border-radius: 6px;
+    cursor: pointer;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+.comment {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.comment-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #222222;
+    flex-shrink: 0;
+}
+
+.comment-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.comment-header {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.comment-username-link {
+    text-decoration: none;
+    color: #f5f5f5;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.comment-username-link:hover {
+    text-decoration: underline;
+}
+
+.comment-timestamp {
+    font-size: 11px;
+    color: #71767b;
+}
+
+.comment-gif {
+    max-width: 200px;
+    border-radius: 8px;
+    margin-top: 6px;
+    display: block;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.comment-action-link {
+    font-size: 11px;
+    color: #71767b;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.comment-action-link:hover {
+    text-decoration: underline;
+}
+
+.comment-edit-input {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #292929;
+    border-radius: 6px;
+    background-color: #0f0f0f;
+    color: #f5f5f5;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.comment-input-row {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.comment-gif-preview {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.comment-gif-preview img {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    object-fit: cover;
+    display: block;
+}
+
+.comment-gif-preview button {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #e05252;
+    color: #fff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }
 
 /* Right panel: recommended — bigger thumbnails, title + caption below */
@@ -694,7 +897,7 @@
     font-size: 13px;
     cursor: pointer;
     padding: 6px;
-    border-radius: 20px;
+    border-radius: 8px;
 }
 
 .tweet-action-btn:hover {
@@ -718,6 +921,17 @@
 
 .tweet-action-btn#like-btn:hover {
     color: #e0245e;
+}
+
+.tweet-username-link,
+.tweet-handle-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.tweet-username-link:hover .tweet-username,
+.tweet-handle-link:hover .tweet-handle {
+    text-decoration: underline;
 }
 
 .tweet-media {

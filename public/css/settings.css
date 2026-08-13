@@ -75,6 +75,18 @@
     margin-top: 6px;
 }
 
+form textarea {
+    padding: 10px;
+    border: 1px solid #222222;
+    background-color: #131313;
+    color: #f5f5f5;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 150px;
+    max-height: 300px;
+}
+
 /* Profile picture row */
 .pfp-row {
     display: flex;
@@ -107,6 +119,33 @@
 
 .danger-zone button:hover {
     background-color: #a33025;
+}
+
+.archived-post-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #222222;
+}
+
+.archived-post-item:last-child {
+    border-bottom: none;
+}
+
+.archived-post-title {
+    font-size: 13px;
+    color: #f5f5f5;
+}
+
+.unarchive-btn {
+    padding: 4px 10px;
+    background-color: #131313;
+    border: 1px solid #292929;
+    border-radius: 6px;
+    color: #f5f5f5;
+    font-size: 12px;
+    cursor: pointer;
 }
 
 @media (max-width: 600px) {

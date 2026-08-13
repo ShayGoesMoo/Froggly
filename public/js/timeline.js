@@ -13,7 +13,9 @@ async function loadTimeline() {
 
     const { data: posts, error } = await supabaseClient
         .from("posts")
-        .select("id, user_id, media_url, media_type, thumbnail_url, title, caption, created_at, edited_at, users!posts_user_id_fkey(username, avatar_url)")        .order("created_at", { ascending: false });
+        .select("id, user_id, media_url, media_type, thumbnail_url, title, caption, created_at, edited_at, visibility, users!posts_user_id_fkey(username, avatar_url)")
+        .not("visibility", "in", "(archived,private)")
+        .order("created_at", { ascending: false });
 
     if (error) {
         console.error("Failed to load timeline:", error.message, error);
@@ -40,7 +42,6 @@ async function loadTimeline() {
         return;
     }
 
-    // fetch view counts for all these posts in one go
     const postIds = posts.map(p => p.id);
     const { data: viewRows, error: viewsError } = await supabaseClient
         .from("post_views")
@@ -57,9 +58,9 @@ async function loadTimeline() {
     timeline.innerHTML = "";
 
     posts.forEach((post) => {
-        const item = document.createElement("a");
-        item.href = `post.html?id=${post.id}`;
+        const item = document.createElement("div");
         item.className = "timeline-item";
+        item.style.cursor = "pointer";
 
         let mediaHTML;
 
@@ -98,6 +99,12 @@ async function loadTimeline() {
                 </button>
                 <div class="item-menu-dropdown" data-post-id="${post.id}">
                     <button type="button" class="edit-post-btn" data-post-id="${post.id}">Edit post</button>
+                    <button type="button" class="visibility-btn" data-post-id="${post.id}" data-set="${post.visibility === 'private' ? 'public' : 'private'}">
+                        ${post.visibility === 'private' ? 'Make public' : 'Make private'}
+                    </button>
+                    <button type="button" class="archive-post-btn" data-post-id="${post.id}" data-set="${post.visibility === 'archived' ? 'public' : 'archived'}">
+                        ${post.visibility === 'archived' ? 'Unarchive' : 'Archive post'}
+                    </button>
                     <button type="button" class="delete-post-btn" data-post-id="${post.id}">Delete post</button>
                 </div>
             ` : ""}
@@ -109,24 +116,29 @@ async function loadTimeline() {
                 <div class="item-text">
                     <span class="item-title">${post.title || ""}</span>
                     <span class="item-caption">${post.caption}</span>
-                    <span class="item-meta"><b>@${post.users.username}</b> posted this ${uploadedText}${editedText}</span>
+                    <span class="item-meta">
+                        <a href="profile.html?id=${post.user_id}" class="item-meta-link">@${post.users.username}</a>
+                        posted this ${uploadedText}${editedText}
+                    </span>
                 </div>
             </div>
         `;
 
         item.addEventListener("click", (e) => {
-            // don't navigate if the click was on the menu button or dropdown
-            if (e.target.closest(".item-menu-btn") || e.target.closest(".item-menu-dropdown")) {
-                e.preventDefault();
+            if (
+                e.target.closest(".item-menu-btn") ||
+                e.target.closest(".item-menu-dropdown") ||
+                e.target.closest(".item-meta-link")
+            ) {
                 return;
             }
             sessionStorage.setItem("timelineScroll", window.scrollY);
+            window.location.href = `post.html?id=${post.id}`;
         });
 
         timeline.appendChild(item);
     });
 
-    // wire up menu toggles
     document.querySelectorAll(".item-menu-btn").forEach((btn) => {
         btn.addEventListener("click", (e) => {
             e.preventDefault();
@@ -139,7 +151,6 @@ async function loadTimeline() {
         });
     });
 
-    // wire up delete buttons
     document.querySelectorAll(".delete-post-btn").forEach((btn) => {
         btn.addEventListener("click", async (e) => {
             e.preventDefault();
@@ -154,7 +165,7 @@ async function loadTimeline() {
                 .eq("id", btn.dataset.postId);
 
             if (error) {
-                showToast("Failed to delete post: " + error.message);
+                showToast("Failed to delete post: " + error.message, "error");
                 return;
             }
 
@@ -170,7 +181,31 @@ async function loadTimeline() {
         });
     });
 
-    // close any open dropdown when clicking elsewhere
+    document.querySelectorAll(".visibility-btn, .archive-post-btn").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const newVisibility = btn.dataset.set;
+
+            const { error } = await supabaseClient
+                .from("posts")
+                .update({ visibility: newVisibility })
+                .eq("id", btn.dataset.postId);
+
+            if (error) {
+                showToast("Failed to update post: " + error.message, "error");
+                return;
+            }
+
+            showToast(`Post ${newVisibility === "archived" ? "archived" : newVisibility === "private" ? "set to private" : "made public"}`, "success");
+
+            if (newVisibility !== "public") {
+                btn.closest(".timeline-item").remove();
+            }
+        });
+    });
+
     document.addEventListener("click", () => {
         document.querySelectorAll(".item-menu-dropdown").forEach((d) => d.classList.remove("active"));
     });

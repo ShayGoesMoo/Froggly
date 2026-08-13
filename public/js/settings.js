@@ -23,10 +23,14 @@ async function init() {
 
     document.getElementById("display-name-input").value = userRow.display_name || "";
     document.getElementById("username-input").value = userRow.username || "";
+    document.getElementById("bio-input").value = userRow.bio || "";
 
     if (userRow.avatar_url) {
         document.getElementById("current-avatar").src = userRow.avatar_url;
     }
+
+    loadArchivedPosts(); // now currentUser is guaranteed to be set
+    loadPrivatePosts();
 }
 
 // --- Display name ---
@@ -69,6 +73,24 @@ document.getElementById("username-form").addEventListener("submit", async (e) =>
     }
 
     statusEl.textContent = "Username updated.";
+});
+
+// new form handler
+document.getElementById("bio-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const newBio = document.getElementById("bio-input").value.trim();
+
+    const { error } = await supabaseClient
+        .from("users")
+        .update({ bio: newBio })
+        .eq("id", currentUser.id);
+
+    if (error) {
+        showToast("Failed to update bio: " + error.message, "error");
+        return;
+    }
+
+    showToast("Bio updated.", "success");
 });
 
 // --- Password ---
@@ -139,6 +161,112 @@ document.getElementById("avatar-input").addEventListener("change", async () => {
     document.getElementById("current-avatar").src = freshUrl;
 });
 
+async function loadArchivedPosts() {
+    const list = document.getElementById("archived-posts-list");
+    if (!list) return;
+
+    list.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
+
+    const { data: posts, error } = await supabaseClient
+        .from("posts")
+        .select("id, title, caption, media_type, thumbnail_url, media_url")
+        .eq("user_id", currentUser.id)
+        .eq("visibility", "archived")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        list.innerHTML = `<p class="settings-hint">Couldn't load archived posts.</p>`;
+        return;
+    }
+
+    if (posts.length === 0) {
+        list.innerHTML = `<p class="settings-hint">No archived posts.</p>`;
+        return;
+    }
+
+    list.innerHTML = "";
+
+    posts.forEach((post) => {
+        const item = document.createElement("div");
+        item.className = "archived-post-item";
+        item.innerHTML = `
+            <span class="archived-post-title">${post.title || post.caption || "Untitled"}</span>
+            <button type="button" class="unarchive-btn" data-post-id="${post.id}">Unarchive</button>
+        `;
+        list.appendChild(item);
+    });
+
+    document.querySelectorAll(".unarchive-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const { error } = await supabaseClient
+                .from("posts")
+                .update({ visibility: "public" })
+                .eq("id", btn.dataset.postId);
+
+            if (error) {
+                showToast("Failed to unarchive: " + error.message, "error");
+                return;
+            }
+
+            showToast("Post unarchived", "success");
+            loadArchivedPosts();
+        });
+    });
+}
+
+async function loadPrivatePosts() {
+    const list = document.getElementById("private-posts-list");
+    if (!list) return;
+
+    list.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
+
+    const { data: posts, error } = await supabaseClient
+        .from("posts")
+        .select("id, title, caption, media_type, thumbnail_url, media_url")
+        .eq("user_id", currentUser.id)
+        .eq("visibility", "private")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        list.innerHTML = `<p class="settings-hint">Couldn't load private posts.</p>`;
+        return;
+    }
+
+    if (posts.length === 0) {
+        list.innerHTML = `<p class="settings-hint">No private posts.</p>`;
+        return;
+    }
+
+    list.innerHTML = "";
+
+    posts.forEach((post) => {
+        const item = document.createElement("div");
+        item.className = "archived-post-item"; // reuse the same styling
+        item.innerHTML = `
+            <span class="archived-post-title">${post.title || post.caption || "Untitled"}</span>
+            <button type="button" class="make-public-btn" data-post-id="${post.id}">Make public</button>
+        `;
+        list.appendChild(item);
+    });
+
+    document.querySelectorAll(".make-public-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const { error } = await supabaseClient
+                .from("posts")
+                .update({ visibility: "public" })
+                .eq("id", btn.dataset.postId);
+
+            if (error) {
+                showToast("Failed to update post: " + error.message, "error");
+                return;
+            }
+
+            showToast("Post made public", "success");
+            loadPrivatePosts();
+        });
+    });
+}
+
 // --- Delete account ---
 document.getElementById("delete-account-btn").addEventListener("click", async () => {
     const confirmed = confirm("Are you sure you want to permanently delete your account? This cannot be undone.");
@@ -159,7 +287,7 @@ document.getElementById("delete-account-btn").addEventListener("click", async ()
     const result = await response.json();
 
     if (!response.ok) {
-        showToast("Failed to delete account: " + updateError.message, "error");
+        showToast("Failed to delete account: " + result.error, "error");
         return;
     }
 
