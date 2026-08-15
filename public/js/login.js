@@ -34,5 +34,5 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     }
 
     showToast("Login successful!");
-    window.location.href = "../html/index.html"; // redirect to the index page after successful login
+    window.location.href = "/dashboard/"; // redirect to the index page after successful login
 });

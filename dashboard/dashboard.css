@@ -1,0 +1,463 @@
+.column-layout {
+    display: grid;
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    margin-left: 260px;
+    min-height: 100vh;
+    max-width: 1400px; /* widespread */
+    padding: 0 140px; /* top, left */
+}
+
+/* ----- left side ----- */
+.left-bar {
+    flex: 1;
+    top: 0;
+    left: 160px;
+    width: 240px;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    background-color: #000;
+    border-right: 2px solid #111;
+    z-index: 100;
+}
+
+.left-bar-links {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.left-bar nav a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    padding: 12px;
+    color: #999;
+    transition: 0.3s ease;
+}
+
+.left-bar nav a svg {
+    flex-shrink: 0;
+    width: 27px;
+    height: 27px;
+}
+
+.left-bar nav a:hover {
+    background-color: #090909;
+    color: #1ca0f2;
+}
+
+.left-bar nav a.active {
+    color: #1ca0f2;
+}
+
+.profile-avatar {
+    width: 27px;
+    height: 27px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+#new-link {
+    color: #fff;
+    background-color: #1ca0f2;
+    border-radius: 12px;
+    justify-content: center;
+    margin: auto;
+    margin-top: auto;
+    margin-bottom: 12px;
+    width: 80%;
+    transition: 0.3s ease;
+}
+
+#new-link:hover {
+    background-color: #536e80;
+}
+
+.mobile-fab {
+    display: none;
+}
+
+/* ----- center ----- */
+.center-bar {
+    flex: 1;
+    min-width: 0;
+}
+
+.topic-wrapper {
+    max-width: 1000px;
+    display: flex;
+}
+
+.topic-tabs {
+    display: flex;
+    border-bottom: 2px solid #111;
+}
+
+.tab-btn {
+    padding: 12px 14px; /* height, width */
+    border: none;
+    border-bottom: 3px solid #000 ;
+    background: none;
+    color: #999;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+#tab-preferences {
+    margin-left: auto;
+}
+
+.tab-btn:hover {
+    background-color: #111;
+    border-bottom: 3px solid #111;
+
+}
+
+.tab-btn.active {
+    border-bottom: 3px solid #1ca0f2;
+    color: #1ca0f2 ;
+}
+
+/*----- timeline ----- */
+.timeline {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+}
+
+.timeline-item {
+    display: flex;
+    flex-direction: column;
+    background-color: #090909;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid #111;
+}
+
+.timeline-info {
+    width: 100%;
+}
+
+.item-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.item-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+.item-header-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    margin-right: auto;
+}
+
+.item-username {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.item-date {
+    font-size: 10px;
+    color: #777;
+}
+
+.item-follow {
+    background: #090909;
+    color: inherit;
+    border: 2px solid #111;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    transition: 0.3s ease;
+}
+
+.item-follow:hover {
+    background: #1ca0f2;
+}
+
+.item-more {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 5px;}
+
+.item-more svg {
+    flex-shrink: 0;
+    width: 25px;
+    height: 25px;
+}
+
+.item-media {
+    width: 100%;
+    max-height: 600px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 2px solid #111;
+    display: block;
+    margin: 16px 0; /* top */
+}
+
+.item-title {
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.item-body {
+    padding-top: 8px;
+}
+
+.item-caption {
+    margin: 0;
+    line-height: 1.8;
+}
+
+.item-actions {
+    display: flex;
+    justify-content: space-between;
+    max-width: 400px;
+    margin: auto;
+}
+
+.interaction {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+}
+
+.interaction:hover {
+    color: #f5f5f5;
+    background-color: #131313;
+}
+
+.interaction#like-btn.liked {
+    color: #e0245e;
+}
+
+.interaction#like-btn.liked svg {
+    fill: #e0245e;
+    stroke: #e0245e;
+}
+
+.interaction#like-btn:hover {
+    fill: #e0245e;
+    color: #e0245e;
+}
+
+.interaction#comment-btn:hover {
+    color: #2ba81a;
+}
+
+.interaction#views-btn:hover {
+    color: #1ca0f2;
+}
+
+.interaction#share-btn:hover {
+    color: #bb6f28;
+}
+
+.interaction svg {
+    flex-shrink: 0;
+    width: 25px;
+    height: 25px;
+}
+
+/* ----- right side ----- */
+.right-bar {
+    padding: 10px; /* space around */
+    position: sticky;
+    align-self: flex-start;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-left: 2px solid #111;
+}
+
+.right-bar input[type="search"] {
+    width: 100%;
+    border-radius: 12px;
+    max-width: 400px;
+    padding: 10px 12px; /* height, width */
+    border: 2px solid #111;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    background-color: #232323;
+}
+
+.right-bar input[type="search"]:focus {
+    border-color: #1ca0f2; 
+    color: inherit;
+}
+
+/* responsiveness */
+@media (max-width: 1100px) {
+    .column-layout {
+        grid-template-columns: 1fr; /* collapse to a single column entirely */
+        margin-left: 70px; /* matches the collapsed left-bar width */
+        padding: 0 20px;
+    }
+
+    .right-bar {
+        display: none;
+    }
+
+    .left-bar {
+        left: 0;
+        width: 70px;
+    }
+
+    .left-bar nav a span,
+    #new-link span {
+        display: none;
+    }
+
+    .left-bar nav a {
+        justify-content: center;
+    }
+
+    .column-layout {
+        margin-left: 70px;
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 900px) {
+    .topic-wrapper {
+        overflow-x: auto;
+    }
+
+    .tab-btn {
+        padding: 10px 12px;
+        white-space: nowrap;
+    }
+
+    .timeline {
+        padding: 14px;
+        gap: 14px;
+    }
+
+    .item-actions {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .column-layout {
+        grid-template-columns: 1fr;
+        margin-left: 0;
+        padding: 0 12px 70px;
+    }
+
+    .left-bar {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+        border-right: none;
+        border-top: 2px solid #111;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .left-bar-links {
+        flex-direction: row;
+        justify-content: space-around;
+        flex: 1;
+    }
+
+    .left-bar nav a {
+        padding: 8px;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .left-bar nav a svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    #new-link {
+        display: none; /* replace with a floating action button instead, see note below */
+    }
+
+    .column-layout {
+        margin-left: 0;
+        padding: 0 12px 70px; /* bottom padding clears the fixed bottom nav */
+    }
+
+    .item-header {
+        flex-wrap: wrap;
+    }
+
+    .item-follow {
+        margin-left: auto;
+    }
+
+    .timeline-item {
+        padding: 10px 12px;
+    }
+
+    .item-media {
+        margin: 12px 0;
+    }
+
+    .right-bar {
+        display: none;
+    }
+
+    .mobile-fab {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        bottom: 76px; /* sits just above the 60px bottom nav bar, plus a little breathing room */
+        right: 16px;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background-color: #1ca0f2;
+        color: #fff;
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        cursor: pointer;
+        z-index: 200;
+    }
+
+    .mobile-fab:hover {
+        background-color: #1888cf;
+    }
+}
