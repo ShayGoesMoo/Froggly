@@ -267,7 +267,7 @@ async function openComments(postId, timelineItem, commentPanel) {
         timelineItem.classList.toggle("comments-open", !isOpen);
 
         if (isOpen) {
-            loadComments(post.id, timelineItem, commentPanel);
+            loadComments(postId, timelineItem, commentPanel);
         }
     });
 
