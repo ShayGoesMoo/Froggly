@@ -143,6 +143,6 @@
     }
 
     .comment-panel-form input[type="text"] {
-        max-width: auto;
+        max-width: 250px;
     }
 }
