@@ -125,6 +125,7 @@
     border: none;
     color: #aaa;
     font-size: inherit;
+    font-weight: inherit;
     cursor: pointer;
     padding: 6px;
     border-radius: 8px;
