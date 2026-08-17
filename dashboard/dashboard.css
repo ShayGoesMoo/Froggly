@@ -153,6 +153,7 @@
 }
 
 .right-bar input[type="search"]:focus {
+    outline: none;
     border-color: #A4243B; 
     color: inherit;
 }
