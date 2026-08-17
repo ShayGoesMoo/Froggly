@@ -1,7 +1,7 @@
 const params = new URLSearchParams(window.location.search);
 const postId = params.get("id");
 
-async function loadDashboard() {
+async function loadTimeline() {
     const timeline = document.querySelector(".timeline");
 
     // load state
@@ -24,7 +24,7 @@ async function loadDashboard() {
         .order("created_at", { ascending: false });
 
     if (error) {
-        console.error("Failed to load dashboard:", error.message, error);
+        console.error("Failed to load timeline:", error.message, error);
         timeline.innerHTML = `
             <div class="empty-state">
                 <div class="empty-title">Something went wrong</div>
@@ -67,26 +67,25 @@ async function loadDashboard() {
     timeline.innerHTML = "";
 
     posts.forEach((post) => {
-        const item = document.createElement("div");
-        item.className = "timeline-item"
-        item.style.cursor = "pointer";
         let mediaHTML;
         mediaHTML = `<img src="${post.media_url}" alt="">`;
-        
         const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
         const viewsText = formatViews(viewCounts[post.id] || 0);
         const uploadedText = formatUploaded(post.created_at);
         const isOwner = currentUserId && currentUserId === post.user_id;
         const editedText = post.edited_at ? " (edited)" : "";
-        mediaHTML = `<img src="${post.media_url}" alt="">`;
 
-        item.innerHTML = `
+        // this is for each post
+        const timelineItem = document.createElement("div");
+        timelineItem.className = "timeline-item"
+        timelineItem.style.cursor = "pointer";
+        timelineItem.innerHTML = `
             <div class="item-info">
                 <div class="item-header">
                     <img class="item-avatar" src="${avatarSrc}" alt="">
                     <div class="item-header-text">
                         <span class="item-username">${post.users.username}</span>
-                        <span class="item-date">Published this ${uploadedText}${editedText}</span>
+                        <span class="item-date">${uploadedText}${editedText}</span>
                     </div>
                     ${!isOwner ? `<button type="button" class="item-follow" data-user-id="${post.user_id}">Follow</button>` : ""}
                     <button type="button" class="item-more" data-post-id="${post.id}">
@@ -132,13 +131,37 @@ async function loadDashboard() {
             </div>
         `;
 
-        timeline.appendChild(item);
-        likeFormat(post.id, post.user_id, item);
+        // this is for the comment section under each post
+        const commentPanel = document.createElement("div");
+        commentPanel.className = "comment-panel";
+        commentPanel.style.display = "none";
+        commentPanel.innerHTML = `
+            <div class="comment-panel-header">
+                <span>Comments</span>
+                <button type="button" class="comment-panel-close" aria-label="Close">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6 6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="comment-panel-list"></div>
+            <form class="comment-panel-form">
+                <input type="text" placeholder="Add a comment..." autocomplete="off">
+                <button type="submit">Post</button>
+            </form>
+        `;
+
+        timeline.appendChild(timelineItem);
+        timeline.appendChild(commentPanel);
+        loadLikes(post.id, post.user_id, timelineItem);
+        loadViews(post.id, timelineItem);
+        openComments(post.id, timelineItem, commentPanel);
+        loadComments(post.id, timelineItem, commentPanel);
     })
 }
 
-// like format
-async function likeFormat(postId, postOwnerId, cardElement) {
+// fetch the likes
+async function loadLikes(postId, postOwnerId, cardElement) {
     const likeBtn = cardElement.querySelector("#like-btn");
     const likeIcon = cardElement.querySelector(".like-icon");
     const likeCount = cardElement.querySelector(".like-count");
@@ -222,6 +245,111 @@ async function likeFormat(postId, postOwnerId, cardElement) {
     });
 }
 
+// fetch the views
+async function loadViews(postId, cardElement) {
+    const { count, error } = await supabaseClient
+        .from("post_views")
+        .select("*", { count: "exact", head: true })
+        .eq("post_id", postId);
+    if (!error) {
+        const viewCount = cardElement.querySelector(".view-count");
+        if (viewCount) viewCount.textContent = count ?? 0;
+    }
+}
+
+// open the comment panel
+async function openComments(postId, timelineItem, commentPanel) {
+    const commentBtn = timelineItem.querySelector("#comment-btn");
+
+    commentBtn.addEventListener("click", () => {
+        const isOpen = commentPanel.style.display !== "none";
+        commentPanel.style.display = isOpen ? "none" : "block";
+        timelineItem.classList.toggle("comments-open", !isOpen);
+
+        if (isOpen) {
+            loadComments(post.id, timelineItem, commentPanel);
+        }
+    });
+
+    commentPanel.querySelector(".comment-panel-close").addEventListener("click", () => {
+        commentPanel.style.display = "none";
+    });
+
+    commentPanel.querySelector(".comment-panel-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const input = e.target.querySelector("input[type='text']");
+        const text = input.value.trim();
+        if (!text) return;
+
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) {
+            alert("You need to be logged in to comment.");
+            return;
+        }
+
+        const { error } = await supabaseClient
+            .from("comments")
+            .insert([{ post_id: postId, user_id: session.user.id, comment_text: text }]);
+
+        if (error) {
+            alert("Failed to post comment: " + error.message);
+            return;
+        }
+
+        input.value = "";
+        loadComments(postId, timelineItem, commentPanel);
+    });
+}
+
+async function loadComments(postId, timelineItem, commentPanel) {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    const currentUserId = session?.user?.id || null;
+
+    const { data: comments, error } = await supabaseClient
+        .from("comments")
+        .select("id, comment_text, gif_url, created_at, edited_at, user_id, users!comments_user_id_fkey(username, avatar_url)")
+        .eq("post_id", postId)
+        .order("created_at", { ascending: true });
+
+    if (error) {
+        console.error("Failed to load comments:", error);
+        return;
+    }
+
+    const commentList = commentPanel.querySelector(".comment-panel-list");    
+    commentList.innerHTML = "";
+
+    const commentCount = timelineItem.querySelector(".comment-count");
+    if (commentCount) commentCount.textContent = comments.length;
+    if (comments.length === 0) {
+        commentList.innerHTML = `<p class="no-comments">Comments? You probably ate them all...</p>`;
+        return;
+    }
+
+    comments.forEach((comment) => {
+        const divComment = document.createElement("div");
+        divComment.className = "panel-comment";
+
+        const avatarSrc = comment.users.avatar_url || "../assets/default profile picture.png";
+        const isOwner = currentUserId === comment.user_id;
+        const editedTag = comment.edited_at ? " (edited)" : "";
+        const timeText = formatUploaded(comment.created_at);
+        divComment.innerHTML = `
+            <img class="comment-avatar" src="${avatarSrc}" alt="">
+            <div class="comment-body">
+                <div class="comment-header">
+                    <a href="profile.html?id=${comment.user_id}" class="comment-username-link">${comment.users.username}</a>
+                    <span class="comment-timestamp">${timeText}${editedTag}</span>
+                </div>
+                <div class="comment-text-display">${comment.comment_text || ""}</div>
+                ${comment.gif_url ? `<img class="comment-gif" src="${comment.gif_url}" alt="">` : ""}
+            </div>
+        `;
+
+        commentList.appendChild(divComment);
+    });
+}
+
 // views format
 function formatViews(count) {
     if (count >= 1_000_000) return (count / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M views";
@@ -248,4 +376,4 @@ function formatUploaded(dateStr) {
     return `${Math.floor(diffDays / 365)} year${Math.floor(diffDays / 365) === 1 ? "" : "s"} ago`;
 }
 
-loadDashboard();
+loadTimeline();

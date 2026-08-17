@@ -5,9 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Ferrvent</title>
 
-        <link rel="stylesheet" href="../shared.css">
-        <link rel="stylesheet" href="../load-state.css">
+        <link rel="stylesheet" href="../shared-css/shared.css">
+        <link rel="stylesheet" href="../shared-css/load-state.css">
         <link rel="stylesheet" href="../dashboard/dashboard.css">
+        <link rel="stylesheet" href="../dashboard/timeline.css">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,7 +44,7 @@
 
                     <a href="../profile/" class="left-bar-link" id="profile-link">
                         <img class="profile-avatar" src="../public/assets/default profile picture.png" alt="">
-                        <span>Profile</span>
+                        <span class="profile-name">Profile</span>
                     </a>
 
                     <a href="../new/" class="left-bar-link" id="new-link">
@@ -63,45 +64,7 @@
                 </div>
 
                 <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="item-info">
-                            <div class="item-header">
-                                <img class="item-avatar" src="../public/assets/default profile picture.png" alt="">
-                                <div class="item-header-text">
-                                    <span class="item-username">Username</span>
-                                    <span class="item-date">2 Days ago</span>
-                                </div>
-                                <button type="button" class="item-follow">Follow</button>
-                                <button type="button" class="item-more">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="64" height="64" viewBox="0 0 16 16" style="color: currentColor; opacity: 1; transform: rotate(0deg);"><path fill="currentColor" d="M3 9.5a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3"></path></svg>
-                                </button>                            </div>
 
-                            <div class="item-body">
-                                <p class="item-caption">
-                                    This is a post. This is a post.This is a post.This is a post.This is a post.This is a post.This is a post.This is a post.This is a post.This is a post.This is a post.
-                                </p>
-                            </div>
-                            <img class="item-media" src="../public/assets/IMG_1097.JPG" alt="">
-
-                            <div class="item-actions" aria-label="Like">
-                                <button class="interaction" id="like-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="64" height="64" viewBox="0 0 24 24" style="color: currentColor; opacity: 1; transform: rotate(0deg);"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676a.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path></svg>
-                                    <span class="like-count">0</span>
-                                </button>
-                                <button class="interaction" id="comment-btn" aria-label="Comment">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="64" height="64" viewBox="0 0 24 24" style="color: currentColor; opacity: 1; transform: rotate(0deg);"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0-9-9c0 1.488.36 2.891 1 4.127L3 21l4.873-1c1.236.64 2.64 1 4.127 1"></path></svg>
-                                    <span id="comment-count">0</span>
-                                </button>
-                                <button class="interaction" id="views-btn" aria-label="Views">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="64" height="64" viewBox="0 0 24 24" style="color: currentColor; opacity: 1; transform: rotate(0deg);"><path fill="currentColor" d="M8.143 15.857H5.57V9.43h2.572v6.428zm5.143 0h-2.572V3h2.572zm5.142 0h-2.571v-9h2.571z"></path><path fill="currentColor" fill-rule="evenodd" d="M21 20.714H3v-2h18z" clip-rule="evenodd"></path></svg>
-                                    <span id="view-count">0</span>
-                                </button>
-                                <button class="interaction" id="share-btn" aria-label="Share">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="64" height="64" viewBox="0 0 24 24" style="color: currentColor; opacity: 1; transform: rotate(0deg);"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v13m4-9l-4-4l-4 4m-4 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </aside>
 
@@ -115,7 +78,8 @@
         </button>
 
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-        <script src="../supabase-config.js"></script>
-        <script src="../dashboard/dashboard.js"></script>
+        <script src="../shared-js/supabase-config.js"></script>
+        <script src="../dashboard/timeline.js"></script>
+        <script src="../shared-js/update-avatar.js"></script>
     </body>
 </html>
