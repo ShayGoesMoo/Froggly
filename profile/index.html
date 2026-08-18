@@ -5,11 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Ferrvent</title>
 
-        <link rel="stylesheet" href="\shared-css\shared.css">
-        <link rel="stylesheet" href="\shared-css\load-state.css">
-        <link rel="stylesheet" href="\dashboard\dashboard.css">
-        <link rel="stylesheet" href="\new\new.css">
-        <link rel="stylesheet" href="\shared-css\responsiveness.css">
+        <link rel="stylesheet" href="../shared-css/shared.css">
+        <link rel="stylesheet" href="../shared-css/load-state.css">
+        <link rel="stylesheet" href="../dashboard/dashboard.css">
+        <link rel="stylesheet" href="../shared-css/wip.css">
+        <link rel="stylesheet" href="../shared-css/responsiveness.css">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,7 @@
                 </div>
 
                 <nav class="left-bar-links">
-                    <a href="\dashboard/" class="left-bar-link" id="dashboard-link">
+                    <a href="../dashboard/" class="left-bar-link" id="dashboard-link">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="64" height="64" viewBox="0 0 24 24" style="color: currentColor; opacity: 1; transform: rotate(0deg);"><path fill="currentColor" d="M12 3s-6.186 5.34-9.643 8.232A1.04 1.04 0 0 0 2 12a1 1 0 0 0 1 1h2v7a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-4h4v4a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-7h2a1 1 0 0 0 1-1a.98.98 0 0 0-.383-.768C18.184 8.34 12 3 12 3"></path></svg>
                         <span>Home</span>
                     </a>
@@ -43,12 +43,12 @@
                         <span>Settings</span>
                     </a>
 
-                    <a href="../profile/" class="left-bar-link" id="profile-link">
+                    <a href="../profile/" class="left-bar-link active" id="profile-link">
                         <img class="profile-avatar" src="../public/assets/default profile picture.png" alt="">
                         <span class="profile-name">Profile</span>
                     </a>
 
-                    <a href="../new/" class="left-bar-link active" id="new-link">
+                    <a href="../new/" class="left-bar-link" id="new-link">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="64" height="64" viewBox="0 0 24 24" style="color: currentColor; opacity: 1; transform: rotate(0deg);"><path fill="currentColor" d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5v2H5v14h14v-5z"></path><path fill="currentColor" d="M21 7h-4V3h-2v4h-4v2h4v4h2V9h4z"></path></svg>
                         <span>Create</span>
                     </a>
@@ -64,56 +64,15 @@
                     </div>
                 </div>
 
-                <div class="main-view">
-                    <form id="create-new">
-                        <div class="file-panel" id="file-panel">
-                            <div class="details-panel">
-                                <label>Add caption or text</label>
-                                <textarea id="caption" name="caption" placeholder="Describe this post..." rows="6"></textarea>
-                            </div>
-                            <label>Insert file (image or gif)</label>
-                            <input type="file" id="file-input" accept="image/gif" hidden>
-                            <div class="file-placeholder" id="file-placeholder">
-                                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 16V4m0 0L7 9m5-5 5 5M5 20h14"/>
-                                </svg>
-                                <p>Click to insert a photo or gif</p>
-                                <span class="file-hint">Max 10mb</span>
-                            </div>
-                            <div class="preview-wrapper" id="preview-wrapper" style="display: none;">
-                                <img id="preview-file" alt="Preview">
-                                <button type="button" class="change-file-btn" id="change-file-btn">Change</button>
-                                <button type="button" class="remove-file-btn" id="remove-file-btn">Remove</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <div class="post-settings">
-                        <div class="audience-dropdown">
-                            <label class="audience-label">Audience</label>
-                            <select name="audience" id="audience" disabled>
-                                <option value="public">Public</option>
-                                <option value="private">Private</opiton>
-                            </select>
-                        </div>
-                        <!-- allow comments yes/no -->
-                        <label class="commenting-toggle">Allow commenting
-                            <input type="checkbox" disabled>
-                            <span class="slider"></span>
-                        </label>
-                        <!-- show likes yes/no -->
-                        <label class="likes-toggle">Hide like count
-                            <input type="checkbox" disabled>
-                            <span class="slider"></span>
-                        </label>
+                <div class="wip-view">
+                    <div class="wip-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#A4243B" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 7v5l3 3" />
+                        </svg>
                     </div>
-                </div>
-
-                <div class="sub-bar">
-                    <div class="sub-bar-actions">
-                        <button type="button" class="action-btn" id="cancel-btn">Cancel</button>
-                        <button type="submit" class="action-btn" form="create-new" id="post-btn">Post</button>
-                    </div>
+                    <h3>Work in progress</h3>
+                    <p>This page isn't ready yet. Check back soon.</p>
                 </div>
             </aside>
 
@@ -122,10 +81,20 @@
             </aside>
         </main>
 
+        <button type="button" class="mobile-fab" id="mobile-new-post-btn" aria-label="New Post">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24" style="color: currentColor; opacity: 1; transform: rotate(0deg);"><path fill="currentColor" d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5v2H5v14h14v-5z"></path><path fill="currentColor" d="M21 7h-4V3h-2v4h-4v2h4v4h2V9h4z"></path></svg>
+        </button>
+
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-        <script src="\shared-js\supabase-config.js"></script>
-        <script src="\shared-js\update-avatar.js"></script>
-        <script src="../new/new.js"></script>
-        <script src="\shared-js\logout.js"></script>
+        <script src="../shared-js/supabase-config.js"></script>
+        <script src="../dashboard/timeline.js"></script>
+        <script src="../shared-js/update-avatar.js"></script>
+        <script src="../shared-js/logout.js"></script>
+
+        <script>
+            document.querySelector("#mobile-new-post-btn").addEventListener("click", () => {
+                window.location.href = "../new/";
+            })
+        </script>
     </body>
 </html>

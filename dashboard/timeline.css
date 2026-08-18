@@ -352,6 +352,8 @@
 
 .comment-panel-form input[type="text"]:focus {
     color: inherit;
+    outline: none;
+    border-color: #A4243B;
 }
 
 .comment-panel-form button[type="submit"] {
@@ -367,5 +369,5 @@
 }
 
 .comment-panel-form button[type="submit"]:hover {
-    background: #2ba81a;
+    background: #A4243B;
 }

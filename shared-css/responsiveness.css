@@ -1,4 +1,5 @@
-@media (max-width: 1100px) {
+/* dashboard */
+@media (max-width: 1300px) {
     .column-layout {
         margin-left: 50px; /* matches the collapsed left-bar width */
         padding: 0 20px;
@@ -42,12 +43,16 @@
         max-width: 400px;
     }
 
+    .comment-panel {
+        border: 2px solid #111;
+    }
+
     .right-bar {
         display: none;
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
     .column-layout {
         grid-template-columns: 1fr;
         margin-left: 0;
@@ -141,10 +146,79 @@
     }
 
     .mobile-fab:hover {
-        background-color: #1888cf;
+        background-color: #660d1e;
     }
 
     .comment-panel-form input[type="text"] {
         max-width: 250px;
+    }
+}
+
+/* new post */
+@media (max-width: 1300px) {
+    .sub-bar,
+    .file-panel,
+    .post-settings {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    .main-view {
+        padding: 16px;
+    }
+
+    .main-view h3 {
+        padding-left: 0;
+    }
+
+    .file-panel,
+    .post-settings {
+        padding: 16px;
+    }
+
+    .file-placeholder {
+        height: 200px;
+    }
+}
+
+@media (max-width: 900px) {
+    .sub-bar {
+        padding: 10px;
+    }
+
+    .action-btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .main-view {
+        padding: 12px;
+    }
+
+    .file-panel,
+    .post-settings {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .file-placeholder {
+        height: 160px;
+    }
+
+    .file-hint {
+        font-size: 11px;
+    }
+
+    .change-file-btn,
+    .remove-file-btn {
+        padding: 5px 10px;
+        font-size: 13px;
+    }
+
+    .audience-dropdown,
+    .commenting-toggle,
+    .likes-toggle {
+        font-size: 14px;
     }
 }
