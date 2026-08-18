@@ -460,7 +460,7 @@ function allowShare(postId, cardElement) {
     if (!shareBtn) return;
 
     shareBtn.addEventListener("click", async () => {
-        const url = `${window.location.origin}${window.location.pathname.replace(/[^/]+$/, "")}post/?id=${postId}`;
+        const url = `${window.location.origin}/dashboard/post/?id=${postId}`;
 
         if (navigator.share) {
             try {
@@ -500,3 +500,35 @@ function formatUploaded(dateStr) {
 }
 
 loadTimeline();
+
+const imageModal = document.getElementById("image-modal");
+const imageModalImg = document.getElementById("image-modal-img");
+const imageModalClose = document.getElementById("image-modal-close");
+
+// event delegation - works for posts loaded/rendered dynamically
+document.addEventListener("click", (e) => {
+    const target = e.target.closest(".item-media");
+    if (!target) return;
+    imageModalImg.src = target.src;
+    imageModal.classList.add("open");
+});
+
+imageModalClose.addEventListener("click", () => {
+    imageModal.classList.remove("open");
+    imageModalImg.src = "";
+});
+
+// click outside the image (on the dark backdrop) to close
+imageModal.addEventListener("click", (e) => {
+    if (e.target === imageModal) {
+        imageModal.classList.remove("open");
+        imageModalImg.src = "";
+    }
+});
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && imageModal.classList.contains("open")) {
+        imageModal.classList.remove("open");
+        imageModalImg.src = "";
+    }
+});

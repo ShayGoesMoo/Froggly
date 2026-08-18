@@ -371,3 +371,42 @@
 .comment-panel-form button[type="submit"]:hover {
     background: #A4243B;
 }
+
+.image-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.image-modal.open {
+    display: flex;
+}
+
+.image-modal img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.image-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #090909;
+    color: #fff;
+    border: 2px solid #111;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.image-modal-close:hover {
+    background: #A4243B;
+}
