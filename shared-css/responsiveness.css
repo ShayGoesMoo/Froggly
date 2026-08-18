@@ -1,16 +1,11 @@
 @media (max-width: 1100px) {
     .column-layout {
-        grid-template-columns: 1fr; /* collapse to a single column entirely */
-        margin-left: 70px; /* matches the collapsed left-bar width */
+        margin-left: 50px; /* matches the collapsed left-bar width */
         padding: 0 20px;
     }
 
     .item-actions {
         max-width: 500px;
-    }
-
-    .right-bar {
-        display: none;
     }
 
     .left-bar {
@@ -25,11 +20,6 @@
 
     .left-bar nav a {
         justify-content: center;
-    }
-
-    .column-layout {
-        margin-left: 70px;
-        padding: 0 20px;
     }
 }
 
@@ -50,6 +40,10 @@
 
     .item-actions {
         max-width: 400px;
+    }
+
+    .right-bar {
+        display: none;
     }
 }
 
