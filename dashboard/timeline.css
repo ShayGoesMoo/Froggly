@@ -27,11 +27,12 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 6px;
+    position: relative;
 }
 
 .item-avatar {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 4px;
     flex-shrink: 0;
     object-fit: cover;
@@ -77,12 +78,61 @@
     border: none;
     color: inherit;
     cursor: pointer;
-    padding: 5px;}
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-more:hover {
+    color: #A4243B;
+}
 
 .item-more svg {
     flex-shrink: 0;
     width: 25px;
     height: 25px;
+}
+
+.item-menu-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background-color: #090909;
+    border: 2px solid #111;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 10;
+    min-width: 150px;
+    max-width: 100px;
+}
+
+.item-menu-dropdown.active {
+    display: block;
+}
+
+.item-menu-dropdown button {
+    width: 100%;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    color: #A4243B;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.item-menu-dropdown button:hover {
+    background-color: #000;
+}
+
+.item-menu-dropdown .visibility-btn {
+    color: inherit;
+    border-bottom: 2px solid #111;
 }
 
 .item-media {
@@ -206,7 +256,7 @@
     padding: 12px 16px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 24px;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* old Edge/IE, harmless to include */
 }
@@ -222,8 +272,8 @@
 }
 
 .comment-avatar {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 4px;
     flex-shrink: 0;
     object-fit: cover;
@@ -259,7 +309,7 @@
 }
 
 .comment-text-display {
-    font-size: inherit;
+    font-size: 12px;
     color: inherit;
     line-height: 1.4;
     margin-top: 2px;

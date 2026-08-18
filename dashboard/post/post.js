@@ -1,68 +1,60 @@
 const params = new URLSearchParams(window.location.search);
 const postId = params.get("id");
 
-async function loadTimeline() {
-    const timeline = document.querySelector(".timeline");
+async function loadPost() {
+    const container = document.querySelector(".timeline");
 
-    // load state
-    timeline.innerHTML = `
+    if (!postId) {
+        container.innerHTML = `<div class="empty-state"><div class="empty-title">No post specified</div></div>`;
+        return;
+    }
+
+    container.innerHTML = `
         <div class="loading-spinner">
             <div class="spinner"></div>
             Getting everything ready...
         </div>
     `;
 
-    // using supabase
     const { data: { session } } = await supabaseClient.auth.getSession();
     const currentUserId = session?.user?.id || null;
 
-    // fetch data
-    const { data: posts, error } = await supabaseClient
+    const { data: post, error } = await supabaseClient
         .from("posts")
         .select("id, user_id, media_url, thumbnail_url, title, caption, created_at, edited_at, visibility, users!posts_user_id_fkey(username, avatar_url)")
-        .not("visibility", "in", "(archived,private)")
-        .order("created_at", { ascending: false });
+        .eq("id", postId)
+        .single();
 
-    if (error) {
-        console.error("Failed to load timeline:", error.message, error);
-        timeline.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-title">Something went wrong</div>
-                <div class="empty-subtext">Try refreshing the page</div>
+    if (error || !post) {
+        commentPanel.innerHTML = `
+            <div class="comment-panel-header">
+                <span>Comments</span>
+                <button type="button" class="comment-panel-close" aria-label="Close">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6 6 18M6 6l12 12"/>
+                    </svg>
+                </button>
             </div>
+            <div class="comment-panel-list"></div>
+            <form class="comment-panel-form">
+                <input type="text" placeholder="Add a comment..." autocomplete="off">
+                <button type="submit">Post</button>
+            </form>
         `;
         return;
     }
 
-    // fallback if there are no posts
-    if (posts.length === 0) {
-        timeline.innerHTML = `
-            <div class="empty-state">
-                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M4 4h16v16H4z"/>
-                    <path d="M4 15l4-4 4 4 6-6"/>
-                </svg>
-                <div class="empty-title">Posts? Nope. Nothing to see here.</div>
-                <div class="empty-subtext">Be the first to share something!</div>
-            </div>
-        `;
-        return;
-    }
+    container.innerHTML = "";
 
-    timeline.innerHTML = "";
+    const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
+    const uploadedText = formatUploaded(post.created_at);
+    const isOwner = currentUserId && currentUserId === post.user_id;
+    const editedText = post.edited_at ? " (edited)" : "";
 
-    posts.forEach((post) => {
-        let mediaHTML;
-        mediaHTML = `<img src="${post.media_url}" alt="">`;
-        const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
-        const uploadedText = formatUploaded(post.created_at);
-        const isOwner = currentUserId && currentUserId === post.user_id;
-        const editedText = post.edited_at ? " (edited)" : "";
-
-        // this is for each post
-        const timelineItem = document.createElement("div");
-        timelineItem.className = "timeline-item"
-        timelineItem.innerHTML = `
+    const timelineItem = document.createElement("div");
+    timelineItem.style = "border-radius: 8px 8px 0 0";
+    timelineItem.className = "timeline-item";
+    timelineItem.innerHTML = `
             <div class="item-info">
                 <div class="item-header">
                     <img class="item-avatar" src="${avatarSrc}" alt="">
@@ -115,11 +107,9 @@ async function loadTimeline() {
             </div>
         `;
 
-        // this is for the comment section under each post
-        const commentPanel = document.createElement("div");
-        commentPanel.className = "comment-panel";
-        commentPanel.style.display = "none";
-        commentPanel.innerHTML = `
+    const commentPanel = document.createElement("div");
+    commentPanel.className = "comment-panel";
+    commentPanel.innerHTML = `
             <div class="comment-panel-header">
                 <span>Comments</span>
                 <button type="button" class="comment-panel-close" aria-label="Close">
@@ -135,15 +125,15 @@ async function loadTimeline() {
             </form>
         `;
 
-        timeline.appendChild(timelineItem);
-        timeline.appendChild(commentPanel);
-        showFollow(post.user_id, timelineItem);
-        loadLikes(post.id, post.user_id, timelineItem);
-        openComments(post.id, timelineItem, commentPanel);
-        loadComments(post.id, timelineItem, commentPanel);
-        allowShare(post.id, timelineItem);
-        if (isOwner) postVisibility(timelineItem);
-    });
+    container.appendChild(timelineItem);
+    container.appendChild(commentPanel);
+
+    showFollow(post.user_id, timelineItem);
+    loadLikes(post.id, post.user_id, timelineItem);
+    openComments(post.id, timelineItem, commentPanel);
+    loadComments(post.id, timelineItem, commentPanel);
+    allowShare(post.id, timelineItem);
+    if (isOwner) postVisibility(timelineItem);
 }
 
 // fetch the likes
@@ -237,7 +227,6 @@ async function openComments(postId, timelineItem, commentPanel) {
 
     commentBtn.addEventListener("click", () => {
         const isOpen = commentPanel.style.display !== "none";
-        commentPanel.style.display = isOpen ? "none" : "block";
         timelineItem.classList.toggle("comments-open", !isOpen);
 
         if (isOpen) {
@@ -460,7 +449,7 @@ function allowShare(postId, cardElement) {
     if (!shareBtn) return;
 
     shareBtn.addEventListener("click", async () => {
-        const url = `${window.location.origin}${window.location.pathname.replace(/[^/]+$/, "")}post/?id=${postId}`;
+        const url = `${window.location.origin}${window.location.pathname.replace(/[^/]+$/, "")}/post/?id=${postId}`;
 
         if (navigator.share) {
             try {
@@ -499,4 +488,4 @@ function formatUploaded(dateStr) {
     return `${Math.floor(diffDays / 365)} year${Math.floor(diffDays / 365) === 1 ? "" : "s"} ago`;
 }
 
-loadTimeline();
+loadPost();
