@@ -158,64 +158,82 @@
     margin: 0;
     line-height: 1.8;
     margin-bottom: 10px;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .item-actions {
     display: flex;
-    justify-content: space-between;
-    max-width: 400px;
-    margin: auto;
+    width: fit-content;
+    width: 100%;
 }
 
 .interaction {
     display: flex;
+    flex: 1;
+    justify-content: center;
     align-items: center;
     gap: 6px;
-    background: none;
-    border: none;
-    color: #aaa;
+    background: #090909;
+    color: inherit;
+    border: 2px solid #111;
+    padding: 6px 14px;
     font-size: inherit;
+    font-family: inherit;
     font-weight: inherit;
     cursor: pointer;
-    padding: 6px;
-    border-radius: 8px;
+    transition: 0.3s ease;
+    margin-left: -2px;
+}
+
+.item-actions .interaction:first-child {
+    margin-left: 0;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.item-actions .interaction:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
 }
 
 .interaction:hover {
-    color: #f5f5f5;
-    background-color: #131313;
-}
-
-.interaction#like-btn.liked {
-    color: #a4243b;
-}
-
-.interaction#like-btn.liked svg {
-    fill: #a4243b;
-    stroke: #a4243b;
+    color: inherit;
+    position: relative;
+    z-index: 1;
 }
 
 .interaction#like-btn:hover {
-    fill: #a4243b;
-    color: #a4243b;
+    fill: #A4243B;
+    background: #A4243B;
 }
 
 .interaction#comment-btn:hover {
-    color: #2ba81a;
-}
-
-.interaction#views-btn:hover {
-    color: #1ca0f2;
+    background: #2ba81a;
 }
 
 .interaction#share-btn:hover {
-    color: #bb6f28;
+    background: #bb6f28;
 }
 
 .interaction svg {
     flex-shrink: 0;
-    width: 25px;
-    height: 25px;
+    width: 18px;
+    height: 18px;
+}
+
+.interaction#like-btn.liked {
+    color: #A4243B;
+}
+
+.interaction#like-btn.liked svg {
+    fill: #A4243B;
+    stroke: #A4243B;
+}
+
+.interaction#like-btn.liked:hover {
+    fill: inherit;
+    color: inherit;
 }
 
 /* comment panel */

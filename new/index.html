@@ -58,20 +58,12 @@
             </aside>
 
             <aside class="center-bar">
-                <div class="topic-wraper">
-                    <div class="topic-tabs">
-                        <button type="button" class="tab-btn active" id="tab-recent" data-tab="recent">Recent</button>
-                        <button type="button" class="tab-btn" id="tab-following" data-tab="following">Following</button>
-                        <button type="button" class="tab-btn" id="tab-preferences">Preferences</button>
-                    </div>
-                </div>
-
                 <div class="main-view">
                     <form id="create-new">
                         <div class="file-panel" id="file-panel">
                             <div class="details-panel">
                                 <label>Add caption or text</label>
-                                <textarea id="caption" name="caption" placeholder="Describe this post..." rows="6"></textarea>
+                                <textarea id="caption" name="caption" placeholder="Describe this post..." rows="6" maxlength="1000"></textarea>
                             </div>
                             <label>Insert file (image or gif)</label>
                             <input type="file" id="file-input" accept="image/gif" hidden>

@@ -46,7 +46,7 @@ async function loadPost() {
 
     container.innerHTML = "";
 
-    const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
+    const avatarSrc = post.users.avatar_url || "/assets/pfp.png";
     const uploadedText = formatUploaded(post.created_at);
     const isOwner = currentUserId && currentUserId === post.user_id;
     const editedText = post.edited_at ? " (edited)" : "";
@@ -294,7 +294,7 @@ async function loadComments(postId, timelineItem, commentPanel) {
         const divComment = document.createElement("div");
         divComment.className = "panel-comment";
 
-        const avatarSrc = comment.users.avatar_url || "../assets/default profile picture.png";
+        const avatarSrc = comment.users.avatar_url || "/assets/pfp.png";
         const isOwner = currentUserId === comment.user_id;
         const editedTag = comment.edited_at ? " (edited)" : "";
         const timeText = formatUploaded(comment.created_at);

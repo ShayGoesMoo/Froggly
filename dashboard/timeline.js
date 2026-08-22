@@ -19,7 +19,7 @@ async function loadTimeline() {
     // fetch data
     const { data: posts, error } = await supabaseClient
         .from("posts")
-        .select("id, user_id, media_url, thumbnail_url, title, caption, created_at, edited_at, visibility, users!posts_user_id_fkey(username, avatar_url)")
+        .select("id, user_id, media_url, thumbnail_url, title, caption, created_at, edited_at, visibility, users!posts_user_id_fkey(username, avatar_url, display_name)")
         .not("visibility", "in", "(archived,private)")
         .order("created_at", { ascending: false });
 
@@ -54,7 +54,7 @@ async function loadTimeline() {
     posts.forEach((post) => {
         let mediaHTML;
         mediaHTML = `<img src="${post.media_url}" alt="">`;
-        const avatarSrc = post.users.avatar_url || "../assets/default profile picture.png";
+        const avatarSrc = post.users.avatar_url || "/assets/pfp.png";
         const uploadedText = formatUploaded(post.created_at);
         const isOwner = currentUserId && currentUserId === post.user_id;
         const editedText = post.edited_at ? " (edited)" : "";
@@ -67,7 +67,7 @@ async function loadTimeline() {
                 <div class="item-header">
                     <img class="item-avatar" src="${avatarSrc}" alt="">
                     <div class="item-header-text">
-                        <span class="item-username">${post.users.username}</span>
+                        <span class="item-username">${post.users.display_name || post.users.username}</span>
                         <span class="item-date">${uploadedText}${editedText}</span>
                     </div>
                     ${!isOwner ? `<button type="button" class="item-follow follow-button-slot" data-user-id="${post.user_id}">Follow</button>` : ""}
@@ -305,7 +305,7 @@ async function loadComments(postId, timelineItem, commentPanel) {
         const divComment = document.createElement("div");
         divComment.className = "panel-comment";
 
-        const avatarSrc = comment.users.avatar_url || "../assets/default profile picture.png";
+        const avatarSrc = comment.users.avatar_url || "/assets/pfp.png";
         const isOwner = currentUserId === comment.user_id;
         const editedTag = comment.edited_at ? " (edited)" : "";
         const timeText = formatUploaded(comment.created_at);
